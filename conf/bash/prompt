@@ -1,0 +1,194 @@
+#!/usr/bin/env bash
+
+# Example:
+# newton@host: ~/.dotfiles on master [+!?$]
+# $
+
+# Screenshot: http://i.imgur.com/DSJ1G.png
+# iTerm2 prefs: import Base16 Eighties theme (disable bright colors for bold text)
+# Color ref: http://vim.wikia.com/wiki/Xterm256_color_names_for_console_Vim
+# More tips: http://www.cyberciti.biz/tips/howto-linux-unix-bash-shell-setup-prompt.html
+
+create_fill() {
+	# Fill with minuses
+	# (this is recalculated every time the prompt is shown in function prompt_command):
+	local fill="--- "
+
+	# create a $fill of all screen width minus the time string and a space:
+	let fillsize=${COLUMNS}-10
+	fill=""
+	while [ "$fillsize" -gt "0" ]
+		do
+			fill="-${fill}" # fill with underscores to work on
+			let fillsize=${fillsize}-1
+	done
+	printf "%s (%s)\n" "$fill" "$(date +%H:%M)"
+}
+
+prompt_git() {
+	local s=""
+	local branchName=""
+
+	# check if the current directory is in a git repository
+	if [ $(git rev-parse --is-inside-work-tree &>/dev/null; printf "%s" $?) == 0 ]; then
+
+		# check if the current directory is in .git before running git checks
+		if [ "$(git rev-parse --is-inside-git-dir 2> /dev/null)" == "false" ]; then
+
+			# ensure index is up to date
+			git update-index --really-refresh  -q &>/dev/null
+
+			# check for uncommitted changes in the index
+			if ! $(git diff --quiet --ignore-submodules --cached); then
+				s="$s+";
+			fi
+
+			# check for unstaged changes
+			if ! $(git diff-files --quiet --ignore-submodules --); then
+				s="$s!";
+			fi
+
+			# check for untracked files
+			if [ -n "$(git ls-files --others --exclude-standard)" ]; then
+				s="$s?";
+			fi
+
+			# check for stashed files
+			if $(git rev-parse --verify refs/stash &>/dev/null); then
+				s="$s$";
+			fi
+
+		fi
+
+		# get the short symbolic ref
+		# if HEAD isn't a symbolic ref, get the short SHA
+		# otherwise, just give up
+		branchName="$(git symbolic-ref --quiet --short HEAD 2> /dev/null || git rev-parse --short HEAD 2> /dev/null || printf "(unknown)")"
+
+		[ -n "$s" ] && s=" [$s]"
+
+		printf "%s" "$1$branchName$s"
+	else
+		return
+	fi
+}
+
+set_prompts() {
+	local bold=""
+	local reset=""
+
+	local base00=""
+	local base01=""
+	local base02=""
+	local base03=""
+	local base04=""
+	local base05=""
+	local base06=""
+	local base07=""
+	local base08=""
+	local base09=""
+	local base0A=""
+	local base0B=""
+	local base0C=""
+	local base0D=""
+	local base0E=""
+	local base0F=""
+
+	local hostStyle=""
+	local userStyle=""
+	local fillStyle=""
+	local branchStyle=""
+
+
+	if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+		tput sgr0 # reset colors
+
+		bold=$(tput bold)
+		reset=$(tput sgr0)
+
+		base00=$(tput setaf 16)
+		base01=$(tput setaf 59)
+		base02=$(tput setaf 59)
+		base03=$(tput setaf 101)
+		base04=$(tput setaf 144)
+		base05=$(tput setaf 188)
+		base06=$(tput setaf 188)
+		base07=$(tput setaf 231)
+		base08=$(tput setaf 210)
+		base09=$(tput setaf 209)
+		base0A=$(tput setaf 221)
+		base0B=$(tput setaf 114)
+		base0C=$(tput setaf 80)
+		base0D=$(tput setaf 68)
+		base0E=$(tput setaf 176)
+		base0F=$(tput setaf 173)
+	else
+		bold=""
+		reset="\e[0m"
+
+		base00="\e[1;30m"
+		base01="\e[1;30m"
+		base02="\e[1;30m"
+		base03="\e[1;30m"
+		base04="\e[1;37m"
+		base05="\e[1;37m"
+		base06="\e[1;37m"
+		base07="\e[1;37m"
+		base08="\e[1;31m"
+		base09="\e[1;33m"
+		base0A="\e[1;33m"
+		base0B="\e[1;32m"
+		base0C="\e[1;36m"
+		base0D="\e[1;34m"
+		base0E="\e[1;35m"
+		base0F="\e[1;31m"
+	fi
+
+	# build the prompt
+
+	# logged in as root
+	if [[ "$USER" == "root" ]]; then
+		userStyle="\[$bold$base08\]"
+	else
+		userStyle="\[$base09\]"
+	fi
+
+	# connected via ssh
+	if [[ "$SSH_TTY" ]]; then
+		hostStyle="\[$bold$base08\]"
+	else
+		hostStyle="\[$base0A\]"
+	fi
+
+	if git rev-parse --git-dir >/dev/null 2>&1; then
+		# check for uncommitted changes in the index
+		if ! git diff-index --quiet --cached HEAD --ignore-submodules -- >&2; then
+			branchStyle=$base08
+		# check for unstaged changes
+		elif ! git diff-files --quiet --ignore-submodules -- >&2; then
+			branchStyle=$base0A
+		else
+			branchStyle=$base0B
+		fi
+	fi
+
+	# set the terminal title to the current working directory
+	PS1="\[\033]0;\w\007\]"
+
+	PS1+="\n" # newline
+	PS1+="\[$userStyle\]\u" # username
+	PS1+="\[$reset$bold$base05\]@"
+	PS1+="\[$hostStyle\]\h" # host
+	PS1+="\[$reset$bold$base05\] in "
+	PS1+="\[$base0E\]\w" # working directory
+	PS1+="\$(prompt_git \"$bold$base05 on $branchStyle\")" # git repository details
+	PS1+="\[$reset$bold$base05\] at "
+	PS1+="\[$base0C\]\$(date +%H:%M)" # working directory
+	PS1+="\n"
+	PS1+="\[$reset$base07\]\$ \[$reset\]" # $ (and reset color)
+
+	export PS1
+}
+
+set_prompts
+unset set_prompts

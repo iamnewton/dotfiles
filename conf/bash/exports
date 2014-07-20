@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+# Make gist default browser open in Chrome
+export BROWSER=google-chrome
+
+# Make dotfiles default location
+export DOTFILES_DIRECTORY="/usr/local/opt/dotfiles"
+
+# Make vim the default editor
+export EDITOR="vim"
+
+# Make vim the default editor for git
+export GIT_EDITOR="vim"
+
+# Always enable colored `grep` output
+export GREP_OPTIONS="--color=auto"
+
+# Increase the maximum number of commands to remember
+# (default is 500)
+export HISTSIZE=32768
+
+# Entries beginning with space aren't added into history, and duplicate
+# entries will be erased (leaving the most recent entry).
+export HISTCONTROL=ignorespace:erasedups
+
+# Increase the maximum number of lines contained in the history file
+# (default is 500)
+export HISTFILESIZE=$HISTSIZE
+
+# Make some commands not show up in history
+export HISTIGNORE="ls:ls *:cd:cd -:pwd;exit:date:* --help"
+
+# Set the format for the history file
+export HISTTIMEFORMAT="%h/%d/%y-%H:%M:%S "
+
+# Link Homebrew casks in `/Applications` rather than `~/Applications`
+export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
+
+# Prefer US English and use UTF-8
+export LANG="en_US"
+export LC_ALL="en_US.UTF-8"
+
+# Highlight section titles in manual pages
+export LESS_TERMCAP_md="$ORANGE"
+
+# Add colors format to the LS command output
+export CLICOLOR=1
+export LSCOLORS="exfxcxdxbxegedabagacad"
+
+# Don't clear the screen after quitting a manual page
+export MANPAGER="less -X"
+
+# Export PhantomJS bin location (be explicit in case Homebrew is not installed
+# in the default location)
+export PHANTOMJS_BIN="$(brew --prefix)/bin/phantomjs"
+
+# Make new shells get the history lines from all previous
+# shells instead of the default "last window closed" history
+export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"

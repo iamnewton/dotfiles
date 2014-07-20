@@ -1,0 +1,88 @@
+# allows you to specify the format, in this case
+# i'm specifying it in xml, then you can run
+# csslint test.css > results.xml
+--format=lint.xml
+
+# rules to error on
+--errors=box-model,display-property-grouping,duplicate-properties,empty-rules,known-properties,star-property-hack,underscore-property-hack,bulletproof-font-face,import,zero-units,overqualified-elements,shorthand,duplicate-background-images,floats,font-sizes,outline-none,qualified-headings,unique-headings
+# rules to just warn on
+--warnings=adjoining-classes,gradients,text-indent,vendor-prefix,fallback-colors,font-faces,regex-selectors,universal-selector,unqualified-attributes,ids,important
+# rules to ignore
+--ignore=box-sizing,compatible-vendor-prefixes
+
+# Rules
+# https://github.com/stubbornella/csslint/wiki/Rules
+
+# Possible Errors
+# ===============
+
+# The following rules point out potential errors in your CSS.
+
+# - Beware of box model size (box-model)
+# - Require properties appropriate for display (display-property-grouping)
+# - Disallow duplicate properties (duplicate-properties)
+# - Disallow empty rules (empty-rules)
+# - Require use of known properties (known-properties)
+# - Avoid un-anchored hovers (non-link-hover); can cause performance 
+#   problems on IE7/IE8
+#   http://connect.microsoft.com/IE/feedback/ViewFeedback.aspx?FeedbackID=391387
+
+# Compatibility
+# =============
+
+# The following rules flag for compatibility problems across 
+# browsers and browser settings.
+
+# - Disallow adjoining classes (adjoining-classes)
+# - Disallow box-sizing (box-sizing)
+# - Require compatible vendor prefixes (compatible-vendor-prefixes)
+# - Require all gradient definitions (gradients)
+# - Disallow negative text-indent (text-indent)
+# - Require standard property with vendor prefix (vendor-prefix)
+# - Require fallback colors (fallback-colors)
+# - Disallow star hack (star-property-hack)
+# - Disallow underscore hack (underscore-property-hack)
+# - Bulletproof font-face (bulletproof-font-face)
+
+# Performance
+# ===========
+ 
+# The following rules are aimed at improving CSS performance, 
+# including runtime performance and overall code size.
+ 
+# - Don't use too many web fonts (font-faces)
+# - Disallow @import (import)
+# - Disallow selectors that look like regular expressions (regex-selectors)
+# - Disallow universal selector (universal-selector)
+# - Disallow unqualified attribute selectors (unqualified-attributes)
+# - Disallow units for zero values (zero-units)
+# - Disallow overqualified elements (overqualified-elements)
+# - Require shorthand properties (shorthand)
+# - Disallow duplicate background images (duplicate-background-images)
+
+# Maintainability & Duplication
+# =============================
+ 
+# These rules help to ensure your code is readable and 
+# maintainable by others.
+ 
+# - Disallow too many floats (floats)
+# - Don't use too many font-size declarations (font-sizes)
+# - Disallow IDs in selectors (ids)
+# - Disallow !important (important)
+
+# Accessibility
+# =============
+
+# These rules are designed to pick out possible accessibility 
+# issues.
+# 
+# - Disallow outline:none (outline-none)
+
+# OOCSS
+# =====
+
+# These rules are based on the principles of OOCSS.
+ 
+# - Disallow qualified headings (qualified-headings)
+# - Headings should only be defined once (unique-headings)

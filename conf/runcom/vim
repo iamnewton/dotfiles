@@ -1,0 +1,23 @@
+" .vimrc
+
+" !silent is used to suppress error messages if the config line
+" references plugins/colorschemes that might be missing
+
+" Disable Vi compatibility
+set nocompatible
+
+" required!
+filetype off
+
+" Point to runtime path of vundle submodule (since it's not in .vim/autoload)
+silent! set rtp+=${HOME}/.vim/bundle/Vundle.vim
+" Call vundle plugin management
+silent! call vundle#rc()
+
+source ${HOME}/.vim/settings/bundles.vim
+source ${HOME}/.vim/settings/general.vim
+source ${HOME}/.vim/settings/display.vim
+source ${HOME}/.vim/settings/theme.vim
+source ${HOME}/.vim/settings/search.vim
+source ${HOME}/.vim/settings/ctrlp.vim
+source ${HOME}/.vim/settings/keyboard.vim

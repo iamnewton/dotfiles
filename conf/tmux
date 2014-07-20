@@ -1,0 +1,65 @@
+# improve colors
+# set-option -g default-terminal screen
+set-option -g default-terminal "screen-256color"
+
+# rebind global prefix
+set-option -g prefix `
+
+# act like ViM
+set-window-option -g mode-keys vi
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+# add copy/paste for vi
+bind-key -t vi-copy 'v' begin-selection
+bind-key -t vi-copy 'y' copy-selection
+
+
+# act like GNU screen
+unbind-key C-b
+bind-key C-a last-window
+bind-key ` last-window
+bind-key a send-prefix
+
+# 0 is too far from ` ;)
+set -g base-index 1
+
+# renumber windows sequentially after closing any of them
+set -g renumber-windows on
+
+set -g set-titles on
+set-option -g set-titles-string '#S:#I.#P #W'
+setw -g automatic-rename on
+
+set-window-option -g window-status-current-bg white
+set-window-option -g window-status-current-fg black
+# sets window option for copy/paste
+set-window-option -g mode-mouse on
+
+bind v splitw -h -p 40 \; splitw -v -p 25
+
+bind t splitw -v -l 9
+
+bind Tab select-pane -t :.+
+
+bind r source-file ~/.tmux.conf
+
+unbind +
+bind + new-window -d -n tmux-zoom \; swap-pane -s tmux-zoom \; select-window -t tmux-zoom
+unbind -
+bind - last-window \; swap-pane -s tmux-zoom \; kill-window -t tmux-zoom
+
+set -g status-bg colour0
+set -g status-fg white
+set -g status-left '[ #[fg=green]#H | #S #[fg=white]]'
+set -g status-right '%I:%M %p | %D'
+set -g status-left-length 30
+set -g status-right-length 20
+
+bind C new-window -a
+
+set -g mode-mouse on
+set -g mouse-resize-pane on
+set -g mouse-select-pane on
+set -g mouse-select-window on

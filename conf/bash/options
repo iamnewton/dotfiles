@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# Autocorrect typos in path names when using `cd`
+shopt -s cdspell
+
+# Check the window size after each command and, if necessary, update the values
+# of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# Append to the Bash history file, rather than overwriting it
+shopt -s histappend
+# Allow use to re-edit a failed history substitution.
+shopt -s histreedit
+# History expansions will be verified before execution.
+shopt -s histverify
+
+# Case-insensitive globbing (used in pathname expansion)
+shopt -s nocaseglob
+
+# Allow use of variables in the prompt
+shopt -s promptvars

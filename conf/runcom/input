@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+# Although the Readline library comes with a set of default keybindings, 
+# it is possible to modify these by putting commands into a .inputrc file, 
+# typically in the home directory. The name of this file is taken from the 
+# value of the shell variable INPUTRC. If that variable is unset, the 
+# default is ~/.inputrc If that file does not exist or cannot be read, the 
+# ultimate default is /etc/inputrc
+#
+# The configuration options in .inputrc are particularly useful for 
+# customising the way Tab-completion works, e.g. with the ls command
+#
+# When a program which uses the Readline library starts up, the init file 
+# is read, and the key bindings are set. In addition, the C-x C-r command 
+# re-reads this init file, thus incorporating any changes that you might 
+# have made to it.
+#
+# http://www.ss64.com/bash/syntax-inputrc.html
+#
+# Vi in bash (http://blog.sanctum.geek.nz/vi-mode-in-bash/)
+# If this annoys you, and you still want to get the full power of Vi
+# in bash, then comment out this line and use Ctrl+x Ctrl+e to bring up
+# the command line in your $EDITOR
+set editing-mode vi
+# Words which have more than one possible completion cause the matches 
+# to be listed immediately instead of ringing the bell.
+set show-all-if-ambiguous on
+# Readline performs filename matching and completion in a case-insensitive fashion
+set completion-ignore-case on
+# completed names which are symbolic links to directories have a slash appended
+set mark-symlinked-directories on
+# Using Tab, will cycle through completions
+TAB: menu-complete
+# Shift-Tab will cycle backwards through completions
+"\e[Z": "\e-1\C-i"
+# Use the string that has already been typed as the prefix for searching
+# through commands (i.e. more intelligent Up/Down-arrow behavior)
+"\e[B": history-search-forward
+"\e[A": history-search-backward
+# Do not autocomplete hidden files unless the pattern explicitly begins with a dot
+set match-hidden-files off
+# Show all autocomplete results at once
+set page-completions off
+# If there are more than 200 possible completions for a word, ask to show them all
+set completion-query-items 200
+# Show extra file information when completing, like `ls -F` does
+set visible-stats on
+# Be more intelligent when autocompleting by also looking at the text after
+# the cursor. For example, when the current line is "cd ~/src/mozil", and
+# the cursor is on the "z", pressing Tab will not autocomplete it to "cd
+# ~/src/mozillail", but to "cd ~/src/mozilla". (This is supported by the
+# Readline used by Bash 4.)
+set skip-completed-text on
+# Allow UTF-8 input and output, instead of showing stuff like $'\0123\0456'
+set input-meta on
+set output-meta on
+set convert-meta off
+# Use Alt/Meta + Delete to delete the preceding word
+"\e[3;3~": kill-word

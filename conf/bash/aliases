@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+
+# Allow aliases to be with sudo
+alias sudo="sudo "
+
+# Easier navigation: .., ..., ~ and -
+alias ..="cd .."
+alias ...="cd ../.."
+alias ~="cd ~"
+alias -- -="cd -"
+
+# Always use color output for `ls`
+if [[ "$OSTYPE" =~ ^darwin ]]; then
+	alias ls="command ls -G"
+else
+	alias ls="command ls --color"
+	export LS_COLORS="no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.ogg=01;35:*.mp3=01;35:*.wav=01;35:"
+fi
+# Directory listing
+if type -P 'tree' &> /dev/null; then
+	alias ll="tree --dirsfirst -aLpughDFiC 1"
+	alias lsd="ll -d"
+else
+	alias ll="ls -al"
+	alias lsd='CLICOLOR_FORCE=1 ll | grep --color=never "^d"'
+fi
+
+# Add some shortcuts for formatted directory listings and add a touch of color.
+alias ls="ls -lAFGHhOoST"
+# List dir contents aliases
+# ref: http://ss64.com/osx/ls.html
+# Long form no user group, color
+alias l="ls -oG"
+# Order by last modified, long form no user group, color
+alias lt="ls -toG"
+# List all except . and ..., color, mark file types, long form no user group, file size
+alias la="ls -AGFoh"
+# List all except . and ..., color, mark file types, long form no use group, order by last modified, file size
+alias lat="ls -AGFoth"
+
+# Concatenate and print content of files (add line numbers)
+alias catn="cat -n"
+
+# IP addresses
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias localip="ipconfig getifaddr en1"
+
+# Copy my public key to the pasteboard
+alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | printf '=> Public key copied to pasteboard.\n'"
+
+# Flush DNS cache
+alias flushdns="dscacheutil -flushcache"
+
+# Runs `git pull` on every directory within the current directory
+# `find .` search the current directory
+# `-type d` find only directories, not files
+# `-print` print the directory name
+# `-maxdepth 1` limit the depth to one sub-directory
+# `-execdir {} \;` run a custom command for every directory found
+# `git --git-dir={}/.git --work-tree=$PWD/{} pull` git-pull each directory
+#alias pullall="find . -type d -print -maxdepth 1 -execdir git --git-dir={}/.git --work-tree=$PWD/{} pull \"
+
+# Adds an alias to Disk Usage 
+# du means disk usage; h* means *human readable; d* means *depth (like layers 
+# deep); 1 means one layer of depth 
+alias disk="du -hd 1"
+
+# File size
+alias fs="stat -f '%z bytes'"
+alias df="df -h"
+
+# Make grep more user friendly by highlighting matches
+# # and exclude grepping through .svn folders.
+alias grep="grep --color=auto --exclude-dir=\.git"
+
+# Restart apache
+alias restart="sudo apachectl restart"
+# Edit host file
+alias host="sudo vim /etc/hosts"
+# Edit vhosts listings
+alias vhost="sudo vim /etc/apache2/extra/httpd-vhosts.conf"
+# Pass in a process to find, greps the running processes
+alias process="ps aux | grep"
+
+alias tmux="tmux -2"
+
+# Aliasing eachdir like this allows you to use aliases/functions as commands.
+alias eachdir=". eachdir"
+
+alias undo="git-undo"
+alias rank="rank-contributors"
+
+# Ring the terminal bell, and put a badge on Terminal.app’s Dock icon
+# (useful when executing time-consuming commands)
+alias badge="tput bel"
+
+# Intuitive map function
+# For example, to list all directories that contain a certain file:
+# find . -name .gitattributes | map dirname
+alias map="xargs -n1"
+
+# One of @janmoesen’s ProTip™s
+for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
+	alias "$method"="lwp-request -m '$method'"
+done
+
+# Make Grunt print stack traces by default
+#command -v grunt > /dev/null && alias grunt="grunt --stack"

@@ -1,0 +1,14 @@
+conf/bash/profile .bash_profile
+conf/git/attributes .gitattributes
+conf/git/ignore .gitignore
+conf/git/message .gitmessage
+conf/runcom/ack .ackrc
+conf/runcom/bash .bashrc
+conf/runcom/csslint .csslintrc
+conf/runcom/curl .curlrc
+conf/runcom/input .inputrc
+conf/runcom/jshint .jshintrc
+conf/runcom/wget .wgetrc
+conf/tmux .tmux.conf
+conf/vim/ctags .ctags
+conf/vim/editor .editorconfig

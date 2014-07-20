@@ -1,0 +1,30 @@
+--langdef=html2
+--langmap=html2:.html
+--regex-html2=/ id ?= ?.([-a-zA-Z_0-9]*)./\1/i,id/
+--regex-html2=/ class ?= ?.([-a-zA-Z_0-9]*)./\1/c,class/
+
+--langdef=css
+--langmap=css:.css
+--regex-css=/^([\.|#].*)\{/\1/s,style/
+
+--langdef=js
+--langmap=js:.js
+--regex-js=/(.*) = {/\1/o,object/
+--regex-js=/(var )?(.*)[=|:] function(.*){/\2\3/f,function/
+--regex-js=/function (.*){/\1/c,function2/
+--regex-js=/[jQuery|$].fn\.(.*)=/\1/j,jquery/
+--regex-js=/[jQuery|$].widget\(\"(.*)\"/\1/w,jquerywidget/
+--regex-js=/[jQuery|$].ux.behavior\(\"(.*)\"/\1/x,ux/
+
+--langdef=objc
+--langmap=objc:.m.h
+--regex-objc=/[+|-] ?\([a-zA-Z]*\) ?(.*)[;|{]/\1\2/m,method/
+
+--langdef=groovy
+--langmap=groovy:.groovy
+--regex-groovy=/^[ \t]*[(private|public|protected) ( \t)]*def[ \t]+([A-Za-z0-9_]+)[ \t()=]*\{/\1/f,function,functions/
+--regex-groovy=/^[ \t]*private def[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/v,private,private variables/
+--regex-groovy=/^[ \t]*public def[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/u,public,public variables/
+--regex-groovy=/^[ \t]*[abstract ( \t)]*[(private|public) ( \t)]*class[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/c,class,classes/
+--regex-groovy=/^[ \t]*[abstract ( \t)]*[(private|public) ( \t)]*enum[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/c,class,classes/
+

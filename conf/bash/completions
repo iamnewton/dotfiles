@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#
+# common <tab> completions
+
+# Brew completion
+source "$(brew --prefix)/Library/Contributions/brew_bash_completion.sh"
+
+# Enable bash <tab> completion for grunt
+eval "$(grunt --completion=bash)"
+
+# SSH auto-completion based on entries in known_hosts.
+if [[ -e "$HOME/.ssh/known_hosts" ]]; then
+	complete -o default -W "$(cat $HOME/.ssh/known_hosts | sed 's/[, ].*//' | sort | uniq | grep -v '[0-9]')" ssh scp sftp
+fi
+
+# Add tab completion for `defaults read|write NSGlobalDomain`
+# You could use `-g` instead, but I like being explicit
+complete -W "NSGlobalDomain" defaults
+
+# Add `killall` tab completion for common apps
+complete -o "nospace" -W "Contacts Calendar Dock Finder iTerm2 Mail Safari iTunes SystemUIServer Terminal Twitter" killall
