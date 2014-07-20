@@ -1,0 +1,208 @@
+#!/usr/bin/env bash
+
+# variables
+LOG="${HOME}/Library/Logs/dotfiles.log"
+DIR="$(brew --prefix)"
+
+# Success logging
+_success() {
+	echo "$(date) SUCCESS:  $@" >> $LOG
+	printf "$(tput setaf 2)✓ Success:$(tput sgr0) %s\n" "$@"
+}
+
+# Error logging
+_error() {
+	echo "$(date) ERROR:  $@" >> $LOG
+	printf "$(tput setaf 1)⊘ Error:$(tput sgr0) %s. Aborting!\n" "$@"
+	exit 1
+}
+
+# Command/Processing logging
+_process() {
+	echo "$(date) PROCESSING:  $@" >> $LOG
+	printf "$(tput setaf 6)┃$(tput sgr0)$(tput setaf 7) %s...$(tput sgr0)\n" "$@"
+}
+
+# If missing, download and extract the dotfiles repository
+if [[ ! -d "${DIR}" ]]; then
+	_success "Dotfiles has been uninstalled"
+fi
+
+# set variable for Brewfile based on directory
+BREWFILE="${DIR}/var/Brewfile"
+
+# Install Homebrew formulae via Brewfile
+if ! type -P 'brew' &> /dev/null; then
+	_error "Homebrew not found"
+else
+	_process "Uninstalling Homebrew packages"
+
+	# Set variable for list of homebrew formulaes
+	brews="${DIR}/opt/homebrew"
+
+	# Update and upgrade all packages
+	echo "untap homebrew/completions" >> ${BREWFILE}
+
+	# Store IFS within a temp variable
+	OIFS=$IFS
+
+	# Set the separator to a carriage return & a new line break
+	# read in passed-in file and store as an array
+	IFS=$'\r\n' formulae=($(cat "${brews}"))
+
+	# Loop through split list of formulae
+	for index in ${!formulae[*]}
+	do
+		# Test whether a Homebrew formula is already installed
+		if ! brew list '${formulae[$index]}' &> /dev/null; then
+			# Add to brewfile to install
+			echo "uninstall ${formulae[$index]}" >> ${BREWFILE}
+		fi
+	done
+
+	# Reset IFS back
+	IFS=$OIFS
+
+	# Tap some necessary formulae
+	echo "untap homebrew/dupes" >> ${BREWFILE}
+	echo "untap homebrew/versions" >> ${BREWFILE}
+	echo "untap homebrew/homebrew-php" >> ${BREWFILE}
+	echo "uninstall php55" >> ${BREWFILE}
+	echo "cleanup" >> ${BREWFILE}
+
+	# Install using bundle command
+	brew bundle "${BREWFILE}"
+
+	[[ $? ]] && _success "Uninstalled all Homebrew packages"
+fi
+
+# Install Node packages
+if ! type -P 'npm' &> /dev/null; then
+	_error "npm not found"
+else
+	_process "Uninstalling npm packages"
+
+	# Set variable for list of npm packages
+	npmfile="${DIR}/opt/npm"
+
+	# Store IFS within a temp variable
+	OIFS=$IFS
+
+	# Set the separator to a carriage return & a new line break
+	# read in passed-in file and store as an array
+	IFS=$'\r\n' packages=($(cat "${npmfile}"))
+
+	# Loop through array
+	for index in ${packages[*]}
+	do
+		# Test whether a Homebrew formula is already installed
+		if ! $(npm list -g '${packages[$index]}' | grep '${packages[$index]}') &> /dev/null; then
+			# Create a string of all files with a comma at the end
+			string=$(printf "%s " "${packages[@]}")
+		fi
+	done
+
+	# Reset IFS back
+	IFS=$OIFS
+
+	# Install packages globally and quietly
+	npm uninstall $string --global --quiet
+
+	[[ $? ]] && _success "Uninstalled all npm packages"
+fi
+
+# Install Ruby gems
+if ! type -P 'ruby' &> /dev/null; then
+	_error "ruby not found"
+else
+	_process "Uninstalling Ruby gems"
+
+	# Set variable for list of ruby gems
+	gemfile="${DIR}/opt/gems"
+
+	# Store IFS within a temp variable
+	OIFS=$IFS
+
+	# Set the separator to a carriage return & a new line break
+	# read in passed-in file and store as an array
+	IFS=$'\r\n' gems=($(cat "${gemfile}"))
+
+	# Loop through array
+	for index in ${gems[*]}
+	do
+		# Test whether a Homebrew formula is already installed
+		if ! $(gem list  '${gems[$index]}' | grep '${gems[$index]}') &> /dev/null; then
+			# Create a string of all files with a comma at the end
+			string=$(printf "%s " "${gems[@]}")
+		fi
+	done
+
+	# Reset IFS back
+	IFS=$OIFS
+
+	# Install packages globally and quietly
+	sudo gem uninstall $string
+
+	[[ $? ]] && _success "Uninstalled all Ruby gems"
+fi
+
+_process "Removing global git configuration file"
+rm ${HOME}/.gitconfig
+
+# Force remove the vim directory if it's already there.
+_process "Removing ViM"
+rm -rf "${HOME}/.vim"
+rm "${HOME}/.gvimrc"
+rm "${HOME}/.vimrc"
+
+# Create the necessary symbolic links between the `.dotfiles` and `HOME`
+# directory. The `bash_profile` sources other files directly from the
+# `.dotfiles` repository.
+if [[ -f "${DIR}/opt/symlinks" ]]; then
+	_process "Removing symlinks"
+
+	# Set variable for list of symlinks
+	symlinks="${DIR}/opt/symlinks"
+
+	# Store IFS within a temp variable
+	OIFS=$IFS
+
+	# Set the separator to a carriage return & a new line break
+	# read in passed-in file and store as an array
+	IFS=$'\r\n' 
+	links=($(cat "${symlinks}"))
+	
+	# Loop through array
+	for index in ${!links[*]}
+	do
+		for link in ${links[$index]}
+		do
+			# set IFS back to space to split string on
+			IFS=$' '
+			# create an array of line items
+			symlink=(${links[$index]})
+			# Create symbolic link
+			rm "${HOME}/${symlink[1]}"
+		done
+		# set separater back to carriage return & new line break
+		IFS=$'\r\n'
+	done
+
+	# Reset IFS back
+	IFS=$OIFS
+
+	[[ $? ]] && _success "All symlinks have been removed"
+fi
+
+# Programmatic way to change shell
+chsh -s /bin/bash 2>/dev/null
+
+[[ $? ]] && _success "Changed default shell back to /bin/bash"
+
+# Symlink library files
+rm -rf "/usr/local/bin/dotfiles"
+rm -rf "/usr/local/share/man/man1/dotfiles.1"
+rm -rf "${DIR}"
+
+
+[[ $? ]] && _success "Dotfiles uninstalled"
