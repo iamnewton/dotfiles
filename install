@@ -1,0 +1,379 @@
+#!/usr/bin/env bash
+
+# variables
+LOG="${HOME}/Library/Logs/dotfiles.log"
+GITHUB_USER="chrisopedia"
+GIT_AUTHOR_NAME=""
+GIT_AUTHOR_EMAIL=""
+
+# Success logging
+_success() {
+	echo "$(date) SUCCESS:  $@" >> $LOG
+	printf "$(tput setaf 2)✓ Success:$(tput sgr0) %s\n" "$@"
+}
+
+# Warning logging
+_warning() {
+	echo "$(date) WARNING:  $@" >> $LOG
+	printf "$(tput setaf 3)⚠ Warning:$(tput sgr0) %s!\n" "$@"
+}
+
+# Error logging
+_error() {
+	echo "$(date) ERROR:  $@" >> $LOG
+	printf "$(tput setaf 1)⊘ Error:$(tput sgr0) %s. Aborting!\n" "$@"
+	exit 1
+}
+
+# Question logging
+_question() {
+	echo "$(date) QUESTION:  $@" >> $LOG
+	printf "\n$(tput setaf 3)==> %s?$(tput sgr0) " "$@"
+}
+
+# Command/Processing logging
+_process() {
+	echo "$(date) PROCESSING:  $@" >> $LOG
+	printf "$(tput setaf 6)┃$(tput sgr0)$(tput setaf 7) %s...$(tput sgr0)\n" "$@"
+}
+
+# Check for environment variable for directory, otherwise set to default
+if [[ ! -z ${DOTFILES_DIRECTORY} ]]; then
+	DIR="${DOTFILES_DIRECTORY}"
+else
+	DIR="/usr/local/opt/dotfiles"
+fi
+
+# If missing, download and extract the dotfiles repository
+if [[ -d "${DIR}" ]]; then
+	_process "Dotfiles already installed.  Upgrading dotfiles"
+	dotfiles
+else
+	_warning "No ${DIR} found"
+
+	_process "Creating directory at ${DIR}"
+	mkdir -p "${DIR}"
+
+	_process "Downloading repository to /tmp directory"
+	# (-#) shows the progress bar as # sign
+	# (-f) fail silently
+	# (-L) follow the headers
+	# (-o) output to a file
+	curl -#fLo /tmp/dotfiles.tar.gz "https://github.com/${GITHUB_USER}/dotfiles/tarball/master"
+
+	_process "Extracting files to ${DIR}"
+	tar -zxf /tmp/dotfiles.tar.gz --strip-components 1 -C "${DIR}"
+
+	_process "Removing tarball from /tmp directory"
+	rm -rf /tmp/dotfiles.tar.gz
+
+	[[ $? ]] && _success "${DIR} created, repository downloaded and extracted"
+fi
+
+# Check for Homebrew; install brew
+if ! type -P 'brew' &> /dev/null; then
+	_warning "Be sure to open up xCode to agree to the terms"
+
+	_process "Installing Homebrew"
+	ruby -e "$(curl -#fkL raw.github.com/Homebrew/homebrew/go/install)"
+
+	_process "Running brew doctor"
+	brew doctor
+
+	[[ $? ]] && _success "Homebrew installed"
+fi
+
+# Change to the dotfiles directory
+cd "${DIR}"
+
+# Initialize the git repository if it's missing
+_process "Initializing git repository"
+git init
+
+_process "Adding https://github.com/${GITHUB_USER}/dotfiles.git as origin"
+git remote add origin "https://github.com/${GITHUB_USER}/dotfiles.git"
+
+_process "Downloading changes from origin"
+git fetch origin master
+
+# Reset the index and working tree to the fetched HEAD
+# (submodules are cloned in the subsequent sync step)
+_process "Resetting index & working tree to fetched HEAD"
+git reset --hard FETCH_HEAD
+
+# Remove any untracked files
+_process "Removing any untracked files"
+git clean -fd
+
+[[ $? ]] && _success "Repository has been initialized"
+
+# Pull down the latest changes
+_process "Pulling down latest changes"
+git pull --rebase origin master
+
+# Update submodules
+_process "Updating submodules"
+git submodule update --recursive --init --quiet
+
+[[ $? ]] && _success "Repository has been updated"
+
+# Create variable directory, but only after base installation is complete
+mkdir -p ${DIR}/var
+# set variable for Brewfile based on directory
+BREWFILE="${DIR}/var/Brewfile"
+
+# Install Homebrew formulae via Brewfile
+if ! type -P 'brew' &> /dev/null; then
+	_error "Homebrew not found"
+else
+	_process "Installing Homebrew packages"
+
+	# Set variable for list of homebrew formulaes
+	brews="${DIR}/opt/homebrew"
+
+	# Update and upgrade all packages
+	echo "update" >> ${BREWFILE}
+	echo "upgrade" >> ${BREWFILE}
+	echo "tap homebrew/completions" >> ${BREWFILE}
+
+	# Store IFS within a temp variable
+	OIFS=$IFS
+
+	# Set the separator to a carriage return & a new line break
+	# read in passed-in file and store as an array
+	IFS=$'\r\n' formulae=($(cat "${brews}"))
+
+	# Loop through split list of formulae
+	_process "Checking status of desired Homebrew formulae"
+	for index in ${!formulae[*]}
+	do
+		# Test whether a Homebrew formula is already installed
+		if ! brew list '${formulae[$index]}' &> /dev/null; then
+			# Add to brewfile to install
+			echo "install ${formulae[$index]}" >> ${BREWFILE}
+		fi
+	done
+
+	# Reset IFS back
+	IFS=$OIFS
+
+	# Tap some necessary formulae
+	echo "tap homebrew/dupes" >> ${BREWFILE}
+	echo "tap homebrew/versions" >> ${BREWFILE}
+	echo "tap homebrew/homebrew-php" >> ${BREWFILE}
+	echo "install php55" >> ${BREWFILE}
+	echo "cleanup" >> ${BREWFILE}
+
+	# Install using bundle command
+	brew bundle "${BREWFILE}"
+
+	# Set up hash file for brew installation
+	echo $(md5 "${brews}" | cut -d ' ' -f 4) > "${DIR}/var/homebrew"
+
+	[[ $? ]] && _success "Installed all Homebrew packages"
+fi
+
+# Install Node packages
+if ! type -P 'npm' &> /dev/null; then
+	_error "npm not found"
+else
+	_process "Installing npm packages"
+
+	# Set variable for list of npm packages
+	npmfile="${DIR}/opt/npm"
+
+	# Store IFS within a temp variable
+	OIFS=$IFS
+
+	# Set the separator to a carriage return & a new line break
+	# read in passed-in file and store as an array
+	IFS=$'\r\n' packages=($(cat "${npmfile}"))
+
+	# Loop through array
+	for index in ${packages[*]}
+	do
+		# Test whether a Homebrew formula is already installed
+		if ! $(npm list -g '${packages[$index]}' | grep '${packages[$index]}') &> /dev/null; then
+			# Create a string of all files with a comma at the end
+			string=$(printf "%s " "${packages[@]}")
+		fi
+	done
+
+	# Reset IFS back
+	IFS=$OIFS
+
+	# Install packages globally and quietly
+	npm install $string --global --quiet
+
+	# Set up hash file for npm installation
+	echo $(md5 "${npmfile}" | cut -d ' ' -f 4) > "${DIR}/var/npm"
+
+	[[ $? ]] && _success "Installed all npm packages"
+fi
+
+# Install Ruby gems
+if ! type -P 'ruby' &> /dev/null; then
+	_error "ruby not found"
+else
+	_process "Installing Ruby gems"
+
+	# Set variable for list of ruby gems
+	gemfile="${DIR}/opt/gems"
+
+	# Store IFS within a temp variable
+	OIFS=$IFS
+
+	# Set the separator to a carriage return & a new line break
+	# read in passed-in file and store as an array
+	IFS=$'\r\n' gems=($(cat "${gemfile}"))
+
+	# Loop through array
+	for index in ${gems[*]}
+	do
+		# Test whether a Homebrew formula is already installed
+		if ! $(gem list  '${gems[$index]}' | grep '${gems[$index]}') &> /dev/null; then
+			# Create a string of all files with a comma at the end
+			string=$(printf "%s " "${gems[@]}")
+		fi
+	done
+
+	# Reset IFS back
+	IFS=$OIFS
+
+	# Install packages globally and quietly
+	sudo gem install $string
+
+	# Set up hash file for gem installation
+	echo $(md5 "${gemfile}" | cut -d ' ' -f 4) > "${DIR}/var/gems"
+
+	[[ $? ]] && _success "Installed all Ruby gems"
+fi
+
+# Copy `.gitconfig`.
+# Any global git commands in `~/.bash_profile.local` will be written to
+# `.gitconfig`. This prevents them being committed to the repository.
+_process "Syncing global git configuration file"
+rsync -avz --quiet ${DIR}/conf/git/config  ${HOME}/.gitconfig
+
+# Force remove the vim directory if it's already there.
+_process "Removing ${HOME}/.vim/ directory"
+if [ -e "${HOME}/.vim" ]; then
+	rm -rf "${HOME}/.vim"
+fi
+
+# Symlink all necessary vim configuration files
+ln -fs "${DIR}/vim"                "${HOME}/.vim"
+ln -fs "${DIR}/conf/runcom/gvim"   "${HOME}/.gvimrc"
+ln -fs "${DIR}/conf/runcom/vim"    "${HOME}/.vimrc"
+
+# Check for Vim; install bundles
+if [[ -f "${HOME}/.vim/settings/bundles.vim" ]]; then
+	_process "Updating ViM bundles"
+
+	# Set variable for vim bundles
+	vimbundles="${HOME}/.vim/settings/bundles.vim"
+	vim "${vimbundles}" +PluginInstall +qall
+	echo $(md5 "${vimbundles}" | cut -d ' ' -f 4) > "${DIR}/var/vim"
+
+	[[ $? ]] && _success "Updated ViM bundles"
+fi
+
+# Create the necessary symbolic links between the `.dotfiles` and `HOME`
+# directory. The `bash_profile` sources other files directly from the
+# `.dotfiles` repository.
+if [[ -f "${DIR}/opt/symlinks" ]]; then
+	_process "Creating symlinks"
+
+	# Create .ssh directory; if it exists, no harm
+	mkdir -p "${HOME}/.ssh"
+
+	# Set variable for list of symlinks
+	symlinks="${DIR}/opt/symlinks"
+
+	# Store IFS within a temp variable
+	OIFS=$IFS
+
+	# Set the separator to a carriage return & a new line break
+	# read in passed-in file and store as an array
+	IFS=$'\r\n' 
+	links=($(cat "${symlinks}"))
+	
+	# Loop through array
+	for index in ${!links[*]}
+	do
+		for link in ${links[$index]}
+		do
+			# set IFS back to space to split string on
+			IFS=$' '
+			# create an array of line items
+			symlink=(${links[$index]})
+			# Create symbolic link
+			ln -fs "${DIR}/${symlink[0]}" "${HOME}/${symlink[1]}"
+		done
+		# set separater back to carriage return & new line break
+		IFS=$'\r\n'
+	done
+
+	# Reset IFS back
+	IFS=$OIFS
+
+	# Set up hash file for brew installation
+	echo $(md5 "${symlinks}" | cut -d ' ' -f 4) > "${DIR}/var/symlinks"
+
+	[[ $? ]] && _success "All files have been symlinked"
+fi
+
+_process "Sourcing $HOME/.bash_profile"
+source "${HOME}/.bash_profile"
+
+# Setup git authorship
+_process "Setting up Git author"
+# Git author name
+_question "What's your name"
+read USER_GIT_AUTHOR_NAME
+if [[ ! -z "$USER_GIT_AUTHOR_NAME" ]]; then
+	GIT_AUTHOR_NAME="${USER_GIT_AUTHOR_NAME}"
+	$(git config --global user.name "$GIT_AUTHOR_NAME")
+else
+	_warning "No Git user name has been set.  Please update manually"
+fi
+
+# Git author email
+_question "What's your email"
+read USER_GIT_AUTHOR_EMAIL
+if [[ ! -z "$USER_GIT_AUTHOR_EMAIL" ]]; then
+	GIT_AUTHOR_EMAIL="${USER_GIT_AUTHOR_EMAIL}"
+	$(git config --global user.email "$GIT_AUTHOR_EMAIL")
+else
+	_warning "No Git user email has been set.  Please update manually"
+fi
+
+# Set the credentials (modifies ${HOME}/.gitconfig)
+[[ $? ]] && _success "Git author is $(git config user.name) <$(git config user.email)>"
+
+# Check for brew bash; change to it
+_process "Changing login shell to Homebrew installed version"
+
+# Mac OS X directory service command line utility
+# sudo dscl . -change /Users/$USER UserShell /bin/bash /usr/local/bin/bash
+echo "/usr/local/bin/bash" | pbcopy
+_process "Copied /usr/local/bin/bash to pasteboard"
+
+_process "Opening ViM to update /etc/shells with usr/local/bin/bash"
+# `vim +` runs vim and puts you at the last line of the file
+# -c allows you to run commands and you can have up to 10
+# process reads => open /etc/shells in ViM, go to the last line, put
+# in Insert mode, paste in from the pasteboard, close and save all
+sudo vim + -c 'startinsert' -c ':r !pbpaste' -c ':xa' /etc/shells
+
+# Programmatic way to change shell
+chsh -s /usr/local/bin/bash 2>/dev/null
+
+[[ $? ]] && _success "Changed default shell to Homebrew installed version"
+
+# Symlink library files
+_process "Symlinking dotfiles command & man page"
+ln -fs "${DIR}/bin/dotfiles"                "/usr/local/bin/dotfiles"
+ln -fs "${DIR}/share/man/man1/dotfiles.1"   "/usr/local/share/man/man1/dotfiles.1"
+
+[[ $? ]] && _success "Dotfiles installed.  To upgrade, run dotfiles"
