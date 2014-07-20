@@ -130,17 +130,17 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 
 #### UI
 * [base16-vim](https://github.com/chriskempson/base16-vim) - colorscheme
-* ~~[MatchTag](https://github.com/gregsexton/MatchTag) - highlights the matching HTML tag when the cursor is positioned on a tag~~
-* ~~[vim-gitgutter](https://github.com/airblade/vim-gitgutter) - shows a git diff in the 'gutter'~~
-* ~~[vim-airline](https://github.com/bling/vim-airline) - statusline/tabline~~
-* ~~[tmuxline.vim](https://github.com/edkolev/tmuxline.vim) - tmux statusline~~
+* [MatchTag](https://github.com/gregsexton/MatchTag) - highlights the matching HTML tag when the cursor is positioned on a tag
+* [vim-gitgutter](https://github.com/airblade/vim-gitgutter) - shows a git diff in the 'gutter'
+* [vim-airline](https://github.com/bling/vim-airline) - statusline/tabline
+* [tmuxline.vim](https://github.com/edkolev/tmuxline.vim) - tmux statusline
 
 #### Editing
 
 * [editorconfig-vim](https://github.com/editorconfig/editorconfig-vim) - helps developers define and maintain consistent coding styles between different editors and IDEs
-* ~~[emmet-vim](https://github.com/mattn/emmet-vim) - provides support for expanding abbreviations~~
-* ~~[nerdcommenter](https://github.com/scrooloose/nerdcommenter) - intensely orgasmic commenting~~
-* ~~[vim-surround](https://github.com/tpope/vim-surround) - quoting/parenthesizing made simple~~
+* [emmet-vim](https://github.com/mattn/emmet-vim) - provides support for expanding abbreviations
+* [nerdcommenter](https://github.com/scrooloose/nerdcommenter) - intensely orgasmic commenting
+* [vim-surround](https://github.com/tpope/vim-surround) - quoting/parenthesizing made simple
 
 #### Syntax
 
