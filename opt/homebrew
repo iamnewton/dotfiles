@@ -2,6 +2,7 @@ coreutils
 ack
 bash
 bash-completion
+https://raw.githubusercontent.com/chrisopedia/homebrew-completions/boom-completion/boom-completion.rb
 composer
 ctags
 ffmpeg
@@ -10,6 +11,7 @@ gist
 git
 git-extras
 graphicsmagick
+https://raw.githubusercontent.com/chrisopedia/homebrew-completions/grunt-completion/grunt-completion.rb
 hub
 jpeg
 jq
@@ -24,5 +26,6 @@ tmux
 tree
 wget
 wp-cli
+https://raw.githubusercontent.com/chrisopedia/homebrew-completions/wpcli-completion/wpcli-completion.rb
 vagrant-completion
 vim --HEAD --override-system-vi --with-python3

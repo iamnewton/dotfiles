@@ -159,15 +159,16 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 * ~~[snipmate](https://github.com/msanders/snipmate.vim) - snippet manager~~
 * ~~[vim-fugitive](https://github.com/tpope/vim-fugitive) - a Git wrapper so awesome, it should be illegal~~
 
-### Tab Completion Libraries
+### &lt;tab&gt; Completion Libraries
 
 * [Bash](http://bash-completion.alioth.debian.org/) (via Homebrew)
-* [Boom](https://github.com/Homebrew/homebrew-completions/blob/master/boom-completion.rb) (via Homebrew)
+* [Boom](https://raw.githubusercontent.com/chrisopedia/homebrew-completions/boom-completion/boom-completion.rb) (via Homebrew)
 * Git (via Homebrew)
-* [Grunt](https://github.com/Homebrew/homebrew-completions/blob/master/grunt-completion.rb) (via Homebrew)
-* [Git Extras](https://github.com/visionmedia/git-extras/blob/master/etc/bash_completion.sh) (via Homebrew)
-* [Hub](https://github.com/github/hub/blob/master/etc/hub.bash_completion.sh) (via itself)
+* [Grunt](https://raw.githubusercontent.com/chrisopedia/homebrew-completions/grunt-completion/grunt-completion.rb) (via Homebrew)
+* [Git Extras](https://github.com/visionmedia/git-extras/blob/master/etc/bash_completion.sh)
+* [Hub](https://github.com/github/hub/blob/master/etc/hub.bash_completion.sh)
 * [Vagrant](https://github.com/Homebrew/homebrew-completions/blob/master/vagrant-completion.rb) (via Homebrew)
+* [WP CLI](https://raw.githubusercontent.com/chrisopedia/homebrew-completions/wpcli-completion/wpcli-completion.rb) (via Homebrew)
 * Killall for common apps
 * OS X NSGlobalDomain
 * SSH Known Hosts
