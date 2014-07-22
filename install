@@ -53,6 +53,8 @@ else
 
 	_process "Creating directory at ${DIR}"
 	/usr/bin/sudo mkdir -p "${DIR}"
+	/usr/bin/sudo /bin/chmod g+rwx "${DIR}"
+	/usr/bin/sudo /bin/chgrp admin "${DIR}"
 
 	_process "Downloading repository to /tmp directory"
 	# (-#) shows the progress bar as # sign
