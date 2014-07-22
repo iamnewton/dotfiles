@@ -7,7 +7,8 @@ if has("autocmd")
 	" Languages with specific tabs/space requirements
 	autocmd FileType make setlocal ts=4 sts=4 sw=4 noexpandtab
 	" Automatically strip trailing whitespace on file save
-	autocmd BufWritePre *.css,*.html,*.js,*.json,*.md,*.php,*.py,*.rb,*.scss,*.sh,*.txt :call StripTrailingWhitespace()
+	" disabled so EditorConfig can control it
+	" autocmd BufWritePre *.css,*.html,*.js,*.json,*.md,*.php,*.py,*.rb,*.scss,*.sh,*.txt :call StripTrailingWhitespace()
 endif
 
 if has("wildmenu")

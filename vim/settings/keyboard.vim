@@ -1,5 +1,6 @@
 " Strip trailing whitespace (,$)
-noremap <leader>$ :call StripTrailingWhitespace()<CR>
+" disabled so EditorConfig can control it
+" noremap <leader>$ :call StripTrailingWhitespace()<CR>
 
 " Faster viewport scrolling (3 lines at a time)
 nnoremap <C-e> 3<C-e>
