@@ -52,7 +52,7 @@ else
 	_warning "No ${DIR} found"
 
 	_process "Creating directory at ${DIR}"
-	mkdir -p "${DIR}"
+	/usr/bin/sudo mkdir -p "${DIR}"
 
 	_process "Downloading repository to /tmp directory"
 	# (-#) shows the progress bar as # sign
@@ -72,8 +72,6 @@ fi
 
 # Check for Homebrew; install brew
 if ! type -P 'brew' &> /dev/null; then
-	_warning "Be sure to open up xCode to agree to the terms"
-
 	_process "Installing Homebrew"
 	ruby -e "$(curl -#fkL raw.github.com/Homebrew/homebrew/go/install)"
 
