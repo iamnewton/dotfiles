@@ -15,6 +15,12 @@
 	# Add untracked, remove deleted, and show status
 	adda = !git add -A && git status
 
+	# Sets git branch default to list verbosely
+	branch = !git branch --list -v
+
+	# Sets git remote default to list verbosely
+	remote = !git remote -v
+
 	# Fetch a repository ($1) and checkout its ref ($2) HEAD
 	# Use: `git browse https://github.com/necolas/dotfiles <commit-ish>`
 	browse = !bash -c 'git fetch $1 ${2:-HEAD} && git checkout FETCH_HEAD' -
@@ -167,3 +173,7 @@
 # reuse the recorded resolutions
 [rerere]
 	enabled = 1
+
+[status]
+	# always show the full path
+	relativePaths = false
