@@ -59,22 +59,29 @@
 	# color opts: normal, black, red, green, yellow, blue, magenta, cyan, or white
 	ui = auto
 	interactive = auto
+	showbranch = auto
 
 [color "branch"]
-	current = cyan reverse
-	local = cyan
-	remote = yellow
+	current = magenta ul bold reverse
+	local = magenta dim
+	remote = blue
+	upstream = blue dim
+	plain = white
 
 [color "diff"]
 	meta = yellow bold
-	frag = magenta bold
+	frag = cyan bold
 	old = red bold
 	new = green bold
+	whitespace = yellow reverse
+	commit = green ul bold
 
 [color "status"]
-	added = cyan
-	changed = green
+	added = green
+	changed = yellow
 	untracked = red
+	branch = magenta
+	nobranch = red bold
 
 [commit]
 	# custom commit message template
@@ -121,7 +128,37 @@
 	# tut: http://gitimmersion.com/lab_10.html
 	# ref: http://linux.die.net/man/1/git-log
 	# Result: <short-sha> <commit-message> (<pointer-names>) -- <commit-author-name>; <relative-time>
-	nice = "%C(yellow)%h%C(reset) %C(white)%s%C(cyan)%d%C(reset) -- %an; %ar"
+	# http://git-scm.com/book/en/Git-Basics-Viewing-the-Commit-History
+	# %b:+--body
+	# %Cred:switch color to red
+	# %Cgreen: switch color to green
+	# %Cblue: switch color to blue
+	# %Creset: reset color
+	# %C(...): color specification, as described in color.branch.* config option
+	# %d+---ref names, like the --decorate option of git-log(1)
+	# %H+---Commit hash
+	# %h+---Abbreviated commit hash
+	# %f:+--sanitized subject line, suitable for a filename
+	# %m:+--left, right or boundary mark
+	# %N:+--commit notes
+	# %n:+--newline
+	# %P+---Parent hashes
+	# %p+---Abbreviated parent hashes
+	# %s+---Subject
+	# %T+---Tree hash
+	# %t+---Abbreviated tree hash
+	# %w([<w>[,<i1>[,<i2>]]]): switch line wrapping, like the -w option of git-shortlog(1).
+	# %an+--Author name
+	# %ae+--Author e-mail
+	# %ad+--Author date (format respects the --date= option)
+	# %ar+--Author date, relative
+	# %cn+--Committer name
+	# %ce+--Committer email
+	# %cd+--Committer date
+	# %cr+--Committer date, relative
+	# %%+---:a raw %
+	# %x00:+print a byte from a hex code
+	nice = "%C(209)%an%C(reset)@%C(yellow)%h%C(reset) said '%C(white bold)%s%C(reset)' about %C(cyan)%ar%C(reset)%C(magenta)%d%C(reset)"
 
 [push]
 	default = matching

@@ -28,6 +28,12 @@ create_fill() {
 prompt_git() {
 	local s=""
 	local branchName=""
+	local base08=$(tput setaf 210) # red
+	local base09=$(tput setaf 209) # orange
+	local base0A=$(tput setaf 221) # yellow
+	local base0B=$(tput setaf 114) # green
+	local base0F=$(tput setaf 173) # brown
+	local branchStyle="$base0B"
 
 	# check if the current directory is in a git repository
 	if [ $(git rev-parse --is-inside-work-tree &>/dev/null; printf "%s" $?) == 0 ]; then
@@ -38,24 +44,28 @@ prompt_git() {
 			# ensure index is up to date
 			git update-index --really-refresh  -q &>/dev/null
 
+			# check for stashed files
+			if $(git rev-parse --verify refs/stash &>/dev/null); then
+				s="$s$";
+				branchStyle="$base0F"
+			fi
+
 			# check for uncommitted changes in the index
 			if ! $(git diff --quiet --ignore-submodules --cached); then
 				s="$s+";
+				branchStyle="$base0A"
 			fi
 
 			# check for unstaged changes
 			if ! $(git diff-files --quiet --ignore-submodules --); then
 				s="$s!";
+				branchStyle="$base09"
 			fi
 
 			# check for untracked files
 			if [ -n "$(git ls-files --others --exclude-standard)" ]; then
 				s="$s?";
-			fi
-
-			# check for stashed files
-			if $(git rev-parse --verify refs/stash &>/dev/null); then
-				s="$s$";
+				branchStyle="$base08"
 			fi
 
 		fi
@@ -67,7 +77,7 @@ prompt_git() {
 
 		[ -n "$s" ] && s=" [$s]"
 
-		printf "%s" "$1$branchName$s"
+		printf "%s" "on $branchStyle$1$branchName$s"
 	else
 		return
 	fi
@@ -97,7 +107,6 @@ set_prompts() {
 	local hostStyle=""
 	local userStyle=""
 	local fillStyle=""
-	local branchStyle=""
 
 
 	if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
@@ -106,22 +115,22 @@ set_prompts() {
 		bold=$(tput bold)
 		reset=$(tput sgr0)
 
-		base00=$(tput setaf 16)
-		base01=$(tput setaf 59)
-		base02=$(tput setaf 59)
-		base03=$(tput setaf 101)
-		base04=$(tput setaf 144)
-		base05=$(tput setaf 188)
-		base06=$(tput setaf 188)
-		base07=$(tput setaf 231)
-		base08=$(tput setaf 210)
-		base09=$(tput setaf 209)
-		base0A=$(tput setaf 221)
-		base0B=$(tput setaf 114)
-		base0C=$(tput setaf 80)
-		base0D=$(tput setaf 68)
-		base0E=$(tput setaf 176)
-		base0F=$(tput setaf 173)
+		base00=$(tput setaf 16)  # ----
+		base01=$(tput setaf 59)  # ---
+		base02=$(tput setaf 59)  # --
+		base03=$(tput setaf 101) # -
+		base04=$(tput setaf 144) # +
+		base05=$(tput setaf 188) # ++
+		base06=$(tput setaf 188) # +++
+		base07=$(tput setaf 231) # ++++
+		base08=$(tput setaf 210) # red
+		base09=$(tput setaf 209) # orange
+		base0A=$(tput setaf 221) # yellow
+		base0B=$(tput setaf 114) # green
+		base0C=$(tput setaf 80)  # aqua
+		base0D=$(tput setaf 68)  # blue
+		base0E=$(tput setaf 176) # purple
+		base0F=$(tput setaf 173) # brown
 	else
 		bold=""
 		reset="\e[0m"
@@ -160,18 +169,6 @@ set_prompts() {
 		hostStyle="\[$base0A\]"
 	fi
 
-	if git rev-parse --git-dir >/dev/null 2>&1; then
-		# check for uncommitted changes in the index
-		if ! git diff-index --quiet --cached HEAD --ignore-submodules -- >&2; then
-			branchStyle=$base08
-		# check for unstaged changes
-		elif ! git diff-files --quiet --ignore-submodules -- >&2; then
-			branchStyle=$base0A
-		else
-			branchStyle=$base0B
-		fi
-	fi
-
 	# set the terminal title to the current working directory
 	PS1="\[\033]0;\w\007\]"
 
@@ -180,10 +177,10 @@ set_prompts() {
 	PS1+="\[$reset$bold$base05\]@"
 	PS1+="\[$hostStyle\]\h" # host
 	PS1+="\[$reset$bold$base05\] in "
-	PS1+="\[$base0E\]\w" # working directory
-	PS1+="\$(prompt_git \"$bold$base05 on $branchStyle\")" # git repository details
+	PS1+="\[$base0E\]\$PWD" # working directory
+	PS1+="\[$reset\]\$(prompt_git)" # git repository details
 	PS1+="\[$reset$bold$base05\] at "
-	PS1+="\[$base0C\]\$(date +%H:%M)" # working directory
+	PS1+="\[$base0C\]\t" # working directory
 	PS1+="\n"
 	PS1+="\[$reset$base07\]\$ \[$reset\]" # $ (and reset color)
 
