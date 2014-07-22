@@ -1,5 +1,12 @@
 Host *
 
+# Enable connection sharing
+ControlMaster auto
+ControlPath /tmp/ssh_mux_%h_%p_%r
+
+# Enable persistant connection for 2 hours
+ControlPersist 2h
+
 # Forward ssh agent to the remote machine.
 ForwardAgent yes
 
