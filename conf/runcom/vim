@@ -10,11 +10,12 @@ set nocompatible
 filetype off
 
 " Point to runtime path of vundle submodule (since it's not in .vim/autoload)
-silent! set rtp+=${HOME}/.vim/bundle/Vundle.vim
+silent! set rtp+=${HOME}/.vim/plugins/Vundle.vim
 " Call vundle plugin management
-silent! call vundle#rc()
-
+silent! call vundle#begin()
 source ${HOME}/.vim/settings/bundles.vim
+call vundle#end()
+
 source ${HOME}/.vim/settings/general.vim
 source ${HOME}/.vim/settings/display.vim
 source ${HOME}/.vim/settings/theme.vim
