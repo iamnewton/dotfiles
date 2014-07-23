@@ -11,7 +11,7 @@ html-inspector
 imageoptim-cli
 jshint
 jsonlint
-karma
+karma-cli
 pageres
 plato
 psi

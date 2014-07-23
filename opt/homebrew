@@ -29,4 +29,3 @@ wget
 wp-cli
 https://raw.githubusercontent.com/chrisopedia/homebrew-completions/wpcli-completion/wpcli-completion.rb
 vagrant-completion
-vim --HEAD --override-system-vi --with-python3

@@ -46,7 +46,7 @@ do
 			exit
 			;;
 		-v | --version) # Version of software
-			printf 'Version %s\n' "$(git describe --tags)"
+			printf 'Version %s\n' "$(cd "${DIR}" && git describe --tags)"
 			exit 0
 			;;
 		-*)
