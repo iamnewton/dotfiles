@@ -135,7 +135,12 @@ else
 	# Update and upgrade all packages
 	brew update
 	brew upgrade
+
+	# Tap some necessary formulae
 	brew tap homebrew/completions
+	brew tap homebrew/dupes
+	brew tap homebrew/versions
+	brew tap homebrew/homebrew-php
 
 	# Store IFS within a temp variable
 	OIFS=$IFS
@@ -158,11 +163,6 @@ else
 	# Reset IFS back
 	IFS=$OIFS
 
-	# Tap some necessary formulae
-	brew tap homebrew/dupes
-	brew tap homebrew/versions
-	brew tap homebrew/homebrew-php
-	brew install php55
 	brew cleanup
 
 	[[ $? ]] && _success "Installed all Homebrew packages"
