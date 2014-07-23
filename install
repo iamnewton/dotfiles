@@ -122,10 +122,8 @@ git submodule update --recursive --init --quiet
 
 # Create variable directory, but only after base installation is complete
 mkdir -p ${DIR}/var
-# set variable for Brewfile based on directory
-BREWFILE="${DIR}/var/Brewfile"
 
-# Install Homebrew formulae via Brewfile
+# Install Homebrew formulae
 if ! type -P 'brew' &> /dev/null; then
 	_error "Homebrew not found"
 else
@@ -135,9 +133,9 @@ else
 	brews="${DIR}/opt/homebrew"
 
 	# Update and upgrade all packages
-	echo "update" >> ${BREWFILE}
-	echo "upgrade" >> ${BREWFILE}
-	echo "tap homebrew/completions" >> ${BREWFILE}
+	brew update
+	brew upgrade
+	brew tap homebrew/completions
 
 	# Store IFS within a temp variable
 	OIFS=$IFS
@@ -153,7 +151,7 @@ else
 		# Test whether a Homebrew formula is already installed
 		if ! brew list '${formulae[$index]}' &> /dev/null; then
 			# Add to brewfile to install
-			echo "install ${formulae[$index]}" >> ${BREWFILE}
+			brew install ${formulae[$index]}
 		fi
 	done
 
@@ -161,17 +159,11 @@ else
 	IFS=$OIFS
 
 	# Tap some necessary formulae
-	echo "tap homebrew/dupes" >> ${BREWFILE}
-	echo "tap homebrew/versions" >> ${BREWFILE}
-	echo "tap homebrew/homebrew-php" >> ${BREWFILE}
-	echo "install php55" >> ${BREWFILE}
-	echo "cleanup" >> ${BREWFILE}
-
-	# Install using bundle command
-	brew bundle "${BREWFILE}"
-
-	# Set up hash file for brew installation
-	echo $(md5 "${brews}" | cut -d ' ' -f 4) > "${DIR}/var/homebrew"
+	brew tap homebrew/dupes
+	brew tap homebrew/versions
+	brew tap homebrew/homebrew-php
+	brew install php55
+	brew cleanup
 
 	[[ $? ]] && _success "Installed all Homebrew packages"
 fi
