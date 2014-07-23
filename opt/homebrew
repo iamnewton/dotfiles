@@ -3,7 +3,6 @@ ack
 bash
 bash-completion
 https://raw.githubusercontent.com/chrisopedia/homebrew-completions/boom-completion/boom-completion.rb
-composer
 ctags
 ffmpeg
 gem-completion
@@ -20,6 +19,7 @@ node
 optipng
 phantomjs
 php55
+composer
 rename
 rsync
 spark
