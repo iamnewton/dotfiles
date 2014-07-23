@@ -97,7 +97,7 @@ _process "Adding https://github.com/${GITHUB_USER}/dotfiles.git as origin"
 git remote add origin "https://github.com/${GITHUB_USER}/dotfiles.git"
 
 _process "Downloading changes from origin"
-git fetch origin master
+git fetch --tags origin master
 
 # Reset the index and working tree to the fetched HEAD
 # (submodules are cloned in the subsequent sync step)
@@ -320,7 +320,7 @@ if [[ -f "${DIR}/opt/symlinks" ]]; then
 fi
 
 _process "Sourcing $HOME/.bash_profile"
-source "${HOME}/.bash_profile"
+source "${HOME}/.bash_profile" 2&>/dev/null
 
 # Setup git authorship
 _process "Setting up Git author"
