@@ -2,7 +2,7 @@
 
 # variables
 LOG="${HOME}/Library/Logs/dotfiles.log"
-DIR="$(brew --prefix)"
+DIR="$(dotfiles --prefix)"
 
 # Success logging
 _success() {
@@ -28,9 +28,6 @@ if [[ ! -d "${DIR}" ]]; then
 	_success "Dotfiles has been uninstalled"
 fi
 
-# set variable for Brewfile based on directory
-BREWFILE="${DIR}/var/Brewfile"
-
 # Install Homebrew formulae via Brewfile
 if ! type -P 'brew' &> /dev/null; then
 	_error "Homebrew not found"
@@ -41,7 +38,10 @@ else
 	brews="${DIR}/opt/homebrew"
 
 	# Update and upgrade all packages
-	echo "untap homebrew/completions" >> ${BREWFILE}
+	brew untap homebrew/completions
+	brew untap homebrew/dupes
+	brew untap homebrew/versions
+	brew untap homebrew/homebrew-php
 
 	# Store IFS within a temp variable
 	OIFS=$IFS
@@ -56,22 +56,14 @@ else
 		# Test whether a Homebrew formula is already installed
 		if ! brew list '${formulae[$index]}' &> /dev/null; then
 			# Add to brewfile to install
-			echo "uninstall ${formulae[$index]}" >> ${BREWFILE}
+			brew uninstall '${formulae[$index]}'
 		fi
 	done
 
 	# Reset IFS back
 	IFS=$OIFS
 
-	# Tap some necessary formulae
-	echo "untap homebrew/dupes" >> ${BREWFILE}
-	echo "untap homebrew/versions" >> ${BREWFILE}
-	echo "untap homebrew/homebrew-php" >> ${BREWFILE}
-	echo "uninstall php55" >> ${BREWFILE}
-	echo "cleanup" >> ${BREWFILE}
-
-	# Install using bundle command
-	brew bundle "${BREWFILE}"
+	brew cleanup
 
 	[[ $? ]] && _success "Uninstalled all Homebrew packages"
 fi
