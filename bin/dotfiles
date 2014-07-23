@@ -12,7 +12,6 @@ else
 	DIR="/usr/local/opt/dotfiles"
 fi
 
-BREWFILE="${DIR}/var/Brewfile"
 usage="$(basename "$0"): usage: $(basename "$0") [-h|--help] [-v|--version] [--prefix]"
 
 # Test for known flags
@@ -93,47 +92,34 @@ if type -P 'brew' &> /dev/null; then
 	# Linking applications to ~/Applications
 	brew linkapps --local
 
-	# Install Homebrew formulae via Brewfile
+	# Install Homebrew formulae
 	# here check the hash as well
 	brews="${DIR}/opt/homebrew"
-	old_brew="$(cat '${DIR}/var/homebrew')"
-	new_brew="$(md5 "${brews}" | cut -d ' ' -f 4)"
-	if [[ $new_brew != $old_brew ]]; then
 
-		# remove any Brewfile if there
-		rm -rf ${BREWFILE}
+	# update and upgrade all packages
+	brew update
+	brew upgrade
 
-		# update and upgrade all packages
-		echo "update" >> ${BREWFILE}
-		echo "upgrade" >> ${BREWFILE}
+	# store IFS within a temp variable
+	OIFS=$IFS
 
-		# store IFS within a temp variable
-		OIFS=$IFS
+	# set the separator to a carriage return & a new line break
+	# read in passed-in file and store as an array
+	IFS=$'\r\n' formulae=($(cat "${brews}"))
 
-		# set the separator to a carriage return & a new line break
-		# read in passed-in file and store as an array
-		IFS=$'\r\n' formulae=($(cat "${brews}"))
+	for index in ${!formulae[*]}
+	do
+		# Test whether a Homebrew formula is already installed
+		if ! brew list '${formulae[$index]}' &> /dev/null; then
+			brew install '${formulae[$index]}'
+		fi
+	done
 
-		for index in ${!formulae[*]}
-		do
-			# Test whether a Homebrew formula is already installed
-			if ! brew list '${formulae[$index]}' &> /dev/null; then
-				# add to brewfile to install
-				echo "install ${formulae[$index]}" >> ${BREWFILE}
-			fi
-		done
+	IFS=$OIFS
 
-		IFS=$OIFS
+	brew cleanup
 
-		echo "cleanup" >> ${BREWFILE}
-
-		brew bundle "${BREWFILE}"
-
-		# set up hash file for brew installation
-		echo $(md5 "${brews}" | cut -d ' ' -f 4) > "${DIR}/var/homebrew"
-
-		[[ $? ]] && _success "Homebrew updated, all formulae upgraded, new formulae installed"
-	fi
+	[[ $? ]] && _success "Homebrew updated, all formulae upgraded, new formulae installed"
 fi
 
 # Check if node is installed, upgrade 
@@ -190,7 +176,7 @@ fi
 if type -P 'ruby' &> /dev/null; then
 	sudo gem update
 
-	# Install Homebrew formulae via Brewfile
+	# Install Ruby gem
 	# here check the hash as well
 	gemfile="${DIR}/opt/gems"
 	old_gem="$(cat '${DIR}/var/gems')"
