@@ -19,6 +19,7 @@ mysql
 node
 optipng
 phantomjs
+php55
 rename
 rsync
 spark
