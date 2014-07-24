@@ -167,6 +167,9 @@ else
 	brew install vim --HEAD --override-system-vi --with-python3
 	brew cleanup
 
+	# Set up hash file for brew installation
+	echo $(md5 "${brews}" | cut -d ' ' -f 4) > "${DIR}/var/homebrew"
+
 	[[ $? ]] && _success "Installed all Homebrew packages"
 fi
 
