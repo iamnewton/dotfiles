@@ -42,6 +42,7 @@ else
 	brew untap homebrew/dupes
 	brew untap homebrew/versions
 	brew untap homebrew/homebrew-php
+	brew untap peco/peco
 
 	# Store IFS within a temp variable
 	OIFS=$IFS
