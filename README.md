@@ -2,7 +2,7 @@
 
 Typically software you buy comes with some sort of installer, why not your dotfiles? After setting up my dotfiles and installation for years, I decided to take a page from [some](https://github.com/necolas) [other](https://github.com/mathiasbynens) [people's](https://github.com/cowboy) [books](http://dotfiles.github.io) and set up a script that will configure my machine to run [ViM as an IDE](http://blog.sanctum.geek.nz/series/unix-as-ide/).  Along the way, I figured how to get all of the necessary [Homebrew](http://braumeister.org) & [Node](https://www.npmjs.org) packages installed as well as some useful [Ruby gems](http://rubygems.org). Feel free to [poke around](https://github.com/chrisopedia/dotfiles/commits/master) the repository, [fork it](https://github.com/chrisopedia/dotfiles/fork) to make it your own, [suggest things](https://github.com/chrisopedia/dotfiles/issues?labels=feature+request) for me to include, [log a bug](https://github.com/chrisopedia/dotfiles/issues/new), or maybe checkout the [features list](#features) to see what's included.
 
-[![Version 1.2.3](http://img.shields.io/badge/version-1.2.3-brightgreen.svg)](https://github.com/chrisopedia/bash/releases/tag/1.2.3) [![Stories in Ready](https://badge.waffle.io/chrisopedia/dotfiles.png?label=Ready)](http://waffle.io/chrisopedia/dotfiles)
+[![Version 1.3.0](http://img.shields.io/badge/version-1.3.0-brightgreen.svg)](https://github.com/chrisopedia/bash/releases/tag/1.3.0) [![Stories in Ready](https://badge.waffle.io/chrisopedia/dotfiles.png?label=Ready)](http://waffle.io/chrisopedia/dotfiles)
 
 ## Installation
 
@@ -81,6 +81,7 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 * [mysql](http://www.mysql.com) - open source database
 * [node](http://nodejs.org/) - platform built on Chrome's JavaScript runtime for easily building fast, scalable network applications
 * [optipng](http://optipng.sourceforge.net/) - PNG optimizer that recompresses image files to a smaller size, without losing any information
+* [peco](https://github.com/peco/peco) - Simplistic interactive filtering tool
 * [phantomjs](http://phantomjs.org/) - headless WebKit scriptable with a JavaScript API
 * [php55 (via homebrew-php)](https://github.com/homebrew/homebrew-php) - centralized repository for PHP-related brews
 * [rename](http://plasmasturm.org/code/rename/) - renames files according to modification rules specified on the command line
