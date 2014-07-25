@@ -155,9 +155,9 @@ else
 	for index in ${!formulae[*]}
 	do
 		# Test whether a Homebrew formula is already installed
-		if ! brew list '${formulae[$index]}' &> /dev/null; then
+		if ! brew list ${formulae[$index]} &> /dev/null; then
 			# Add to brewfile to install
-			brew install '${formulae[$index]}'
+			brew install ${formulae[$index]}
 		fi
 	done
 
