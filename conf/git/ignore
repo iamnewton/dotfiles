@@ -1,4 +1,5 @@
-# OS or Editor files
+# OS or Editor files #
+######################
 ._*
 .DS_Store
 Thumbs.db
@@ -23,6 +24,7 @@ Desktop.ini
 *.sass-cache
 *.sw?
 *.vi
+*.viminfo
 
 # Compiled source #
 ###################
@@ -46,11 +48,11 @@ Desktop.ini
 *.xz
 *.lzma
 
-#packing-only formats
+# Packing-only formats
 *.iso
 *.tar
 
-#package management formats
+# Package management formats
 *.dmg
 *.xpi
 *.gem

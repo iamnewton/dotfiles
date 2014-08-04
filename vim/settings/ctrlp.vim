@@ -7,7 +7,7 @@ let g:ctrlp_custom_ignore = {
     \ 'file': '\.DS_Store$\|\.jpg$\|\.png$\|\.jpeg$\|\jpeg.gif$\|\.svg$\|\.class$\|\.iml$\|\.log$'
     \ }
 " set to 1 will put regex search by default
-let g:ctrlp_regexp_search = 0                       
+let g:ctrlp_regexp_search = 0
 " set to 0 for results to show at top; set to 1 for results to show on bottom
 let g:ctrlp_match_window_bottom = 0
 " set to 0 for results matches to show top to bottom; set to 1 for matches to show bottom to top
@@ -19,3 +19,9 @@ let g:ctrlp_show_hidden = 1
 " set to 1 to search by filename (as opposed to full path) as default
 let g:ctrlp_by_filename = 0
 
+" keyboard mappings
+nnoremap <silent> \ :CtrlP<CR>
+nnoremap <silent> <Tab> :CtrlPCurFile<CR>
+nnoremap <silent> <space> :CtrlPBuffer<CR>
+nnoremap <silent> <leader>m :CtrlPMRUFiles<CR>
+nnoremap <silent> cv :CtrlPTag<CR>

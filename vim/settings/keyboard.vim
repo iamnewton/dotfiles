@@ -18,9 +18,3 @@ nnoremap Y y$
 vmap <Tab> >gv
 vmap <S-Tab> <gv
 
-" Ctrlp plugin
-nnoremap <silent> \ :CtrlP<CR>
-nnoremap <silent> <Tab> :CtrlPCurFile<CR>
-nnoremap <silent> <space> :CtrlPBuffer<CR>
-nnoremap <silent> <leader>m :CtrlPMRUFiles<CR>
-nnoremap <silent> cv :CtrlPTag<CR>

@@ -33,7 +33,7 @@ let mapleader=","
 " skip over a lot of screen lines. You can use gj and gk to move by screen
 " lines.
 "
-set wrap
+set wrap!
 set linebreak
 set nolist
 set textwidth=0

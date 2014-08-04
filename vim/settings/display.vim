@@ -3,10 +3,11 @@ if has("syntax")
 	syntax enable
 	" Set 256 color terminal support
 	set t_Co=256
-	" Set dark background
-	set background=dark
-	" Set colorscheme
 	hi Visual ctermbg=15 ctermfg=0
+	" Highlight current line
+	set cursorline
+	hi clear CursorLine
+	hi CursorLine cterm=underline term=underline gui=underline guibg=NONE
 endif
 
 if has("cmdline_info")
@@ -37,10 +38,6 @@ endif
 " Enable line numbers
 set number
 hi LineNr ctermbg=NONE ctermfg=white
-" Highlight current line
-set cursorline
-hi clear CursorLine
-hi CursorLine cterm=underline term=underline gui=underline guibg=NONE
 
 " Show 'invisible' characters
 set list
