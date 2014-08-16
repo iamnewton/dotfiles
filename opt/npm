@@ -2,6 +2,7 @@ bower
 browser-sync
 colorguard
 component
+csscomb
 csslint
 david
 gify

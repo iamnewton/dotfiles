@@ -2,7 +2,7 @@
 
 Typically software you buy comes with some sort of installer, why not your dotfiles? After setting up my dotfiles and installation for years, I decided to take a page from [some](https://github.com/necolas) [other](https://github.com/mathiasbynens) [people's](https://github.com/cowboy) [books](http://dotfiles.github.io) and set up a script that will configure my machine to run [ViM as an IDE](http://blog.sanctum.geek.nz/series/unix-as-ide/).  Along the way, I figured how to get all of the necessary [Homebrew](http://braumeister.org) & [Node](https://www.npmjs.org) packages installed as well as some useful [Ruby gems](http://rubygems.org). Feel free to [poke around](https://github.com/chrisopedia/dotfiles/commits/master) the repository, [fork it](https://github.com/chrisopedia/dotfiles/fork) to make it your own, [suggest things](https://github.com/chrisopedia/dotfiles/issues?labels=feature+request) for me to include, [log a bug](https://github.com/chrisopedia/dotfiles/issues/new), or maybe checkout the [features list](#features) to see what's included.
 
-[![Version 1.5.0](http://img.shields.io/badge/version-1.5.0-brightgreen.svg)](https://github.com/chrisopedia/bash/releases/tag/1.5.0) [![Stories in Ready](https://badge.waffle.io/chrisopedia/dotfiles.png?label=Ready)](http://waffle.io/chrisopedia/dotfiles)
+[![Version 1.6.0](http://img.shields.io/badge/version-1.6.0-brightgreen.svg)](https://github.com/chrisopedia/bash/releases/tag/1.6.0) [![Stories in Ready](https://badge.waffle.io/chrisopedia/dotfiles.png?label=Ready)](http://waffle.io/chrisopedia/dotfiles)
 
 ## Installation
 
@@ -111,6 +111,7 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 * [browser-sync](http://browsersync.io/) - time-saving synchronised browser testing
 * [css-colorguard](https://github.com/SlexAxton/css-colorguard) - keep a watchful eye on your css colors
 * [component(1)](http://component.io/) - client package manager
+* [csscomb](http://csscomb.com/) - CSS coding style formatter
 * [csslint](http://csslint.net/) - lint for CSS
 * [david](https://david-dm.org/) - keep your Nodejs project dependencies up to date
 * [gify](https://github.com/visionmedia/node-gify) - convert videos to gifs using ffmpeg and gifsicle

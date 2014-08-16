@@ -4,6 +4,7 @@ conf/git/ignore .gitignore
 conf/git/message .gitmessage
 conf/runcom/ack .ackrc
 conf/runcom/bash .bashrc
+conf/runcom/csscomb .csscomb.json
 conf/runcom/csslint .csslintrc
 conf/runcom/curl .curlrc
 conf/runcom/input .inputrc
