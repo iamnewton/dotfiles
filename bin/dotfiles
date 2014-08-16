@@ -18,6 +18,11 @@ usage="$(basename "$0"): usage: $(basename "$0") [-h|--help] [-v|--version] [--p
 for opt in "$@"
 do
 	case "$opt" in
+		-e|--edit)
+			cd "${DIR}"
+			vim
+			exit
+			;;
 		-h | --help) # Help text
 			printf '\n'
 			printf 'Options\n'
@@ -30,6 +35,10 @@ do
 			printf '\n'
 			exit 0
 			;;
+		--prefix)
+			echo "${DIR}"
+			exit
+			;;
 		-t | --test) # test suite using roundup
 			roundup="$(type -P 'roundup')"
 			[[ ! -z $roundup ]] || {
@@ -40,10 +49,6 @@ do
 			}
 			$roundup ./tests/*.sh
 			exit 0
-			;;
-		--prefix)
-			echo "${DIR}"
-			exit
 			;;
 		-v | --version) # Version of software
 			printf 'Version %s\n' "$(cd "${DIR}" && git describe --tags)"
