@@ -1,0 +1,57 @@
+linters:
+    BorderZero:
+        enabled: false
+    CapitalizationInSelector:
+        enabled: false
+    ColorKeyword:
+        enabled: false
+    Comment:
+        enabled: false
+    DeclarationOrder:
+        enabled: false
+    DuplicateProperty:
+        enabled: false
+    EmptyLineBetweenBlocks:
+        enabled: false
+    EmptyRule:
+        enabled: false
+    HexLength:
+        enabled: false
+    HexNotation:
+        enabled: false
+    Indentation:
+        enabled: false
+    LeadingZero:
+        enabled: false
+    MergeableSelector:
+        enabled: false
+    NameFormat:
+        enabled: false
+    PlaceholderInExtend:
+        enabled: false
+    PropertySortOrder:
+        enabled: false
+    PropertySpelling:
+        enabled: false
+    SelectorDepth:
+        enabled: false
+    SingleLinePerSelector:
+        enabled: false
+    SpaceAfterComma:
+        enabled: false
+    SpaceAfterPropertyColon:
+        enabled: false
+    SpaceBeforeBrace:
+        enabled: false
+    SpaceBetweenParens:
+        enabled: false
+    StringQuotes:
+        enabled: false
+    TrailingSemicolon:
+        enabled: false
+    UrlFormat:
+        enabled: false
+    UrlQuotes:
+        enabled: false
+    ZeroUnit:
+        enabled: false
