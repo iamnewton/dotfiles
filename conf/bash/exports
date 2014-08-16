@@ -12,6 +12,9 @@ export EDITOR="vim"
 # Make vim the default editor for git
 export GIT_EDITOR="vim"
 
+# Automatically install overcommit hooks
+export GIT_TEMPLATE_DIR="$(overcommit --template-dir)"
+
 # Always enable colored `grep` output
 export GREP_OPTIONS="--color=auto"
 

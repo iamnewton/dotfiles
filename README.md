@@ -2,7 +2,7 @@
 
 Typically software you buy comes with some sort of installer, why not your dotfiles? After setting up my dotfiles and installation for years, I decided to take a page from [some](https://github.com/necolas) [other](https://github.com/mathiasbynens) [people's](https://github.com/cowboy) [books](http://dotfiles.github.io) and set up a script that will configure my machine to run [ViM as an IDE](http://blog.sanctum.geek.nz/series/unix-as-ide/).  Along the way, I figured how to get all of the necessary [Homebrew](http://braumeister.org) & [Node](https://www.npmjs.org) packages installed as well as some useful [Ruby gems](http://rubygems.org). Feel free to [poke around](https://github.com/chrisopedia/dotfiles/commits/master) the repository, [fork it](https://github.com/chrisopedia/dotfiles/fork) to make it your own, [suggest things](https://github.com/chrisopedia/dotfiles/issues?labels=feature+request) for me to include, [log a bug](https://github.com/chrisopedia/dotfiles/issues/new), or maybe checkout the [features list](#features) to see what's included.
 
-[![Version 1.4.0](http://img.shields.io/badge/version-1.4.0-brightgreen.svg)](https://github.com/chrisopedia/bash/releases/tag/1.4.0) [![Stories in Ready](https://badge.waffle.io/chrisopedia/dotfiles.png?label=Ready)](http://waffle.io/chrisopedia/dotfiles)
+[![Version 1.5.0](http://img.shields.io/badge/version-1.5.0-brightgreen.svg)](https://github.com/chrisopedia/bash/releases/tag/1.5.0) [![Stories in Ready](https://badge.waffle.io/chrisopedia/dotfiles.png?label=Ready)](http://waffle.io/chrisopedia/dotfiles)
 
 ## Installation
 
@@ -100,6 +100,7 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 * [bundler](http://bundler.io/) - provides a consistent environment for Ruby projects by tracking and installing the exact gems and versions that are needed
 * [friction](https://github.com/rafalchmiel/friction) - a tool to get rid of common sources of contributor friction
 * [jekyll](https://github.com/jekyll/jekyll) - a blog-aware, static site generator in Ruby
+* [overcommit](https://github.com/causes/overcommit) - fully configurable and extendable Git hook manager
 * [sass](http://sass-lang.com/) - the most mature, stable, and powerful professional grade CSS extension language in the world
 * [scss-lint](https://github.com/causes/scss-lint) - configurable tool for writing clean and consistent SCSS
 * [showterm](http://showterm.io/) - ideal for demoing instructions (as the user can copy-paste), making fail-safe "live-coding" sessions (plain text is very scalable), and sharing all your l33t terminal hacks.

@@ -2,6 +2,7 @@ boom
 bundler
 friction
 jekyll
+overcommit
 sass
 scss-lint
 showterm
