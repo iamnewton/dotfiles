@@ -2,7 +2,7 @@
 
 Typically software you buy comes with some sort of installer, why not your dotfiles? After setting up my dotfiles and installation for years, I decided to take a page from [some](https://github.com/necolas) [other](https://github.com/mathiasbynens) [people's](https://github.com/cowboy) [books](http://dotfiles.github.io) and set up a script that will configure my machine to run [ViM as an IDE](http://blog.sanctum.geek.nz/series/unix-as-ide/).  Along the way, I figured how to get all of the necessary [Homebrew](http://braumeister.org) & [Node](https://www.npmjs.org) packages installed as well as some useful [Ruby gems](http://rubygems.org). Feel free to [poke around](https://github.com/chrisopedia/dotfiles/commits/master) the repository, [fork it](https://github.com/chrisopedia/dotfiles/fork) to make it your own, [suggest things](https://github.com/chrisopedia/dotfiles/issues?labels=feature+request) for me to include, [log a bug](https://github.com/chrisopedia/dotfiles/issues/new), or maybe checkout the [features list](#features) to see what's included.
 
-[![Version 1.7.0](http://img.shields.io/badge/version-1.7.0-brightgreen.svg)](https://github.com/chrisopedia/bash/releases/tag/1.7.0) [![Stories in Ready](https://badge.waffle.io/chrisopedia/dotfiles.png?label=Ready)](http://waffle.io/chrisopedia/dotfiles)
+[![Version 1.8.0](http://img.shields.io/badge/version-1.8.0-brightgreen.svg)](https://github.com/chrisopedia/bash/releases/tag/1.8.0) [![Stories in Ready](https://badge.waffle.io/chrisopedia/dotfiles.png?label=Ready)](http://waffle.io/chrisopedia/dotfiles)
 
 ## Installation
 
@@ -122,6 +122,7 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 * [imageoptim-cli](http://jamiemason.github.io/ImageOptim-CLI/) - automates batch optimisation of images
 * [jshint](http://www.jshint.com/) - community-driven tool to detect errors and potential problems in JavaScript code and to enforce your team's coding conventions
 * [jsonlint](http://zaach.github.io/jsonlint/) - a JSON parser and validator with a CLI
+* [myth](http://myth.io/) - CSS preprocessor that acts like a polyfill for future versions of the spec
 * [karma-cli](http://karma-runner.github.io/0.12/intro/installation.html) - Spectacular Test Runner for JavaScript
 * [pageres](https://github.com/sindresorhus/pageres) - Responsive website screenshots
 * [plato](https://github.com/es-analysis/plato) - JavaScript source code visualization, static analysis, and complexity tool
