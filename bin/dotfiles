@@ -12,7 +12,7 @@ else
 	DIR="/usr/local/opt/dotfiles"
 fi
 
-usage="$(basename "$0"): usage: $(basename "$0") [-h|--help] [-v|--version] [--prefix]"
+usage="$(basename "$0"): usage: $(basename "$0") [-e|--edit] [-h|--help] [-v|--version] [--prefix]"
 
 # Test for known flags
 for opt in "$@"

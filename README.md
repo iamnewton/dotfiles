@@ -32,8 +32,9 @@ $ bash -c "$(curl -#fL raw.github.com/chrisopedia/dotfiles/go/install)"
 
 | Flag              | Meaning                          |
 | :-----------------| :------------------------------- |
-| `-t`, `--test`    | Run the test suite               |
+| `-e`, `--edit`    | Edit the dotfiles                |
 | `--prefix`        | Print the installation directory |
+| `-t`, `--test`    | Run the test suite               |
 | `-v`, `--version` | Print the current version        |
 
 ## Man page
