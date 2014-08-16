@@ -12,7 +12,10 @@ Plugin 'editorconfig/editorconfig-vim' " editorconfig for vim
 Plugin 'mattn/emmet-vim' " provides support for expanding abbreviations
 Plugin 'scrooloose/nerdcommenter' " intensely orgasmic commenting
 Plugin 'tpope/vim-surround' " quoting/parenthesizing made simple
-"
+
+" Syntax
+Plugin 'scrooloose/syntastic' " syntax checking hacks
+
 " Utilities
 Plugin 'kien/ctrlp.vim' " fuzzy file, buffer, mru, tag, etc finder
 

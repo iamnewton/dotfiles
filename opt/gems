@@ -3,4 +3,5 @@ bundler
 friction
 jekyll
 sass
+scss-lint
 showterm

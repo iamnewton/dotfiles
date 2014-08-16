@@ -23,3 +23,4 @@ source ${HOME}/.vim/settings/keyboard.vim
 source ${HOME}/.vim/settings/search.vim
 " CtrlP plugin
 source ${HOME}/.vim/settings/ctrlp.vim
+source ${HOME}/.vim/settings/syntastic.vim

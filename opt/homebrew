@@ -23,6 +23,7 @@ php55
 composer
 rename
 rsync
+shellcheck
 spark
 tmux
 tree
