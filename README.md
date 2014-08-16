@@ -2,7 +2,7 @@
 
 Typically software you buy comes with some sort of installer, why not your dotfiles? After setting up my dotfiles and installation for years, I decided to take a page from [some](https://github.com/necolas) [other](https://github.com/mathiasbynens) [people's](https://github.com/cowboy) [books](http://dotfiles.github.io) and set up a script that will configure my machine to run [ViM as an IDE](http://blog.sanctum.geek.nz/series/unix-as-ide/).  Along the way, I figured how to get all of the necessary [Homebrew](http://braumeister.org) & [Node](https://www.npmjs.org) packages installed as well as some useful [Ruby gems](http://rubygems.org). Feel free to [poke around](https://github.com/chrisopedia/dotfiles/commits/master) the repository, [fork it](https://github.com/chrisopedia/dotfiles/fork) to make it your own, [suggest things](https://github.com/chrisopedia/dotfiles/issues?labels=feature+request) for me to include, [log a bug](https://github.com/chrisopedia/dotfiles/issues/new), or maybe checkout the [features list](#features) to see what's included.
 
-[![Version 1.9.0](http://img.shields.io/badge/version-1.9.0-brightgreen.svg)](https://github.com/chrisopedia/bash/releases/tag/1.9.0) [![Stories in Ready](https://badge.waffle.io/chrisopedia/dotfiles.png?label=Ready)](http://waffle.io/chrisopedia/dotfiles)
+[![Version 1.10.0](http://img.shields.io/badge/version-1.10.0-brightgreen.svg)](https://github.com/chrisopedia/bash/releases/tag/1.10.0) [![Stories in Ready](https://badge.waffle.io/chrisopedia/dotfiles.png?label=Ready)](http://waffle.io/chrisopedia/dotfiles)
 
 ## Installation
 
@@ -130,6 +130,7 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 * [stylestats](http://www.stylestats.org/) - StyleStats is a Node.js library to collect CSS statistics
 * [tldr](https://github.com/rprieto/tldr) - Simplified and community-driven man pages
 * [uncss](https://github.com/giakki/uncss) - remove unused styles from CSS
+* [vtop](https://github.com/MrRio/vtop) - graphical activity monitor for the command line
 * [yo](http://yeoman.io/) - Yeoman is a robust and opinionated client-side stack, comprising tools and frameworks that can help developers quickly build beautiful web applications
 
 ### ViM plugins
