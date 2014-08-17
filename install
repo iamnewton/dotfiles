@@ -78,7 +78,11 @@ fi
 # Check for Homebrew; install brew
 if ! type -P 'brew' &> /dev/null; then
 	_process "Installing Homebrew"
-	ruby -e "$(curl -#fkL raw.github.com/Homebrew/homebrew/go/install)"
+	if [[ "$OSTYPE" =~ ^darwin ]]; then
+		ruby -e "$(curl -#fkL raw.github.com/Homebrew/homebrew/go/install)"
+	else
+		ruby -e "$(wget -O- https://raw.github.com/Homebrew/linuxbrew/go/install)"
+	fi
 
 	_process "Running brew doctor"
 	brew doctor
