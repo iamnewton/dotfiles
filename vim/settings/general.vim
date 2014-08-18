@@ -48,7 +48,7 @@ else
 endif
 
 " Wrap lines at 80 characters
-" set textwidth=80
+ set textwidth=80
 " Use 4 spaces for indentation
 set shiftwidth=4
 " Use 4 spaces for soft tab

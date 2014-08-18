@@ -21,6 +21,8 @@ source ${HOME}/.vim/settings/theme.vim
 source ${HOME}/.vim/settings/display.vim
 source ${HOME}/.vim/settings/keyboard.vim
 source ${HOME}/.vim/settings/search.vim
+source ${HOME}/.vim/settings/toggle.vim
 " CtrlP plugin
 source ${HOME}/.vim/settings/ctrlp.vim
+" Syntastic plugin
 source ${HOME}/.vim/settings/syntastic.vim

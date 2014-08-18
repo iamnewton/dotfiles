@@ -36,11 +36,11 @@ if has('statusline')
 endif
 
 " Enable line numbers
-set number
+set number!
 hi LineNr ctermbg=NONE ctermfg=white
 
 " Show 'invisible' characters
-set list
+set list!
 " Set characters used to indicate 'invisible' characters
 set listchars=tab:+-
 set listchars+=trail:·
