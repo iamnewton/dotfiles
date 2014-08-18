@@ -1,81 +1,229 @@
 #!/usr/bin/env bash
 
-# Success logging
-_success() {
-	printf "$(tput setaf 2)✓ Success:$(tput sgr0) %s\n" "$@"
+# constants
+readonly PROGNAME=$(basename $0)
+readonly PROGDIR=$(dirname $0)
+readonly VERSION=$(cat "$PROGDIR/VERSION.md")
+readonly TODAY=$(date +"%m-%d-%y")
+readonly ARGS="$@"
+
+# utility functions
+_is_empty() {
+	local var=$1
+	[[ -z $var ]]
+}
+_is_not_empty() {
+	local var=$1
+	[[ -n $var ]]
+}
+_exists() {
+	local var=$1
+	[[ -e $var ]]
+}
+is_file() {
+	local file=$1
+	[[ -f $file ]]
+}
+_is_dir() {
+	local dir=$1
+	[[ -d $dir ]]
+}
+_is_not_valid_option() {
+	local option=$1
+	printf "bash: %s: %s: invalid option\n" "$PROGNAME" "$option"
+}
+_print_error() {
+	local message=$1
+	printf "%s⊘ Error:%s %s. Aborting!\n\n" "$(tput setaf 1)" "$(tput sgr0)" "$message"
+}
+_print_success() {
+	local message=$1
+	printf "%s✓ Success:%s\n" "$(tput setaf 2)" "$(tput sgr0) $message"
+}
+_require_prog() {
+	local prog=$1
+	local msg=$2
+	local url=$3
+	type -P "$prog" >/dev/null || {
+		print_error "$msg"
+		echo "Download it at $url"
+		exit 2
+	}
+}
+_install_formula() {
+	local formula=$1
+	# Test whether a Homebrew formula is already installed
+	if ! brew list $formula &> /dev/null; then
+		brew install $formula
+	fi
+}
+_install_package() {
+	local package=$1
+	# Test whether a npm package is already installed
+	if ! $(npm list -g $package | grep $package) &> /dev/null; then
+		npm install $package --global --quiet
+	fi
+}
+_install_gem() {
+	local gem=$1
+	# Test whether a Ruby gem is already installed
+	if ! $(gem list $gem | grep $gem) &> /dev/null; then
+		sudo gem install $package
+	fi
+}
+_symlink_file() {
+	local file=$1
+	# split input on space, and return 2nd part (the symbolic link desired)
+	local symbolic_link="$(echo $file | cut -d ' ' -f 2)"
+	# Test whether a symbolic link already exists
+	if [[ ! -L "$symbolic_link" ]]; then
+		# set IFS back to space to split string on
+		IFS=$' '
+		# create symbolic link
+		# create an array of line items
+		symlink=($file)
+		ln -fs "${PROGDIR}/${symlink[0]}" "${HOME}/${symlink[1]}"
+	fi
+}
+_bulk_install() {
+	local file=$PROGDIR/opt/$1
+	local type=$2
+	local apps
+	local oifs=$IFS
+
+	# set the separator to a carriage return & a new line break
+	IFS=$'\r\n'
+	# read in passed-in file and store as an array
+	apps=($(cat "${file}"))
+
+	for index in ${apps[*]}
+	do
+		case $type in
+			homebrew)
+				_install_formula ${apps[index]}
+				;;
+			node)
+				_install_package ${apps[index]}
+				;;
+			ruby)
+				_install_gem ${apps[index]}
+				;;
+			*)
+				_symlink_file ${apps[index]}
+				;;
+		esac
+	done
+
+	IFS=$oifs
+}
+_usage() {
+	printf "%s: usage: %s [-h|--help] [--prefix] [-v|--version]"  "$PROGNAME" "$PROGNAME"
+}
+_print_help() {
+	cat <<- EOF
+	usage: $PROGNAME [options]
+
+	Update dotfiles with any new dependencies
+
+	OPTIONS:
+	    -h --help              Show this help
+	    -t --test              Run unit test to check the program
+	    -v --version           Display dotfiles version
+	    --prefix               Display dotfiles install path. Default: /usr/local/opt/dotfiles
+
+	Examples:
+	    Run all tests:
+	    $PROGNAME --test
+
+	    Print current version:
+	    $PROGNAME --version
+
+	    Run:
+	    $PROGNAME
+	EOF
+}
+_print_directory() {
+	echo "$PROGDIR"
+}
+_edit() {
+	cd "$PROGDIR" \
+	&& vim
+}
+_run_tests() {
+	_require_prog roundup "Roundup is required to run tests" https://github.com/bmizerany/roundup \
+	&& roundup ./tests/*.sh
+}
+_version() {
+	printf 'Version %s\n' "$VERSION"
 }
 
-# Check for environment variable for directory, otherwise set to default
-if [[ ! -z ${DOTFILES_DIRECTORY} ]]; then
-	DIR="${DOTFILES_DIRECTORY}"
-else
-	DIR="/usr/local/opt/dotfiles"
-fi
+# options
+cmdline() {
+	# got this idea from here:
+	# http://kirk.webfinish.com/2009/10/bash-shell-script-to-use-getopts-with-gnu-style-long-positional-parameters/
+	local arg=
+	for arg
+	do
+		local delim=""
+		case "$arg" in
+			#translate --gnu-long-options to -g (short options)
+			--edit)         args="${args}-e ";;
+			--help)         args="${args}-h ";;
+			--prefix)       args="${args}-p ";;
+			--test)         args="${args}-t ";;
+			--version)      args="${args}-v ";;
+			#pass through anything else
+			*) [[ "${arg:0:1}" == "-" ]] || delim="\""
+				args="${args}${delim}${arg}${delim} ";;
+		esac
+	done
 
-usage="$(basename "$0"): usage: $(basename "$0") [-e|--edit] [-h|--help] [-v|--version] [--prefix]"
+	#Reset the positional parameters to the short options
+	eval set -- $args
 
-# Test for known flags
-for opt in "$@"
-do
-	case "$opt" in
-		-e|--edit)
-			cd "${DIR}"
-			vim
-			exit
-			;;
-		-h | --help) # Help text
-			printf '\n'
-			printf 'Options\n'
-			printf '\n'
-			printf '\t-h, --help              Print this help text\n'
-			printf '\t--prefix                Display install path\n'
-			printf '\t-v, --version           Print out the version\n'
-			printf '\n'
-			printf 'Documentation can be found at https://github.com/chrisopedia/dotfiles\n'
-			printf '\n'
-			exit 0
-			;;
-		--prefix)
-			echo "${DIR}"
-			exit
-			;;
-		-t | --test) # test suite using roundup
-			roundup="$(type -P 'roundup')"
-			[[ ! -z $roundup ]] || {
-				printf '%s⊘ Error:%s Roundup is required to run tests. Aborting!\n' "$(tput setaf 1)" "$(tput sgr0)"
-				printf '\n'
-				printf 'Download it at https://github.com/bmizerany/roundup\n'
-				exit 2;
-			}
-			$roundup ./tests/*.sh
-			exit 0
-			;;
-		-v | --version) # Version of software
-			printf 'Version %s\n' "$(cat ./VERSION.md)"
-			exit 0
-			;;
-		-*)
-			printf '%sbash: %s: %s: Invalid option\n' "-" "$(basename "$0")" "$1"
-			printf '%s\n' "$usage"
-			exit 1
-			;;
-		*)  # No more options
-			break
-			;;
-	esac
-done
+	while getopts ":ehptv" OPTION
+	do
+		case $OPTION in
+			e)
+				_edit
+				exit 0
+				;;
+			h)
+				_print_help
+				exit 0
+				;;
+			p)
+				_print_directory
+				exit 0
+				;;
+			t)
+				_run_tests
+				exit 0
+				;;
+			v)
+				_version
+				exit 0
+				;;
+			\?)
+				_is_not_valid_option "-$OPTARG"
+				usage
+				exit 1
+				;;
+		esac
+	done
 
-# If no dotfiles, bail
-if [[ ! -d "${DIR}" ]]; then
-	printf '%s⊘ Error:%s No %s found!\n' "$(tput bold ; tput setaf 1)" "$(tput sgr0)" "${DIR}"
-	printf '\n'
+	return 0
+}
+
+# program functions
+_error_out() {
+	_print_error "No $PROGDIR found!"
 	printf 'Run the installer <%shttps://github.com/chrisopedia/dotfiles#how-to-install%s>\n' "$(tput smul)" "$(tput rmul)"
 	exit 1
-fi
+}
 
-# Check if git is installed, if not bail
-if type -P 'git' &> /dev/null; then
-	cd "${DIR}"
+set_up_repository() {
+	cd "${PROGDIR}"
 
 	# Pull down the latest changes
 	git pull --rebase origin master
@@ -83,11 +231,11 @@ if type -P 'git' &> /dev/null; then
 	# Update submodules
 	git submodule update --recursive --init --quiet
 
-	[[ $? ]] && _success "Repository has been updated"
-fi
+	[[ $? ]] \
+	&& _print_success "Repository has been updated"
+}
 
-# Check if brew is installed, if so update & upgrade
-if type -P 'brew' &> /dev/null; then
+install_formulae() {
 	# Updating Homebrew
 	brew update
 
@@ -96,180 +244,146 @@ if type -P 'brew' &> /dev/null; then
 
 	# Install Homebrew formulae
 	# here check the hash as well
-	brews="${DIR}/opt/homebrew"
+	brews="${PROGDIR}/opt/homebrew"
 
-	old_brew="$(cat '${DIR}/var/homebrew')"
+	old_brew="$(cat ${PROGDIR}/var/homebrew)"
 	new_brew="$(md5 "${brews}" | cut -d ' ' -f 4)"
 	if [[ $new_brew != $old_brew ]]; then
-
-		# store IFS within a temp variable
-		OIFS=$IFS
-
-		# set the separator to a carriage return & a new line break
-		# read in passed-in file and store as an array
-		IFS=$'\r\n' formulae=($(cat "${brews}"))
-
-		for index in ${!formulae[*]}
-		do
-			# Test whether a Homebrew formula is already installed
-			if ! brew list '${formulae[$index]}' &> /dev/null; then
-				brew install '${formulae[$index]}'
-			fi
-		done
-
-		IFS=$OIFS
+		_bulk_install $brews 'homebrew'
 	fi
 
 	brew cleanup
 
-	[[ $? ]] && _success "Homebrew updated, all formulae upgraded, new formulae installed"
-fi
+	[[ $? ]] \
+	&& _print_success "Homebrew updated, all formulae upgraded, new formulae installed"
+}
 
-# Check if node is installed, upgrade 
-if type -P 'node' &> /dev/null; then
+upgrade_node() {
 	sudo npm cache clean -f
 	sudo npm install -g n
 	sudo n stable
 
-	[[ $? ]] && _success "Node updated"
-fi
+	[[ $? ]] \
+	&& _print_success "Node updated"
+}
 
-# Check if npm is installed, install packages
-if type -P 'npm' &> /dev/null; then
+install_packages() {
 	npm update npm -g
 	npm update -g
 
-	npmfile="${DIR}/opt/npm"
-	old_file="$(cat '${DIR}/var/npm')"
+	npmfile="${PROGDIR}/opt/npm"
+	old_file="$(cat ${PROGDIR}/var/npm)"
 	new_file="$(md5 "${npmfile}" | cut -d ' ' -f 4)"
 	# check hash of var/{{ file }} so that I don't try to install if nothing has changed
 	if [[ $new_file != $old_file ]]; then
 		# Install Node packages
 
-		# store IFS within a temp variable
-		OIFS=$IFS
-		# set the separator to a carriage return & a new line break
-		# read in passed-in file and store as an array
-		IFS=$'\r\n' packages=($(cat "${npmfile}"))
-
-		# loop through array
-		for index in ${packages[*]}
-		do
-			# Test whether a Homebrew formula is already installed
-			if ! $(npm list -g '${packages[$index]}' | grep '${packages[$index]}') &> /dev/null; then
-				# create a string of all files with a comma at the end
-				string=$(printf "%s " "${packages[@]}")
-			fi
-		done
-
-		# reset IFS back
-		IFS=$OIFS
-
-		# Install packages globally and quietly
-		npm install $string --global --quiet
+		_bulk_install $npmfile 'node'
 
 		# set up hash file for npm installation
-		echo $(md5 "${npmfile}" | cut -d ' ' -f 4) > "${DIR}/var/npm"
+		echo $(md5 "${npmfile}" | cut -d ' ' -f 4) > "${PROGDIR}/var/npm"
 
-		[[ $? ]] && _success "npm updated, all packages upgraded, & new packages upgraded"
+		[[ $? ]] \
+		&& _print_success "npm updated, all packages upgraded, & new packages upgraded"
 	fi
-fi
+}
 
-# Check if ruby is installed, upgrade 
-if type -P 'ruby' &> /dev/null; then
+install_gems() {
 	sudo gem update
 
 	# Install Ruby gem
 	# here check the hash as well
-	gemfile="${DIR}/opt/gems"
-	old_gem="$(cat '${DIR}/var/gems')"
+	gemfile="${PROGDIR}/opt/gems"
+	old_gem="$(cat ${PROGDIR}/var/gems)"
 	new_gem="$(md5 "${gemfile}" | cut -d ' ' -f 4)"
 	if [[ $new_gem != $old_gem ]]; then
 
-		# Store IFS within a temp variable
-		OIFS=$IFS
-		# Set the separator to a carriage return & a new line break
-		# read in passed-in file and store as an array
-		IFS=$'\r\n' gems=($(cat "${gemfile}"))
-
-		# Loop through array
-		for index in ${gems[*]}
-		do
-			# Test whether a Homebrew formula is already installed
-			if ! $(gem list '${gems[$index]}' | grep '${gems[$index]}') &> /dev/null; then
-				# Create a string of all files with a comma at the end
-				string=$(printf "%s " "${gems[@]}")
-			fi
-		done
-
-		# Reset IFS back
-		IFS=$OIFS
-
-		# Install packages globally and quietly
-		sudo gem install $string
+		_bulk_install $gemfile 'ruby'
 
 		# set up hash file for brew installation
-		echo $(md5 "${gemfile}" | cut -d ' ' -f 4) > "${DIR}/var/gems"
+		echo $(md5 "${gemfile}" | cut -d ' ' -f 4) > "${PROGDIR}/var/gems"
 
-		[[ $? ]] && _success "All Ruby gems upgraded, & new gems installed"
+		[[ $? ]] \
+		&& _print_success "All Ruby gems upgraded, & new gems installed"
 	fi
-fi
+}
 
-# Copy `.gitconfig`.
-# Any global git commands in `~/.bash_profile.local` will be written to
-# `.gitconfig`. This prevents them being committed to the repository.
-rsync -avz --quiet ${DIR}/conf/git/config  ${HOME}/.gitconfig
+setup_vim() {
+	# Force remove the vim directory if it's already there.
+	exists "${HOME}/.vim" \
+	&& rm -rf "${HOME}/.vim"
 
-# Force remove the vim directory if it's already there.
-if [[ -e "${HOME}/.vim" ]]; then
-	rm -rf "${HOME}/.vim"
-fi
-ln -fs "${DIR}/vim"                "${HOME}/.vim"
-ln -fs "${DIR}/conf/runcom/gvim"   "${HOME}/.gvimrc"
-ln -fs "${DIR}/conf/runcom/vim"    "${HOME}/.vimrc"
+	ln -fs "${PROGDIR}/vim"                "${HOME}/.vim"
+	ln -fs "${PROGDIR}/conf/runcom/gvim"   "${HOME}/.gvimrc"
+	ln -fs "${PROGDIR}/conf/runcom/vim"    "${HOME}/.vimrc"
 
-# Check for Vim; install bundles
-# check for hash of var/ file to see if changed
-if [[ -f "${HOME}/.vim/settings/bundles.vim" ]]; then
+	[[ $? ]] \
+	&& _print_success "Updated ViM settings"
+}
+
+update_vim_plugins() {
 	vim "${HOME}/.vim/settings/bundles.vim" +PluginInstall +PluginUpdate +qall
-	[[ $? ]] && _success "Updated ViM bundles"
-fi
+	[[ $? ]] \
+	&& _print_success "Updated ViM bundles"
+}
 
-if [[ -f "${DIR}/opt/symlinks" ]]; then
-	# store IFS within a temp variable
-	OIFS=$IFS
+setup_global_gitconfig() {
+	# Copy `.gitconfig`.
+	# Any global git commands in `~/.bash_profile.local` will be written to
+	# .gitconfig. This prevents them being committed to the repository.
+	rsync -avz --quiet ${PROGDIR}/conf/git/config  ${HOME}/.gitconfig
+}
 
+symlink_config_files() {
 	# Set variable for list of symlinks
-	symlinks="${DIR}/opt/symlinks"
+	symlinks="${PROGDIR}/opt/symlinks"
 
-	# set the separator to a carriage return & a new line break
-	# read in passed-in file and store as an array
-	IFS=$'\r\n'
-	links=($(cat "${symlinks}"))
-
-	for index in ${!links[*]}
-	do
-		# split input on space, and return 2nd part (the symbolic link desired)
-		symbolic_link="$(echo ${links[$index]} | cut -d ' ' -f 2)"
-		# Test whether a symbolic link already exists
-		if [[ ! -L "$symbolic_link" &> /dev/null ]]; then
- 			# set IFS back to space to split string on
- 			IFS=$' '
-			# create symbolic link
- 			# create an array of line items
- 			symlink=(${links[$index]})
- 			ln -fs "${DIR}/${symlink[0]}" "${HOME}/${symlink[1]}"
-		fi
-	done
-
-	IFS=$OIFS
+	_bulk_install $symlinks
 
 	# set up hash file for brew installation
-	echo $(md5 "${symlinks}" | cut -d ' ' -f 4) > "${DIR}/var/symlinks"
+	echo $(md5 "${symlinks}" | cut -d ' ' -f 4) > "${PROGDIR}/var/symlinks"
 
-	[[ $? ]] && _success "All files have been symlinked"
-fi
+	[[ $? ]] \
+	&& _print_success "All files have been symlinked"
+}
 
-source "${HOME}/.bash_profile"
+source_bash() {
+	source "${HOME}/.bash_profile"
+}
 
-[[ $? ]] && _success "$(basename "$0") updated"
+main() {
+	_is_empty $PROGDIR \
+	&& error_out
+
+	cmdline $ARGS
+
+	_require_prog git "Git is required to use $PROGNAME" http://git-scm.com \
+	&& set_up_repository
+
+	_require_prog brew "Homebrew is required to install formulae" http://brew.sh \
+	&& install_formulae
+
+	_require_prog node "Node is required to use npm" http://nodejs.org \
+	&& upgrade_node
+
+	_require_prog npm "npm is required to install packages" https://www.npmjs.org \
+	&& install_packages
+
+	_require_prog ruby "Ruby is required to install packages" https://www.ruby-lang.org \
+	&& install_gems
+
+	setup_vim
+
+	setup_global_gitconfig
+
+	_is_file "$HOME/.vim/settings/bundles.vim" \
+	&& update_vim_plugins
+
+	_is_file "$PROGDIR/opt/symlinks" \
+	&& symlink_config_files
+
+	source_bash \
+	&& _print_success "$PROGNAME updated"
+}
+
+main

@@ -198,7 +198,7 @@ For best results, you should install [iTerm2](http://chriskempson.github.io/base
 
 #### Screenshot
 
-![](http://cdn.chrisopedia.me/images/dotfiles-screenshot.png)
+![](http://cdn.chrisopedia.me/images/dotfiles-screenshot-v2.png)
 
 ### Local/private Bash configuration
 
