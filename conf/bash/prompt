@@ -175,13 +175,14 @@ set_prompts() {
 	PS1+="\n" # newline
 	PS1+="\[$userStyle\]\u" # username
 	PS1+="\[$reset$bold$base05\]@"
-	PS1+="\[$hostStyle\]\h" # host
+	PS1+="\[$hostStyle\]\H" # host including the .local
 	PS1+="\[$reset$bold$base05\] in "
 	PS1+="\[$base0E\]\$PWD" # working directory
 	PS1+="\[$reset\]\$(prompt_git)" # git repository details
 	PS1+="\[$reset$bold$base05\] at "
 	PS1+="\[$base0C\]\t" # working directory
 	PS1+="\n"
+	PS1+="\[$reset$base02\]#\!: "
 	PS1+="\[$reset$base07\]\$ \[$reset\]" # $ (and reset color)
 
 	export PS1
