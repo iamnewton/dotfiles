@@ -103,7 +103,7 @@ else
 	# Loop through array
 	for index in ${gems[*]}
 	do
-		# Test whether a Homebrew formula is already installed
+		# Test whether a Gem is already installed
 		if ! $(gem list  '${gems[$index]}' | grep '${gems[$index]}') &> /dev/null; then
 			# Create a string of all files with a comma at the end
 			string=$(printf "%s " "${gems[@]}")
@@ -138,7 +138,7 @@ else
 	# Loop through array
 	for index in ${packages[*]}
 	do
-		# Test whether a Homebrew formula is already installed
+		# Test whether a npm package is already installed
 		if ! $(npm list -g '${packages[$index]}' | grep '${packages[$index]}') &> /dev/null; then
 			# Create a string of all files with a comma at the end
 			string=$(printf "%s " "${packages[@]}")
@@ -174,9 +174,9 @@ else
 	for index in ${!formulae[*]}
 	do
 		# Test whether a Homebrew formula is already installed
-		if ! brew list '${formulae[$index]}' &> /dev/null; then
+		if ! brew list ${formulae[$index]} &> /dev/null; then
 			# Add to brewfile to install
-			brew uninstall '${formulae[$index]}'
+			brew uninstall ${formulae[$index]}
 		fi
 	done
 
