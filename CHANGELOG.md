@@ -1,10 +1,21 @@
 # Changelog
 
+## Current (2.0.3)
+
+Features:
+
+* Update exports and PATH for linuxbrew (SHA: 7c7e497, tag: 2.0.1)
+
+Bugfixes:
+
+* Update CHANGELOG hashes (SHA: 759c789, tag: 2.0.3)
+* Update all file permissions (SHA: 8124926, tag: 2.0.2)
+
 ## 2.0.0 (2014-08-14)
 
 Features:
 
-* Update script to be more defensive (SHA: 63c79c3)
+* Update script to be more defensive (SHA: c9fa19d)
 * Create file to store VERSION (SHA: de955aa, tag: 1.14.0)
 * Create library tests (SHA: 64357d7, tag: 1.13.0)
 * Create toggle functions for ViM settings (SHA: f430f54, tag: 1.12.0)
