@@ -18,3 +18,5 @@ nnoremap Y y$
 vmap <Tab> >gv
 vmap <S-Tab> <gv
 
+" http://captainbollocks.tumblr.com/post/9858989188/linking-macvim-and-marked-app
+nnoremap <silent> <leader>md !open -a Marked.app '%:p'<CR>

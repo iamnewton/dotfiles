@@ -33,6 +33,7 @@ $ bash -c "$(curl -#fL raw.github.com/chrisopedia/dotfiles/go/install)"
 | Flag              | Meaning                          |
 | :-----------------| :------------------------------- |
 | `-e`, `--edit`    | Edit the dotfiles                |
+| `-h`, `--help`    | Print help text                  |
 | `--prefix`        | Print the installation directory |
 | `-t`, `--test`    | Run the test suite               |
 | `-v`, `--version` | Print the current version        |
@@ -57,6 +58,14 @@ $ dotfiles
 * You want to pull changes from the remote repository
 * You add a new Homebrew formulae, Ruby gems, Node packages.
 * You want to update Homebrew formulae, Ruby gems, Node packages.
+
+### Uninstall
+
+If you need to uninstall for whatever reason, this script will remove all installed Homebrew formulae, Ruby Gems, Node and its packages, configuration symlinks, ViM and all of its plugins, and the library itself.  However, it won't uninstall Homebrew as I didn't want to make that assumption.
+
+```bash
+$ bash -c "$(curl -#fL raw.github.com/chrisopedia/dotfiles/go/uninstall)"
+```
 
 ## Features
 

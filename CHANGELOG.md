@@ -8,7 +8,7 @@ Features:
 
 Bugfixes:
 
-* Update CHANGELOG hashes (SHA: 759c789, tag: 2.0.3)
+* Update CHANGELOG hashes (SHA: b71bbfc, tag: 2.0.3)
 * Update all file permissions (SHA: 8124926, tag: 2.0.2)
 
 ## 2.0.0 (2014-08-14)
