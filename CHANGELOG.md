@@ -1,15 +1,13 @@
 # Changelog
 
-## Current (2.0.3)
-
-Features:
-
-* Update exports and PATH for linuxbrew (SHA: 7c7e497, tag: 2.0.1)
+## Current (2.0.4)
 
 Bugfixes:
 
+* Delete git re-initialization (SHA: , tag: 2.0.4)
 * Update CHANGELOG hashes (SHA: b71bbfc, tag: 2.0.3)
 * Update all file permissions (SHA: 8124926, tag: 2.0.2)
+* Update exports and PATH for linuxbrew (SHA: 7c7e497, tag: 2.0.1)
 
 ## 2.0.0 (2014-08-14)
 

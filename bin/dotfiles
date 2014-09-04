@@ -222,19 +222,6 @@ _error_out() {
 	exit 1
 }
 
-set_up_repository() {
-	cd "${PROGDIR}"
-
-	# Pull down the latest changes
-	git pull --rebase origin master
-
-	# Update submodules
-	git submodule update --recursive --init --quiet
-
-	[[ $? ]] \
-	&& _print_success "Repository has been updated"
-}
-
 install_formulae() {
 	# Updating Homebrew
 	brew update
@@ -357,8 +344,7 @@ main() {
 
 	cmdline $ARGS
 
-	_require_prog git "Git is required to use $PROGNAME" http://git-scm.com \
-	&& set_up_repository
+	_require_prog git "Git is required to use $PROGNAME" http://git-scm.com
 
 	_require_prog brew "Homebrew is required to install formulae" http://brew.sh \
 	&& install_formulae
