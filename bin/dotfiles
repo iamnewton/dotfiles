@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 # constants
-readonly PROGNAME=$(basename $0)
-readonly PROGDIR=$(dirname $0)
+readonly PROGNAME="$(basename "$0")"
+# @TODO: need to figure out how to get the programmatic way of doing this
+readonly PROGDIR="/usr/local/opt/dotfiles"
 readonly VERSION=$(cat "$PROGDIR/VERSION.md")
 readonly TODAY=$(date +"%m-%d-%y")
 readonly ARGS="$@"

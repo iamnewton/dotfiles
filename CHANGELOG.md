@@ -1,10 +1,11 @@
 # Changelog
 
-## Current (2.0.5)
+## Current (2.0.6)
 
 Bugfixes:
 
-* Update script as per syntax verification (SHA: , tag: 2.0.5)
+* Update $PROGDIR variable to hardcoded value (SHA: , tag 2.0.6)
+* Update script as per syntax verification (SHA: 97f719e, tag: 2.0.5)
 * Delete git re-initialization (SHA: 54bf189, tag: 2.0.4)
 * Update CHANGELOG hashes (SHA: b71bbfc, tag: 2.0.3)
 * Update all file permissions (SHA: 8124926, tag: 2.0.2)
