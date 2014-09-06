@@ -1,9 +1,10 @@
 # Changelog
 
-## Current (2.0.6)
+## Current (2.0.7)
 
 Bugfixes:
 
+* Update bash_aliases bug (SHA: , tag 2.0.7)
 * Update $PROGDIR variable to hardcoded value (SHA: , tag 2.0.6)
 * Update script as per syntax verification (SHA: 97f719e, tag: 2.0.5)
 * Delete git re-initialization (SHA: 54bf189, tag: 2.0.4)

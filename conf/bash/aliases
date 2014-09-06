@@ -105,7 +105,7 @@ for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
 done
 
 # Update vim plugins from anywhere
-alias vu=vim +PluginInstall +qall
+alias vu="vim +PluginInstall +qall"
 
 # Make Grunt print stack traces by default
 #command -v grunt > /dev/null && alias grunt="grunt --stack"
