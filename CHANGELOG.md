@@ -1,10 +1,11 @@
 # Changelog
 
-## Current (2.0.4)
+## Current (2.0.5)
 
 Bugfixes:
 
-* Delete git re-initialization (SHA: , tag: 2.0.4)
+* Update script as per syntax verification (SHA: , tag: 2.0.5)
+* Delete git re-initialization (SHA: 54bf189, tag: 2.0.4)
 * Update CHANGELOG hashes (SHA: b71bbfc, tag: 2.0.3)
 * Update all file permissions (SHA: 8124926, tag: 2.0.2)
 * Update exports and PATH for linuxbrew (SHA: 7c7e497, tag: 2.0.1)

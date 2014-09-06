@@ -20,18 +20,18 @@ Third-party patches are essential for keeping open-source software great. In the
 ## Getting Started
 
 1. Make sure you have a [GitHub account](https://github.com/signup/free).
-2. Read the [Style Guide](https://github.com/chrisopedia/eighth-inning/wiki/Style-Guide) docs in the Wiki.  I won't accept any pull request that doesn't adhere, so be forewarned.
+2. Read the [Style Guide](https://github.com/chrisopedia/dotfiles/wiki/Style-Guide) docs in the Wiki.  I won't accept any pull request that doesn't adhere, so be forewarned.
 3. Please [ask before](https://twitter.com/chrisOHpedia) making significant changes.  I'd hate for you to put in a lot of work for something that doesn't align with the vision of this project.
 
 ## Bug Reports
 
 Bugs are small, testable and demonstratable problems caused by the code.  A good report will be able to easily outline the problem and steps to recreate.  If you're going to submit a bug, please verify you've done everything on this list.
 
-1. [Search](https://github.com/chrisopedia/eighth-inning/search) for the issue.  This means you may have to read through the [issue(s)](https://github.com/chrisopedia/eighth-inning/issues) in order to determine if your particular issue has already been created.
+1. [Search](https://github.com/chrisopedia/dotfiles/search) for the issue.  This means you may have to read through the [issue(s)](https://github.com/chrisopedia/dotfiles/issues) in order to determine if your particular issue has already been created.
 2. Check if the issue has been fixed by trying to reproduce the issue in a fresh repo off the `master` branch.
 3. If you've followed the above, and you're still seeing the problem, congratulations, you've found a bug.
 
-Now its time to [submit a ticket](https://github.com/chrisopedia/eighth-inning/issues/new).  Bug reports should be thorough and not leave me wondering or questioning what you were thinking.  I shouldn't have to ask you anything or require further clarification.  Github allows you to fill out a title and a comment.  The title should be concise and descriptive; I should be able to know what you're issue is at a glance.  For the comment section, there are some very specific fields I'd like to see within there.  The first few lines should be a description or summary of the issue; don't be afraid to go into detail.  No one ever said too much detail was a problem, and if they did, it wasn't me.  I would like a few other things listed as such:
+Now its time to [submit a ticket](https://github.com/chrisopedia/dotfiles/issues/new).  Bug reports should be thorough and not leave me wondering or questioning what you were thinking.  I shouldn't have to ask you anything or require further clarification.  Github allows you to fill out a title and a comment.  The title should be concise and descriptive; I should be able to know what you're issue is at a glance.  For the comment section, there are some very specific fields I'd like to see within there.  The first few lines should be a description or summary of the issue; don't be afraid to go into detail.  No one ever said too much detail was a problem, and if they did, it wasn't me.  I would like a few other things listed as such:
 
 1. **OS & version**: Always include the OS(es) and version(s) where you found the issue.  If, for example its Mavericks, you can put OSX 10.9.1.
 2. **Steps to Reproduce**: Please include the steps you followed to find this bug.  This will make my life so much easier to help fix the issue.  Screenshots can be a big help as well along with the steps.
@@ -47,26 +47,26 @@ Clone script is throwing "repo not found" error
 
 **OS**: OSX 10.8.3
 **Steps to Reproduce**:
-1.  Run `clone chrisopedia/eighth-inning`
-2.  Notice that script throws error suggesting repo is not found, although repo is on http://github.com/chrisopedia/eighth-inning
+1.  Run `clone chrisopedia/dotfiles`
+2.  Notice that script throws error suggesting repo is not found, although repo is on http://github.com/chrisopedia/dotfiles
 **Line(s) of Code**: 18 on bin/clone
 **Library Version**: 0.1.0
 ```
 
 ## Feature Requests
 
-I'm always open for new ideas, so don't be afraid to issue a feature request, but please stop and think about the intent of the project.  Maybe its better in another independent project, or maybe not; there is no harm in asking, or filling out a feature request.  Before you do submit, please look at my [road map](https://github.com/chrisopedia/eighth-inning/wiki/Road-Map) to see if I've already thought of your feature.  If it's not there, you might try looking at my [features list](https://github.com/chrisopedia/eighth-inning/wiki/Features); there I'll generally list ideas to possibly solicit feedback or list out community features.  And remember, if I don't like the idea, doesn't mean you can't fork the project.
+I'm always open for new ideas, so don't be afraid to issue a feature request, but please stop and think about the intent of the project.  Maybe its better in another independent project, or maybe not; there is no harm in asking, or filling out a feature request.  Before you do submit, please look at my [road map](https://github.com/chrisopedia/dotfiles/wiki/Road-Map) to see if I've already thought of your feature.  If it's not there, you might try looking at my [features list](https://github.com/chrisopedia/dotfiles/wiki/Features); there I'll generally list ideas to possibly solicit feedback or list out community features.  And remember, if I don't like the idea, doesn't mean you can't fork the project.
 
 ## Pull Requests
 
 ### The Process
-1. [Fork It](https://github.com/chrisopedia/eighth-inning/fork)
-2. Clone the repo (`git clone https://github.com/<username>/eighth-inning`)
+1. [Fork It](https://github.com/chrisopedia/dotfiles/fork)
+2. Clone the repo (`git clone https://github.com/<username>/dotfiles`)
 3. Configure the remote.
 
     ```bash
-    $ cd eighth-inning
-    $ git remote add upstream https://github.com/chrisopedia/eighth-inning
+    $ cd dotfiles
+    $ git remote add upstream https://github.com/chrisopedia/dotfiles
     ```
 
 4. If you've cloned previously, then get latest changes.
@@ -79,7 +79,7 @@ I'm always open for new ideas, so don't be afraid to issue a feature request, bu
 5. Create your feature branch (`git checkout -b feature/my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin feature/my-new-feature`)
-5. Create new [Pull Request](https://github.com/chrisopedia/eighth-inning/compare)
+5. Create new [Pull Request](https://github.com/chrisopedia/dotfiles/compare)
 
 **IMPORTANT**: By submitting a patch, you agree to the same license as that used by the project.
 

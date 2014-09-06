@@ -53,28 +53,28 @@ _require_prog() {
 _install_formula() {
 	local formula=$1
 	# Test whether a Homebrew formula is already installed
-	if ! brew list $formula &> /dev/null; then
-		brew install $formula
+	if ! brew list "$formula" &> /dev/null; then
+		brew install "$formula"
 	fi
 }
 _install_package() {
 	local package=$1
 	# Test whether a npm package is already installed
-	if ! $(npm list -g $package | grep $package) &> /dev/null; then
-		npm install $package --global --quiet
+	if ! npm list -g "$package" | grep "$package" &> /dev/null; then
+		npm install "$package" --global --quiet
 	fi
 }
 _install_gem() {
 	local gem=$1
 	# Test whether a Ruby gem is already installed
-	if ! $(gem list $gem | grep $gem) &> /dev/null; then
-		sudo gem install $package
+	if ! gem list "$gem" | grep "$gem" &> /dev/null; then
+		sudo gem install "$package"
 	fi
 }
 _symlink_file() {
 	local file=$1
 	# split input on space, and return 2nd part (the symbolic link desired)
-	local symbolic_link="$(echo $file | cut -d ' ' -f 2)"
+	local symbolic_link="$(echo "$file" | cut -d ' ' -f 2)"
 	# Test whether a symbolic link already exists
 	if [[ ! -L "$symbolic_link" ]]; then
 		# set IFS back to space to split string on
@@ -121,25 +121,27 @@ _usage() {
 }
 _print_help() {
 	cat <<- EOF
+
 	usage: $PROGNAME [options]
 
 	Update dotfiles with any new dependencies
 
 	OPTIONS:
-	    -h --help              Show this help
-	    -t --test              Run unit test to check the program
-	    -v --version           Display dotfiles version
-	    --prefix               Display dotfiles install path. Default: /usr/local/opt/dotfiles
+    -h --help              Show this help
+    -t --test              Run unit test to check the program
+    -v --version           Display dotfiles version
+    --prefix               Display dotfiles install path. Default: /usr/local/opt/dotfiles
 
 	Examples:
-	    Run all tests:
-	    $PROGNAME --test
+    Run all tests:
+    $PROGNAME --test
 
-	    Print current version:
-	    $PROGNAME --version
+	Print current version:
+    $PROGNAME --version
 
-	    Run:
-	    $PROGNAME
+	Run:
+    $PROGNAME
+
 	EOF
 }
 _print_directory() {
@@ -179,7 +181,7 @@ cmdline() {
 	done
 
 	#Reset the positional parameters to the short options
-	eval set -- $args
+	eval set -- "$args"
 
 	while getopts ":ehptv" OPTION
 	do
@@ -233,10 +235,10 @@ install_formulae() {
 	# here check the hash as well
 	brews="${PROGDIR}/opt/homebrew"
 
-	old_brew="$(cat ${PROGDIR}/var/homebrew)"
+	old_brew="$(cat "${PROGDIR}"/var/homebrew)"
 	new_brew="$(md5 "${brews}" | cut -d ' ' -f 4)"
 	if [[ $new_brew != $old_brew ]]; then
-		_bulk_install $brews 'homebrew'
+		_bulk_install "$brews" 'homebrew'
 	fi
 
 	brew cleanup
@@ -259,16 +261,16 @@ install_packages() {
 	npm update -g
 
 	npmfile="${PROGDIR}/opt/npm"
-	old_file="$(cat ${PROGDIR}/var/npm)"
+	old_file="$(cat "${PROGDIR}"/var/npm)"
 	new_file="$(md5 "${npmfile}" | cut -d ' ' -f 4)"
 	# check hash of var/{{ file }} so that I don't try to install if nothing has changed
 	if [[ $new_file != $old_file ]]; then
 		# Install Node packages
 
-		_bulk_install $npmfile 'node'
+		_bulk_install "$npmfile" 'node'
 
 		# set up hash file for npm installation
-		echo $(md5 "${npmfile}" | cut -d ' ' -f 4) > "${PROGDIR}/var/npm"
+		md5 "${npmfile}" | cut -d ' ' -f 4 > "${PROGDIR}/var/npm"
 
 		[[ $? ]] \
 		&& _print_success "npm updated, all packages upgraded, & new packages upgraded"
@@ -281,14 +283,14 @@ install_gems() {
 	# Install Ruby gem
 	# here check the hash as well
 	gemfile="${PROGDIR}/opt/gems"
-	old_gem="$(cat ${PROGDIR}/var/gems)"
+	old_gem="$(cat "${PROGDIR}"/var/gems)"
 	new_gem="$(md5 "${gemfile}" | cut -d ' ' -f 4)"
 	if [[ $new_gem != $old_gem ]]; then
 
-		_bulk_install $gemfile 'ruby'
+		_bulk_install "$gemfile" 'ruby'
 
 		# set up hash file for brew installation
-		echo $(md5 "${gemfile}" | cut -d ' ' -f 4) > "${PROGDIR}/var/gems"
+		md5 "${gemfile}" | cut -d ' ' -f 4 > "${PROGDIR}/var/gems"
 
 		[[ $? ]] \
 		&& _print_success "All Ruby gems upgraded, & new gems installed"
@@ -318,17 +320,17 @@ setup_global_gitconfig() {
 	# Copy `.gitconfig`.
 	# Any global git commands in `~/.bash_profile.local` will be written to
 	# .gitconfig. This prevents them being committed to the repository.
-	rsync -avz --quiet ${PROGDIR}/conf/git/config  ${HOME}/.gitconfig
+	rsync -avz --quiet "${PROGDIR}/conf/git/config"  "${HOME}/.gitconfig"
 }
 
 symlink_config_files() {
 	# Set variable for list of symlinks
 	symlinks="${PROGDIR}/opt/symlinks"
 
-	_bulk_install $symlinks
+	_bulk_install "$symlinks"
 
 	# set up hash file for brew installation
-	echo $(md5 "${symlinks}" | cut -d ' ' -f 4) > "${PROGDIR}/var/symlinks"
+	md5 "${symlinks}" | cut -d ' ' -f 4 > "${PROGDIR}/var/symlinks"
 
 	[[ $? ]] \
 	&& _print_success "All files have been symlinked"
@@ -339,10 +341,10 @@ source_bash() {
 }
 
 main() {
-	_is_empty $PROGDIR \
+	_is_empty "$PROGDIR" \
 	&& error_out
 
-	cmdline $ARGS
+	cmdline "$ARGS"
 
 	_require_prog git "Git is required to use $PROGNAME" http://git-scm.com
 
