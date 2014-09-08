@@ -4,7 +4,7 @@
 
 Features:
 
-* Update with ghi library (SHA: , tag 2.1.0)
+* Update with ghi library (SHA: 3728be8, tag 2.1.0)
 
 Bugfixes:
 

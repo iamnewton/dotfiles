@@ -81,6 +81,7 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 * [composer](https://getcomposer.org/) - dependency manager for PHP
 * [ctags](http://ctags.sourceforge.net/) - tag generator; used for moving around function definitions
 * [ffmpeg](http://ffmpeg.org/) - cross-platform solution to record, convert and stream audio and video
+* [ghi](https://github.com/stephencelis/ghi) - GitHub Issues on the command line. Use your $EDITOR, not your browser.
 * [gist](http://defunkt.io/gist/) - provides a gist command that you can use from your terminal to upload content to https://gist.github.com/
 * [git](http://git-scm.com/) - version control; latest version
 * [git-extras](https://github.com/visionmedia/git-extras) - GIT utilities -- repo summary, repl, changelog population, author commit percentages and more
@@ -111,6 +112,7 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 * [friction](https://github.com/rafalchmiel/friction) - a tool to get rid of common sources of contributor friction
 * [jekyll](https://github.com/jekyll/jekyll) - a blog-aware, static site generator in Ruby
 * [overcommit](https://github.com/causes/overcommit) - fully configurable and extendable Git hook manager
+* [pygments.rb](https://github.com/tmm1/pygments.rb) - pygments syntax highlighting in ruby
 * [sass](http://sass-lang.com/) - the most mature, stable, and powerful professional grade CSS extension language in the world
 * [scss-lint](https://github.com/causes/scss-lint) - configurable tool for writing clean and consistent SCSS
 * [showterm](http://showterm.io/) - ideal for demoing instructions (as the user can copy-paste), making fail-safe "live-coding" sessions (plain text is very scalable), and sharing all your l33t terminal hacks.
