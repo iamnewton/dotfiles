@@ -1,11 +1,15 @@
 # Changelog
 
-## Current (2.0.7)
+## Current (2.1.0)
+
+Features:
+
+* Update with ghi library (SHA: , tag 2.1.0)
 
 Bugfixes:
 
-* Update bash_aliases bug (SHA: , tag 2.0.7)
-* Update $PROGDIR variable to hardcoded value (SHA: , tag 2.0.6)
+* Update bash_aliases bug (SHA: f4e98f4, tag 2.0.7)
+* Update $PROGDIR variable to hardcoded value (SHA: 28d50d6, tag 2.0.6)
 * Update script as per syntax verification (SHA: 97f719e, tag: 2.0.5)
 * Delete git re-initialization (SHA: 54bf189, tag: 2.0.4)
 * Update CHANGELOG hashes (SHA: b71bbfc, tag: 2.0.3)

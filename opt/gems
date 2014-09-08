@@ -3,6 +3,7 @@ bundler
 friction
 jekyll
 overcommit
+pygments.rb
 sass
 scss-lint
 showterm
