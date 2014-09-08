@@ -2,6 +2,7 @@ conf/bash/profile .bash_profile
 conf/git/attributes .gitattributes
 conf/git/ignore .gitignore
 conf/git/message .gitmessage
+conf/misc/tmux .tmux.conf
 conf/runcom/ack .ackrc
 conf/runcom/bash .bashrc
 conf/runcom/csscomb .csscomb.json
@@ -11,6 +12,6 @@ conf/runcom/input .inputrc
 conf/runcom/jshint .jshintrc
 conf/runcom/scss-lint .scss-lint.yml
 conf/runcom/wget .wgetrc
-conf/misc/tmux .tmux.conf
+conf/ssh/confi .ssh/config
 conf/vim/ctags .ctags
 conf/vim/editor .editorconfig
