@@ -380,4 +380,7 @@ _process "Symlinking dotfiles command & man page"
 ln -fs "${DIR}/bin/dotfiles"                "/usr/local/bin/dotfiles"
 ln -fs "${DIR}/share/man/man1/dotfiles.1"   "/usr/local/share/man/man1/dotfiles.1"
 
+_process "Setting permissions back to normal"
+/usr/bin/sudo /bin/chmod 755 "/usr/local/opt"
+
 [[ $? ]] && _success "Dotfiles installed.  To upgrade, run dotfiles"
