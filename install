@@ -44,6 +44,21 @@ else
 	DIR="/usr/local/opt/dotfiles"
 fi
 
+# Check for Homebrew; install brew
+if ! type -P 'brew' &> /dev/null; then
+	_process "Installing Homebrew"
+	if [[ "$OSTYPE" =~ ^darwin ]]; then
+		ruby -e "$(curl -#fkL raw.github.com/Homebrew/homebrew/go/install)"
+	else
+		ruby -e "$(wget -O- https://raw.github.com/Homebrew/linuxbrew/go/install)"
+	fi
+
+	_process "Running brew doctor"
+	brew doctor
+
+	[[ $? ]] && _success "Homebrew installed"
+fi
+
 # If missing, download and extract the dotfiles repository
 if [[ -d "${DIR}" ]]; then
 	_process "Dotfiles already installed.  Upgrading dotfiles"
@@ -53,11 +68,6 @@ else
 
 	_process "Creating directory at ${DIR} and setting permissions"
 	/usr/bin/sudo /bin/mkdir -p "${DIR}"
-	/usr/bin/sudo /bin/chmod g+rwx "${DIR}"
-	/usr/bin/sudo /usr/bin/chgrp admin "${DIR}"
-
-	_process "Temporarily setting permissions"
-	/usr/bin/sudo /bin/chmod 777 "/usr/local/opt"
 
 	_process "Downloading repository to /tmp directory"
 	# (-#) shows the progress bar as # sign
@@ -73,21 +83,6 @@ else
 	rm -rf /tmp/dotfiles.tar.gz
 
 	[[ $? ]] && _success "${DIR} created, repository downloaded and extracted"
-fi
-
-# Check for Homebrew; install brew
-if ! type -P 'brew' &> /dev/null; then
-	_process "Installing Homebrew"
-	if [[ "$OSTYPE" =~ ^darwin ]]; then
-		ruby -e "$(curl -#fkL raw.github.com/Homebrew/homebrew/go/install)"
-	else
-		ruby -e "$(wget -O- https://raw.github.com/Homebrew/linuxbrew/go/install)"
-	fi
-
-	_process "Running brew doctor"
-	brew doctor
-
-	[[ $? ]] && _success "Homebrew installed"
 fi
 
 # Change to the dotfiles directory
@@ -379,8 +374,5 @@ chsh -s /usr/local/bin/bash 2>/dev/null
 _process "Symlinking dotfiles command & man page"
 ln -fs "${DIR}/bin/dotfiles"                "/usr/local/bin/dotfiles"
 ln -fs "${DIR}/share/man/man1/dotfiles.1"   "/usr/local/share/man/man1/dotfiles.1"
-
-_process "Setting permissions back to normal"
-/usr/bin/sudo /bin/chmod 755 "/usr/local/opt"
 
 [[ $? ]] && _success "Dotfiles installed.  To upgrade, run dotfiles"
