@@ -2,7 +2,7 @@ coreutils
 ack
 bash
 bash-completion
-https://raw.githubusercontent.com/chrisopedia/homebrew-completions/boom-completion/boom-completion.rb
+boom-completion
 ctags
 ffmpeg
 gem-completion
@@ -11,7 +11,8 @@ ghi
 git
 git-extras
 graphicsmagick
-https://raw.githubusercontent.com/chrisopedia/homebrew-completions/grunt-completion/grunt-completion.rb
+grunt-completion
+gist
 hub
 jpeg
 jq
@@ -30,5 +31,5 @@ tmux
 tree
 wget
 wp-cli
-https://raw.githubusercontent.com/chrisopedia/homebrew-completions/wpcli-completion/wpcli-completion.rb
+wpcli-completion
 vagrant-completion

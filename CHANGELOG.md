@@ -1,6 +1,6 @@
 # Changelog
 
-## Current (2.1.1)
+## Current (2.1.2)
 
 Features:
 
@@ -8,7 +8,8 @@ Features:
 
 Bugfixes:
 
-* Update symlinks to include .ssh/config (SHA: , tag 2.1.1)
+* Update completion libraries to Homebrew version (SHA: , tag 2.1.2)
+* Update symlinks to include .ssh/config (SHA: 47a3f09, tag 2.1.1)
 * Update bash_aliases bug (SHA: f4e98f4, tag 2.0.7)
 * Update $PROGDIR variable to hardcoded value (SHA: 28d50d6, tag 2.0.6)
 * Update script as per syntax verification (SHA: 97f719e, tag: 2.0.5)
