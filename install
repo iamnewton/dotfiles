@@ -67,7 +67,7 @@ else
 	_warning "No ${DIR} found"
 
 	_process "Creating directory at ${DIR} and setting permissions"
-	/usr/bin/sudo /bin/mkdir -p "${DIR}"
+	mkdir -p "${DIR}"
 
 	_process "Downloading repository to /tmp directory"
 	# (-#) shows the progress bar as # sign
