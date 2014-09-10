@@ -12,6 +12,6 @@ conf/runcom/input .inputrc
 conf/runcom/jshint .jshintrc
 conf/runcom/scss-lint .scss-lint.yml
 conf/runcom/wget .wgetrc
-conf/ssh/confi .ssh/config
+conf/ssh/config .ssh/config
 conf/vim/ctags .ctags
 conf/vim/editor .editorconfig
