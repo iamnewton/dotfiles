@@ -96,7 +96,7 @@ _process "Adding https://github.com/${GITHUB_USER}/dotfiles.git as origin"
 git remote add origin "https://github.com/${GITHUB_USER}/dotfiles.git"
 
 _process "Downloading changes from origin"
-git fetch --tags origin master
+git fetch origin master
 
 # Reset the index and working tree to the fetched HEAD
 # (submodules are cloned in the subsequent sync step)
