@@ -26,8 +26,11 @@ create_fill() {
 }
 
 prompt_git() {
-	local s=""
-	local branchName=""
+	local s
+	local branchName
+	local bold=$(tput bold)
+	local reset=$(tput sgr0)
+	local base05=$(tput setaf 188) # ++
 	local base08=$(tput setaf 210) # red
 	local base09=$(tput setaf 209) # orange
 	local base0A=$(tput setaf 221) # yellow
@@ -36,7 +39,7 @@ prompt_git() {
 	local branchStyle="$base0B"
 
 	# check if the current directory is in a git repository
-	if [ $(git rev-parse --is-inside-work-tree &>/dev/null; printf "%s" $?) == 0 ]; then
+	if [ "$(git rev-parse --is-inside-work-tree &>/dev/null; printf "%s" "$?")" == 0 ]; then
 
 		# check if the current directory is in .git before running git checks
 		if [ "$(git rev-parse --is-inside-git-dir 2> /dev/null)" == "false" ]; then
@@ -45,19 +48,19 @@ prompt_git() {
 			git update-index --really-refresh  -q &>/dev/null
 
 			# check for stashed files
-			if $(git rev-parse --verify refs/stash &>/dev/null); then
-				s="$s$";
+			if git rev-parse --verify refs/stash &>/dev/null; then
+				s="$s\$";
 				branchStyle="$base0F"
 			fi
 
 			# check for uncommitted changes in the index
-			if ! $(git diff --quiet --ignore-submodules --cached); then
+			if ! git diff --quiet --ignore-submodules --cached; then
 				s="$s+";
 				branchStyle="$base0A"
 			fi
 
 			# check for unstaged changes
-			if ! $(git diff-files --quiet --ignore-submodules --); then
+			if ! git diff-files --quiet --ignore-submodules --; then
 				s="$s!";
 				branchStyle="$base09"
 			fi
@@ -67,7 +70,6 @@ prompt_git() {
 				s="$s?";
 				branchStyle="$base08"
 			fi
-
 		fi
 
 		# get the short symbolic ref
@@ -77,7 +79,7 @@ prompt_git() {
 
 		[ -n "$s" ] && s=" [$s]"
 
-		printf "%s" " on $branchStyle$1$branchName$s"
+		printf "%s" "$base05$bold on $branchStyle$branchName$s"
 	else
 		return
 	fi
@@ -87,26 +89,26 @@ set_prompts() {
 	local bold=""
 	local reset=""
 
-	local base00=""
-	local base01=""
-	local base02=""
-	local base03=""
-	local base04=""
-	local base05=""
-	local base06=""
-	local base07=""
-	local base08=""
-	local base09=""
-	local base0A=""
-	local base0B=""
-	local base0C=""
-	local base0D=""
-	local base0E=""
-	local base0F=""
+	local base00
+	local base01
+	local base02
+	local base03
+	local base04
+	local base05
+	local base06
+	local base07
+	local base08
+	local base09
+	local base0A
+	local base0B
+	local base0C
+	local base0D
+	local base0E
+	local base0F
 
-	local hostStyle=""
-	local userStyle=""
-	local fillStyle=""
+	local hostStyle
+	local userStyle
+	local fillStyle
 
 
 	if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
@@ -177,8 +179,8 @@ set_prompts() {
 	PS1+="\[$reset$bold$base05\]@"
 	PS1+="\[$hostStyle\]\H" # host including the .local
 	PS1+="\[$reset$bold$base05\] in "
-	PS1+="\[$base0E\]\$PWD" # working directory
-	PS1+="\[$reset\]\$(prompt_git)" # git repository details
+	PS1+="\[$base0E\]\$PWD\[$reset\]" # working directory
+	PS1+="\$(prompt_git)" # git repository details
 	PS1+="\[$reset$bold$base05\] at "
 	PS1+="\[$base0C\]\t" # working directory
 	PS1+="\n"
