@@ -25,6 +25,7 @@ Desktop.ini
 *.sw?
 *.vi
 *.viminfo
+*.netrwhist
 
 # Compiled source #
 ###################
