@@ -131,7 +131,9 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 * [grunt-devtools](https://github.com/vladikoff/grunt-devtools) - Grunt task runner extension for Chrome Developer Tools
 * [htmlhint](https://github.com/yaniswang/HTMLHint) - static code analysis tool for html
 * [html-inspector](http://philipwalton.com/articles/introducing-html-inspector/) - code quality tool to help you and your team write better markup
+* [is-up](https://github.com/sindresorhus/is-up) - Check whether a website is up or down
 * [imageoptim-cli](http://jamiemason.github.io/ImageOptim-CLI/) - automates batch optimisation of images
+* [jscs](https://github.com/jscs-dev/node-jscs) - JavaScript Code Style checker
 * [jshint](http://www.jshint.com/) - community-driven tool to detect errors and potential problems in JavaScript code and to enforce your team's coding conventions
 * [jsonlint](http://zaach.github.io/jsonlint/) - a JSON parser and validator with a CLI
 * [myth](http://myth.io/) - CSS preprocessor that acts like a polyfill for future versions of the spec

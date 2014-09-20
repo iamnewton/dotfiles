@@ -22,6 +22,8 @@ source ${HOME}/.vim/settings/display.vim
 source ${HOME}/.vim/settings/keyboard.vim
 source ${HOME}/.vim/settings/search.vim
 source ${HOME}/.vim/settings/toggle.vim
+" Airline plugin
+source ${HOME}/.vim/settings/airline.vim
 " CtrlP plugin
 source ${HOME}/.vim/settings/ctrlp.vim
 " Syntastic plugin

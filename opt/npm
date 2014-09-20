@@ -11,6 +11,8 @@ grunt-devtools
 htmlhint
 html-inspector
 imageoptim-cli
+is-up
+jscs
 jshint
 jsonlint
 karma-cli
