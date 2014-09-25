@@ -1,4 +1,5 @@
 coreutils
+crafts
 ack
 bash
 bash-completion
@@ -6,6 +7,8 @@ boom-completion
 ctags
 ffmpeg
 gem-completion
+gfv
+gifmaker
 gist
 ghi
 git
@@ -16,6 +19,7 @@ gist
 hub
 jpeg
 jq
+lovecolor
 mysql
 node
 optipng
@@ -25,10 +29,12 @@ php55
 composer
 rename
 rsync
+seren
 shellcheck
 spark
 tmux
 tree
+unsplashdownload
 wget
 wp-cli
 wpcli-completion

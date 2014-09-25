@@ -101,6 +101,7 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 * [spark](https://zachholman/spark) - spark lines in your shell
 * [tmux](http://tmux.sourceforge.net/) - lets you switch easily between several programs in one terminal, detach them (they keep running in the background) and reattach them to a different terminal
 * [tree](http://mama.indstate.edu/users/ice/tree/) - recursive directory listing command that produces a depth indented listing of files
+* [tiny-scripts](https://github.com/vitorgalvao/tiny-scripts) - Collection of small bash scripts from @vitorgalvao
 * [wget](http://www.gnu.org/software/wget/) - a free software package for retrieving files using HTTP, HTTPS and FTP, the most widely-used Internet protocols
 * [wp-cli](http://wp-cli.org/) - set of command-line tools for managing WordPress installations
 * [vim](http://www.vim.org) - the editor; latest version with python3 support
