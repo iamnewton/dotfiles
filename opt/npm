@@ -5,6 +5,7 @@ component
 csscomb
 csslint
 david
+fixmyjs
 gify
 grunt-cli
 grunt-devtools

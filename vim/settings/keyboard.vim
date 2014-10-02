@@ -20,3 +20,7 @@ vmap <S-Tab> <gv
 
 " http://captainbollocks.tumblr.com/post/9858989188/linking-macvim-and-marked-app
 nnoremap <silent> <leader>md !open -a Marked.app '%:p'<CR>
+
+" https://twitter.com/goatslacker/status/192085732834291712
+" run fixmyjs on the current file, and reload the page
+map <Leader>k :execute ":w !fixmyjs " . expand("%")<CR>:edit<CR>
