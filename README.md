@@ -86,6 +86,7 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 * [gist](http://defunkt.io/gist/) - provides a gist command that you can use from your terminal to upload content to https://gist.github.com/
 * [git](http://git-scm.com/) - version control; latest version
 * [git-extras](https://github.com/visionmedia/git-extras) - GIT utilities -- repo summary, repl, changelog population, author commit percentages and more
+* [go](http://golang.org/) - open source programming language that makes it easy to build simple, reliable, and efficient software
 * [graphicsmagick](http://www.graphicsmagick.org/) - the swiss army knife of image processing
 * [hub](http://hub.github.com/) - command-line wrapper for git that makes you better at GitHub
 * [image_optim dependencies](https://github.com/toy/image_optim) - Optimize images using multiple utilities binary dependencies

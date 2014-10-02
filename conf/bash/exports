@@ -15,6 +15,10 @@ export GIT_EDITOR="vim"
 # Automatically install overcommit hooks
 export GIT_TEMPLATE_DIR="$(overcommit --template-dir)"
 
+# Automatically install overcommit hooks
+# @TODO: automate this folder creation in dotfiles install
+export GOPATH="$(brew --prefix)/lib/go"
+
 # Always enable colored `grep` output
 export GREP_OPTIONS="--color=auto"
 
