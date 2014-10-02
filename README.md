@@ -82,16 +82,26 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 * [ctags](http://ctags.sourceforge.net/) - tag generator; used for moving around function definitions
 * [ffmpeg](http://ffmpeg.org/) - cross-platform solution to record, convert and stream audio and video
 * [ghi](https://github.com/stephencelis/ghi) - GitHub Issues on the command line. Use your $EDITOR, not your browser.
+* [gibo](https://github.com/simonwhitaker/gibo) - A shell script for easily accessing gitignore boilerplates.
 * [gist](http://defunkt.io/gist/) - provides a gist command that you can use from your terminal to upload content to https://gist.github.com/
 * [git](http://git-scm.com/) - version control; latest version
 * [git-extras](https://github.com/visionmedia/git-extras) - GIT utilities -- repo summary, repl, changelog population, author commit percentages and more
 * [graphicsmagick](http://www.graphicsmagick.org/) - the swiss army knife of image processing
 * [hub](http://hub.github.com/) - command-line wrapper for git that makes you better at GitHub
+* [image_optim dependencies](https://github.com/toy/image_optim) - Optimize images using multiple utilities binary dependencies
+	* [advancecomp](http://advancemame.sourceforge.net/comp-readme.html)
+	* [gifsicle](http://www.lcdf.org/gifsicle/)
+	* [jhead](http://www.lcdf.org/gifsicle/)
+	* [jpegoptim](http://www.kokkonen.net/tjko/projects.html)
+	* [optipng](http://optipng.sourceforge.net/) - PNG optimizer that recompresses image files to a smaller size, without losing any information
+	* [pngcrush](http://pmt.sourceforge.net/pngcrush/)
+	* [pngout](http://www.advsys.net/ken/util/pngout.htm)
+	* [pngquant](http://pngquant.org/)
+	* [svgo (via npm)](https://github.com/svg/svgo)
 * [jpeg](https://en.wikipedia.org/wiki/Libjpeg) - implements JPEG decoding and encoding functions alongside various utilities for handling JPEG images
 * [jq](http://stedolan.github.io/jq/) - a lightweight and flexible command-line JSON processor
 * [mysql](http://www.mysql.com) - open source database
 * [node](http://nodejs.org/) - platform built on Chrome's JavaScript runtime for easily building fast, scalable network applications
-* [optipng](http://optipng.sourceforge.net/) - PNG optimizer that recompresses image files to a smaller size, without losing any information
 * [peco](https://github.com/peco/peco) - Simplistic interactive filtering tool
 * [phantomjs](http://phantomjs.org/) - headless WebKit scriptable with a JavaScript API
 * [php55 (via homebrew-php)](https://github.com/homebrew/homebrew-php) - centralized repository for PHP-related brews
@@ -102,6 +112,12 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 * [tmux](http://tmux.sourceforge.net/) - lets you switch easily between several programs in one terminal, detach them (they keep running in the background) and reattach them to a different terminal
 * [tree](http://mama.indstate.edu/users/ice/tree/) - recursive directory listing command that produces a depth indented listing of files
 * [tiny-scripts](https://github.com/vitorgalvao/tiny-scripts) - Collection of small bash scripts from @vitorgalvao
+	* [crafts](https://github.com/vitorgalvao/tiny-scripts/blob/master/crafts) - Script to allow copy/cut/paste between different terminal windows (it’s meant to be sourced from the shell, not called directly)
+	* [gfv](https://github.com/vitorgalvao/tiny-scripts/blob/master/gfv) - Script to make animated gifs from a video file
+	* [gifmaker](https://github.com/vitorgalvao/tiny-scripts/blob/master/gifmaker) - Script to make animated gifs from sequences of images, with more control over FPS
+	* [lovecolor](https://github.com/vitorgalvao/tiny-scripts/blob/master/lovecolor) - Script to get color palette from colourlovers and format it to use in processing
+	* [seren](https://github.com/vitorgalvao/tiny-scripts/blob/master/seren) - Script to rename files in a numerical sequence
+	* [unsplashdownload](https://github.com/vitorgalvao/tiny-scripts/blob/master/unsplashdownload) - Script to download images from http://unsplash.com/
 * [wget](http://www.gnu.org/software/wget/) - a free software package for retrieving files using HTTP, HTTPS and FTP, the most widely-used Internet protocols
 * [wp-cli](http://wp-cli.org/) - set of command-line tools for managing WordPress installations
 * [vim](http://www.vim.org) - the editor; latest version with python3 support
@@ -111,6 +127,7 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 * [boom](http://zachholman.com/boom) - motherfucking text snippets on the command line
 * [bundler](http://bundler.io/) - provides a consistent environment for Ruby projects by tracking and installing the exact gems and versions that are needed
 * [friction](https://github.com/rafalchmiel/friction) - a tool to get rid of common sources of contributor friction
+* [image_optim](https://github.com/toy/image_optim) - Optimize images using multiple utilities
 * [jekyll](https://github.com/jekyll/jekyll) - a blog-aware, static site generator in Ruby
 * [overcommit](https://github.com/causes/overcommit) - fully configurable and extendable Git hook manager
 * [pygments.rb](https://github.com/tmm1/pygments.rb) - pygments syntax highlighting in ruby
@@ -137,12 +154,13 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 * [jscs](https://github.com/jscs-dev/node-jscs) - JavaScript Code Style checker
 * [jshint](http://www.jshint.com/) - community-driven tool to detect errors and potential problems in JavaScript code and to enforce your team's coding conventions
 * [jsonlint](http://zaach.github.io/jsonlint/) - a JSON parser and validator with a CLI
-* [myth](http://myth.io/) - CSS preprocessor that acts like a polyfill for future versions of the spec
 * [karma-cli](http://karma-runner.github.io/0.12/intro/installation.html) - Spectacular Test Runner for JavaScript
+* [myth](http://myth.io/) - CSS preprocessor that acts like a polyfill for future versions of the spec
 * [pageres](https://github.com/sindresorhus/pageres) - Responsive website screenshots
 * [plato](https://github.com/es-analysis/plato) - JavaScript source code visualization, static analysis, and complexity tool
 * [psi](https://github.com/addyosmani/psi/) - PageSpeed Insights for Node - with reporting
 * [stylestats](http://www.stylestats.org/) - StyleStats is a Node.js library to collect CSS statistics
+* [svgo](https://github.com/svg/svgo) - SVGO is a Nodejs-based tool for optimizing SVG vector graphics files
 * [tldr](https://github.com/rprieto/tldr) - Simplified and community-driven man pages
 * [uncss](https://github.com/giakki/uncss) - remove unused styles from CSS
 * [vtop](https://github.com/MrRio/vtop) - graphical activity monitor for the command line

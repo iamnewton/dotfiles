@@ -3,6 +3,7 @@ conf/git/attributes .gitattributes
 conf/git/ignore .gitignore
 conf/git/message .gitmessage
 conf/misc/tmux .tmux.conf
+conf/misc/image_optim conf/.image_optim.yml
 conf/runcom/ack .ackrc
 conf/runcom/bash .bashrc
 conf/runcom/csscomb .csscomb.json
