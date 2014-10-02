@@ -1,0 +1,16 @@
+PreCommit:
+  ALL:
+    exclude:
+      - '**/node_modules/**'
+      - '.bowerrc'
+      - '.editorconfig'
+      - '.gitattributes'
+      - '.gitignore'
+      - '.jscs.json'
+      - '.jshintrc'
+      - 'Gruntfile.js'
+      - 'www/bower.json'
+      - 'package.json'
+  HardTabs:
+    exclude:
+      - '**/**'
