@@ -156,7 +156,6 @@ else
 	do
 		# Test whether a Homebrew formula is already installed
 		if ! brew list ${formulae[$index]} &> /dev/null; then
-			# Add to brewfile to install
 			brew install ${formulae[$index]}
 		fi
 	done
@@ -192,7 +191,7 @@ else
 	# Loop through array
 	for index in ${packages[*]}
 	do
-		# Test whether a Homebrew formula is already installed
+		# Test whether a npm package is already installed
 		if ! $(npm list -g '${packages[$index]}' | grep '${packages[$index]}') &> /dev/null; then
 			# Create a string of all files with a comma at the end
 			string=$(printf "%s " "${packages[@]}")
@@ -230,8 +229,8 @@ else
 	# Loop through array
 	for index in ${gems[*]}
 	do
-		# Test whether a Homebrew formula is already installed
-		if ! $(gem list  '${gems[$index]}' | grep '${gems[$index]}') &> /dev/null; then
+		# Test whether a Ruby gem is already installed
+		if ! $(gem list '${gems[$index]}' | grep '${gems[$index]}') &> /dev/null; then
 			# Create a string of all files with a comma at the end
 			string=$(printf "%s " "${gems[@]}")
 		fi
@@ -247,6 +246,40 @@ else
 	echo $(md5 "${gemfile}" | cut -d ' ' -f 4) > "${DIR}/var/gems"
 
 	[[ $? ]] && _success "Installed all Ruby gems"
+fi
+
+# Install Go libraries
+if ! type -P 'go' &> /dev/null; then
+	_error "go not found"
+else
+	_process "Installing go libraries"
+
+	# Set variable for list of npm packages
+	gofile="${DIR}/opt/go"
+
+	# Store IFS within a temp variable
+	OIFS=$IFS
+
+	# Set the separator to a carriage return & a new line break
+	# read in passed-in file and store as an array
+	IFS=$'\r\n' libraries=($(cat "${gofile}"))
+
+	# Loop through array
+	for index in ${!libraries[*]}
+	do
+		# Test whether a Go library is already installed
+		if ! go list ${formulae[$index]} &> /dev/null; then
+			go get ${libraries[$index]}
+		fi
+	done
+
+	# Reset IFS back
+	IFS=$OIFS
+
+	# Set up hash file for npm installation
+	echo $(md5 "${gofile}" | cut -d ' ' -f 4) > "${DIR}/var/go"
+
+	[[ $? ]] && _success "Installed all go libraries"
 fi
 
 # Copy `.gitconfig`.
@@ -295,9 +328,9 @@ if [[ -f "${DIR}/opt/symlinks" ]]; then
 
 	# Set the separator to a carriage return & a new line break
 	# read in passed-in file and store as an array
-	IFS=$'\r\n' 
+	IFS=$'\r\n'
 	links=($(cat "${symlinks}"))
-	
+
 	# Loop through array
 	for index in ${!links[*]}
 	do
