@@ -167,6 +167,10 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 * [vtop](https://github.com/MrRio/vtop) - graphical activity monitor for the command line
 * [yo](http://yeoman.io/) - Yeoman is a robust and opinionated client-side stack, comprising tools and frameworks that can help developers quickly build beautiful web applications
 
+### Go libraries
+
+* [pup](https://github.com/EricChiang/pup) - parsing HTML at the command line 
+
 ### ViM plugins
 
 * [vundle](https://github.com/gmarik/Vundle.vim) - manages all plugin installation
