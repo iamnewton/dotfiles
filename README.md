@@ -162,6 +162,7 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 * [psi](https://github.com/addyosmani/psi/) - PageSpeed Insights for Node - with reporting
 * [stylestats](http://www.stylestats.org/) - StyleStats is a Node.js library to collect CSS statistics
 * [svgo](https://github.com/svg/svgo) - SVGO is a Nodejs-based tool for optimizing SVG vector graphics files
+* [takana](http://usetakana.com/) - See your SCSS and CSS style changes live, in the browser, as you type them
 * [tldr](https://github.com/rprieto/tldr) - Simplified and community-driven man pages
 * [uncss](https://github.com/giakki/uncss) - remove unused styles from CSS
 * [vtop](https://github.com/MrRio/vtop) - graphical activity monitor for the command line
@@ -169,7 +170,7 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 
 ### Go libraries
 
-* [pup](https://github.com/EricChiang/pup) - parsing HTML at the command line 
+* [pup](https://github.com/EricChiang/pup) - parsing HTML at the command line
 
 ### ViM plugins
 
