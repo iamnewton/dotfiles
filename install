@@ -48,7 +48,7 @@ fi
 if ! type -P 'brew' &> /dev/null; then
 	_process "Installing Homebrew"
 	if [[ "$OSTYPE" =~ ^darwin ]]; then
-		ruby -e "$(curl -#fkL raw.github.com/Homebrew/homebrew/go/install)"
+		ruby -e "$(curl -#fkL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 	else
 		ruby -e "$(wget -O- https://raw.github.com/Homebrew/linuxbrew/go/install)"
 	fi
