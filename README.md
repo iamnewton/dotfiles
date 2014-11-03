@@ -77,6 +77,7 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 
 * [GNU core utilities](http://www.gnu.org/software/coreutils/) - basic file, shell and text manipulation utilities of the GNU operating system; latest version
 * [ack](http://betterthangrep.com/) - file search
+* [adtool](http://www.afterthedeadline.com/) - artificial intelligence and natural language processing technology to find your writing errors and offer smart suggestions
 * [bash](http://en.wikipedia.org/wiki/Bash_(Unix_shell)) - shell language; latest version
 * [composer](https://getcomposer.org/) - dependency manager for PHP
 * [ctags](http://ctags.sourceforge.net/) - tag generator; used for moving around function definitions
@@ -119,6 +120,7 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 	* [lovecolor](https://github.com/vitorgalvao/tiny-scripts/blob/master/lovecolor) - Script to get color palette from colourlovers and format it to use in processing
 	* [seren](https://github.com/vitorgalvao/tiny-scripts/blob/master/seren) - Script to rename files in a numerical sequence
 	* [unsplashdownload](https://github.com/vitorgalvao/tiny-scripts/blob/master/unsplashdownload) - Script to download images from http://unsplash.com/
+* [w3m](http://w3m.sourceforge.net/) - text-based web browser as well as a pager like `more` or `less`
 * [wget](http://www.gnu.org/software/wget/) - a free software package for retrieving files using HTTP, HTTPS and FTP, the most widely-used Internet protocols
 * [wp-cli](http://wp-cli.org/) - set of command-line tools for managing WordPress installations
 * [vim](http://www.vim.org) - the editor; latest version with python3 support
@@ -132,6 +134,7 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 * [jekyll](https://github.com/jekyll/jekyll) - a blog-aware, static site generator in Ruby
 * [overcommit](https://github.com/causes/overcommit) - fully configurable and extendable Git hook manager
 * [pygments.rb](https://github.com/tmm1/pygments.rb) - pygments syntax highlighting in ruby
+* [rubocop](https://github.com/bbatsov/rubocop) - Ruby static code analyzer, based on the community Ruby style guide
 * [sass](http://sass-lang.com/) - the most mature, stable, and powerful professional grade CSS extension language in the world
 * [scss-lint](https://github.com/causes/scss-lint) - configurable tool for writing clean and consistent SCSS
 * [showterm](http://showterm.io/) - ideal for demoing instructions (as the user can copy-paste), making fail-safe "live-coding" sessions (plain text is very scalable), and sharing all your l33t terminal hacks.
@@ -192,18 +195,15 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 
 #### Syntax
 
-* ~~[html5.vim](https://github.com/othree/html5.vim) - HTML5 + inline SVG omnicomplete funtion, indent and syntax~~
 * [syntastic](https://github.com/scrooloose/syntastic) - syntax checking plugin for ViM that runs files through external syntax checkers and displays any resulting errors to the user.
-* ~~[vim-css3-syntax](https://github.com/hail2u/vim-css3-syntax) - css(3) syntax highlight~~
-* ~~[vim-git](https://github.com/tpope/vim-git) - syntax, indent, and filetype plugin files for git, gitcommit, gitconfig, gitrebase, and gitsendemail~~
-* ~~[vim-haml](https://github.com/tpope/vim-haml) - Vim runtime files for Haml, Sass, and SCSS~~
-* ~~[vim-javascript](https://github.com/pangloss/vim-javascript) - JavaScript bundle for ViM, this bundle provides syntax and indent plugins~~
-* ~~[vim-less](https://github.com/groenewege/vim-less) - syntax highlighting, indenting and autocompletion for the dynamic stylesheet language LESS.~~
-* ~~[vim-markdown](https://github.com/tpope/vim-markdown) - markdown support~~
+* [vim-polyglot](https://github.com/sheerun/vim-polyglot) - A solid language pack for ViM
 
 #### Utilities
 
 * [ctrlp.vim](https://github.com/kien/ctrlp.vim) - fuzzy file, buffer, mru, tag, etc finder
+* [nerdtree](https://github.com/scrooloose/nerdtree) - tree explorer plugin for vim
+* [tagbar](http://majutsushi.github.io/tagbar) - displays tags in a window, ordered by scope
+* [supertab](https://github.com/ervandew/supertab) - perform all your ViM insert mode completions with <Tab>
 * ~~[snipmate](https://github.com/msanders/snipmate.vim) - snippet manager~~
 * ~~[vim-fugitive](https://github.com/tpope/vim-fugitive) - a Git wrapper so awesome, it should be illegal~~
 

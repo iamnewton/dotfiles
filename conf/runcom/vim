@@ -16,6 +16,7 @@ silent! call vundle#begin()
 source ${HOME}/.vim/settings/bundles.vim
 call vundle#end()
 
+source ${HOME}/.vim/settings/startup.vim
 source ${HOME}/.vim/settings/general.vim
 source ${HOME}/.vim/settings/theme.vim
 source ${HOME}/.vim/settings/display.vim
@@ -26,5 +27,9 @@ source ${HOME}/.vim/settings/toggle.vim
 source ${HOME}/.vim/settings/airline.vim
 " CtrlP plugin
 source ${HOME}/.vim/settings/ctrlp.vim
+" NerdTree plugin
+source ${HOME}/.vim/settings/nerdtree.vim
+" Tagbar plugin
+source ${HOME}/.vim/settings/tagbar.vim
 " Syntastic plugin
 source ${HOME}/.vim/settings/syntastic.vim

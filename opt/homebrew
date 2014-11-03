@@ -43,6 +43,7 @@ spark
 tmux
 tree
 unsplashdownload
+w3m
 wget
 wp-cli
 wpcli-completion

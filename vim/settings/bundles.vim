@@ -15,7 +15,11 @@ Plugin 'tpope/vim-surround' " quoting/parenthesizing made simple
 
 " Syntax
 Plugin 'scrooloose/syntastic' " syntax checking hacks
+Plugin 'sheerun/vim-polyglot' " solid language pack
 
 " Utilities
 Plugin 'kien/ctrlp.vim' " fuzzy file, buffer, mru, tag, etc finder
+Plugin 'scrooloose/nerdtree' " tree explorer plugin for vim
+Plugin 'ervandew/supertab' " perform all your ViM insert mode completions with <Tab>
+Plugin 'majutsushi/tagbar' " displays tags in a window, ordered by scope
 
