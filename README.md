@@ -69,7 +69,7 @@ $ bash -c "$(curl -#fL raw.github.com/chrisopedia/dotfiles/go/uninstall)"
 
 ## Features
 
-Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several package installations handled via [Homebrew](#beer-homebrew-formulae), [Ruby gems](#gem-ruby-gems), & [npm](#node-packages) that are listed below. In addition, there are several [ViM plugins](#vim-plugins) that are installed via Vundle, and some [`<tab>` completion](#tab-completion-libraries) libraries. If you want to modify what is installed by default, removing or adding is as easy as updating the package in the appropriate file.  Each package is stored in the `opt` directory and named for the package management software that is used.
+Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several package installations handled via Homebrew, Ruby gems, NPM, & Go that are listed in the [wiki](https://github.com/chrisopedia/dotfiles/wiki). In addition, there are several ViM plugins that are installed via [Vundle](https://github.com/gmarik/vundle), and some `<tab>` completion libraries. If you want to modify what is installed by default, removing or adding is as easy as updating the package in the appropriate file.  Each package is stored in the `opt` directory and named for the package management software that is used.
 
 :exclamation: N.B. Each package should be on a new line.
 
@@ -84,7 +84,7 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 
 ### Custom bash prompt
 
-I use a custom bash prompt based on the [Base16 color palette](http://chriskempson.github.io/base16/) and influenced by @necolas', @gf3's and @cowboy's custom prompts.When your current working directory is a Git repository, the `$PROMPT` will display the checked-out branch's name (and failing that, the commit SHA that `HEAD` is pointing to). The state of the working tree is reflected in the following way:
+I use a custom bash prompt based on the [Base16 color palette](http://chriskempson.github.io/base16/) and influenced by [@necolas](https://github.com/necolas), [@gf3](https://github.com/gf3) and [@cowboy](https://github.com/cowboy) custom prompts. When your current working directory is a Git repository, the `$PROMPT` will display the checked-out branch's name (and failing that, the commit SHA that `HEAD` is pointing to). The state of the working tree is reflected in the following way:
 
 | Symbol | Meaning                          |
 | :----: | :------------------------------- |
