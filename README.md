@@ -77,7 +77,7 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 
 * [GNU core utilities](http://www.gnu.org/software/coreutils/) - basic file, shell and text manipulation utilities of the GNU operating system; latest version
 * [ack](http://betterthangrep.com/) - file search
-* [adtool](http://www.afterthedeadline.com/) - artificial intelligence and natural language processing technology to find your writing errors and offer smart suggestions
+* [atdtool](http://www.afterthedeadline.com/) - artificial intelligence and natural language processing technology to find your writing errors and offer smart suggestions
 * [bash](http://en.wikipedia.org/wiki/Bash_(Unix_shell)) - shell language; latest version
 * [composer](https://getcomposer.org/) - dependency manager for PHP
 * [ctags](http://ctags.sourceforge.net/) - tag generator; used for moving around function definitions <sup>[1][vim-ctags]</sup>
