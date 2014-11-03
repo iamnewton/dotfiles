@@ -1,12 +1,12 @@
 # dotfiles
 
-Typically software you buy comes with some sort of installer, why not your dotfiles? After setting up my dotfiles and installation for years, I decided to take a page from [some](https://github.com/necolas) [other](https://github.com/mathiasbynens) [people's](https://github.com/cowboy) [books](http://dotfiles.github.io) and set up a script that will configure my machine to run [ViM as an IDE](http://blog.sanctum.geek.nz/series/unix-as-ide/).  Along the way, I figured how to get all of the necessary [Homebrew](http://braumeister.org) & [Node](https://www.npmjs.org) packages installed as well as some useful [Ruby gems](http://rubygems.org). Feel free to [poke around](https://github.com/chrisopedia/dotfiles/commits/master) the repository, [fork it](https://github.com/chrisopedia/dotfiles/fork) to make it your own, [suggest things](https://github.com/chrisopedia/dotfiles/issues?labels=feature+request) for me to include, [log a bug](https://github.com/chrisopedia/dotfiles/issues/new), or maybe checkout the [features list](#features) to see what's included.
+Typically software you buy comes with some sort of installer, why not your dotfiles? After manually setting up my dotfiles and installation for years, I decided to take a page from [some](https://github.com/necolas) [other](https://github.com/mathiasbynens) [people's](https://github.com/cowboy) [books](http://dotfiles.github.io) and set up a script that will configure my machine to run [ViM as an IDE](http://blog.sanctum.geek.nz/series/unix-as-ide/).  Along the way, I figured how to get all of the necessary [Homebrew](http://braumeister.org) & [Node](https://www.npmjs.org) packages installed as well as some useful [Ruby gems](http://rubygems.org). Feel free to [poke around](https://github.com/chrisopedia/dotfiles/commits/master) the repository, [fork it](https://github.com/chrisopedia/dotfiles/fork) to make it your own, [suggest things](https://github.com/chrisopedia/dotfiles/issues?labels=feature+request) for me to include, [log a bug](https://github.com/chrisopedia/dotfiles/issues/new), or maybe checkout the [features list](#features) to see what's included.
 
 [![Version 2.1.2](http://img.shields.io/badge/version-2.1.2-brightgreen.svg)](https://github.com/chrisopedia/bash/releases/tag/2.1.2) [![Stories in Ready](https://badge.waffle.io/chrisopedia/dotfiles.svg?label=Ready&title=Ready)](http://waffle.io/chrisopedia/dotfiles)
 
 ## Installation
 
-:warning: This may overwrite existing dotfiles in your `$HOME` and `.vim` directories.
+:warning: This will overwrite existing dotfiles in your `$HOME` and `.vim` directories.
 
 ### Requirements
 
@@ -80,9 +80,9 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 * [adtool](http://www.afterthedeadline.com/) - artificial intelligence and natural language processing technology to find your writing errors and offer smart suggestions
 * [bash](http://en.wikipedia.org/wiki/Bash_(Unix_shell)) - shell language; latest version
 * [composer](https://getcomposer.org/) - dependency manager for PHP
-* [ctags](http://ctags.sourceforge.net/) - tag generator; used for moving around function definitions
+* [ctags](http://ctags.sourceforge.net/) - tag generator; used for moving around function definitions <sup>[1][vim-ctags]</sup>
 * [ffmpeg](http://ffmpeg.org/) - cross-platform solution to record, convert and stream audio and video
-* [ghi](https://github.com/stephencelis/ghi) - GitHub Issues on the command line. Use your $EDITOR, not your browser.
+* [ghi](https://github.com/stephencelis/ghi) - GitHub Issues on the command line. Use your `$EDITOR`, not your browser.
 * [gibo](https://github.com/simonwhitaker/gibo) - A shell script for easily accessing gitignore boilerplates.
 * [gist](http://defunkt.io/gist/) - provides a gist command that you can use from your terminal to upload content to https://gist.github.com/
 * [git](http://git-scm.com/) - version control; latest version
@@ -179,12 +179,14 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 
 * [vundle](https://github.com/gmarik/Vundle.vim) - manages all plugin installation
 
-#### UI
+#### Theme
 * [base16-vim](https://github.com/chriskempson/base16-vim) - colorscheme
+
+#### UI
 * [MatchTag](https://github.com/gregsexton/MatchTag) - highlights the matching HTML tag when the cursor is positioned on a tag
+* [tmuxline.vim](https://github.com/edkolev/tmuxline.vim) - tmux statusline
 * [vim-gitgutter](https://github.com/airblade/vim-gitgutter) - shows a git diff in the 'gutter'
 * [vim-airline](https://github.com/bling/vim-airline) - statusline/tabline
-* [tmuxline.vim](https://github.com/edkolev/tmuxline.vim) - tmux statusline
 
 #### Editing
 
@@ -318,3 +320,5 @@ Inspiration and code was taken from many sources, including (in lexicographical 
 * [@holman](https://github.com/holman) (Zach Holman) https://github.com/holman/dotfiles
 * [@mathiasbynens](https://github.com/mathiasbynens) (Mathias Bynens) https://github.com/mathiasbynens/dotfiles
 * [@necolas](https://github.com/necolas) (Nicolas Gallagher) https://github.com/necolas/dotfiles
+
+[vim-ctags]: http://andrew.stwrt.ca/posts/vim-ctags "Vim and Ctags"

@@ -18,3 +18,6 @@ function TabToggle()
 	endif
 endfunction
 map <leader>sp :call TabToggle()<CR>
+
+" toggle paste mode
+nnoremap <leader>o :set paste!<CR>

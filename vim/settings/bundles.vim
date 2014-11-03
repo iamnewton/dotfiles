@@ -1,11 +1,13 @@
 Plugin 'gmarik/vundle' " vim bundle manager
 
-" UI
+" Theme
 Plugin 'chriskempson/base16-vim' " base16 colorscheme
+
+" UI
 Plugin 'gregsexton/MatchTag' " highlights the matching HTML tag when the cursor is positioned on a tag
+Plugin 'edkolev/tmuxline.vim' " tmux statusline
 Plugin 'airblade/vim-gitgutter' " shows a git diff in the 'gutter'
 Plugin 'bling/vim-airline' " statusline/tabline
-Plugin 'edkolev/tmuxline.vim' " tmux statusline
 
 " Editing
 Plugin 'editorconfig/editorconfig-vim' " editorconfig for vim

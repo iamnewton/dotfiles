@@ -19,8 +19,26 @@ vmap <Tab> >gv
 vmap <S-Tab> <gv
 
 " http://captainbollocks.tumblr.com/post/9858989188/linking-macvim-and-marked-app
-nnoremap <silent> <leader>md !open -a Marked.app '%:p'<CR>
+nnoremap <silent> <Leader>m !open -a Marked\ 2.app '%:p'<CR>
 
 " https://twitter.com/goatslacker/status/192085732834291712
 " run fixmyjs on the current file, and reload the page
 map <Leader>k :execute ":w !fixmyjs " . expand("%")<CR>:edit<CR>
+
+" http://statico.github.io/vim.html#rudimentary_essentials
+" move up/down a file in a single column
+nnoremap j gj
+nnoremap k gk
+
+" turn off search highlighting
+nnoremap <Leader>q :nohlsearch<CR>
+
+" move forward/back in buffers
+nnoremap <C-n> :bnext<CR>
+nnoremap <C-p> :bprev<CR>
+
+" shortcut for :shell/:sh mode
+nnoremap <Leader>s :shell<CR>
+
+" open last edited buffer
+nnoremap <C-e> :e#<CR>

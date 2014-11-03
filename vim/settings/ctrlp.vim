@@ -23,5 +23,5 @@ let g:ctrlp_by_filename = 0
 nnoremap <silent> \ :CtrlP<CR>
 nnoremap <silent> <Tab> :CtrlPCurFile<CR>
 nnoremap <silent> <space> :CtrlPBuffer<CR>
-nnoremap <silent> <leader>m :CtrlPMRUFiles<CR>
-nnoremap <silent> cv :CtrlPTag<CR>
+nnoremap <silent> <leader>mr :CtrlPMRUFiles<CR>
+nnoremap <leader>. :CtrlPTag<cr>
