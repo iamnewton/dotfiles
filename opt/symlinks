@@ -1,4 +1,5 @@
 conf/bash/profile .bash_profile
+conf/bash/hushlogin .hushlogin
 conf/git/attributes .gitattributes
 conf/git/ignore .gitignore
 conf/git/message .gitmessage
