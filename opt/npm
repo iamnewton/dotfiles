@@ -14,7 +14,9 @@ html-inspector
 imageoptim-cli
 is-up
 jscs
+jsfmt
 jshint
+jsinspect
 jsonlint
 karma-cli
 myth
@@ -25,6 +27,8 @@ stylestats
 svgo
 takana
 tldr
+tmi
 uncss
 vtop
+webpagetest
 yo

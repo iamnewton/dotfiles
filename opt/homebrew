@@ -35,6 +35,7 @@ php55
 pip-completion
 pngcrush
 pngquant
+https://raw.githubusercontent.com/EricChiang/pup/master/pup.rb
 composer
 rename
 rsync

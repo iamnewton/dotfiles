@@ -1,35 +1,69 @@
 " .vimrc
-
+"
+" To start vim without using this .vimrc file, use:
+"     vim -u NORC
+"
+" To start vim without loading any .vimrc or plugins, use:
+"     vim -u NONE
+"
+"
 " !silent is used to suppress error messages if the config line
 " references plugins/colorschemes that might be missing
 
 " Disable Vi compatibility
 set nocompatible
 
-" required!
+" required for Vundle!
 filetype off
 
 " Point to runtime path of vundle submodule (since it's not in .vim/autoload)
 silent! set rtp+=${HOME}/.vim/plugins/Vundle.vim
 " Call vundle plugin management
 silent! call vundle#begin()
+" Load in the bundles
 source ${HOME}/.vim/settings/bundles.vim
 call vundle#end()
 
+" Settings to run on startup of ViM
 source ${HOME}/.vim/settings/startup.vim
+" Basic settings
 source ${HOME}/.vim/settings/general.vim
+" History, backup settings
+source ${HOME}/.vim/settings/history.vim
+" Editing/moving around settings
+source ${HOME}/.vim/settings/editing.vim
+" Folding
+source ${HOME}/.vim/settings/folding.vim
+" Color theme
 source ${HOME}/.vim/settings/theme.vim
+" Syntax highlighting and visual display settings
 source ${HOME}/.vim/settings/display.vim
-source ${HOME}/.vim/settings/keyboard.vim
-source ${HOME}/.vim/settings/search.vim
+" Abbreviation shortcuts
+source ${HOME}/.vim/settings/abbreviations.vim
+" Functions to toggle various settings
 source ${HOME}/.vim/settings/toggle.vim
+" Keyboard shortcuts (excludes plugins)
+source ${HOME}/.vim/settings/mappings.vim
+" Search settings
+source ${HOME}/.vim/settings/search.vim
+" Writing settings
+source ${HOME}/.vim/settings/writing.vim
+
+" Plugins
 " Airline plugin
 source ${HOME}/.vim/settings/airline.vim
 " CtrlP plugin
 source ${HOME}/.vim/settings/ctrlp.vim
+" Localrc plugin
+source ${HOME}/.vim/settings/localrc.vim
 " NerdTree plugin
 source ${HOME}/.vim/settings/nerdtree.vim
-" Tagbar plugin
-source ${HOME}/.vim/settings/tagbar.vim
+" Rainbow plugin
+source ${HOME}/.vim/settings/rainbow.vim
 " Syntastic plugin
 source ${HOME}/.vim/settings/syntastic.vim
+
+" Load local machine settings if they exist
+if filereadable(glob("$HOME/.vimrc.local"))
+	source $HOME/.vimrc.local
+endif

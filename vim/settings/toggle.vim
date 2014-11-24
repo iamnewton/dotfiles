@@ -1,8 +1,4 @@
-" toggle line numbers/invisible characters for copy/paste
-map <leader>cp :set nonumber! nolist!<CR>
-
-" allow toggling between tabs and spaces mode
-function TabToggle()
+function! TabToggle()
 	if &expandtab
 		set shiftwidth=4
 		set softtabstop=4
@@ -17,7 +13,3 @@ function TabToggle()
 		set nolist
 	endif
 endfunction
-map <leader>sp :call TabToggle()<CR>
-
-" toggle paste mode
-nnoremap <leader>o :set paste!<CR>

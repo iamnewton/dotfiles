@@ -19,9 +19,3 @@ let g:ctrlp_show_hidden = 1
 " set to 1 to search by filename (as opposed to full path) as default
 let g:ctrlp_by_filename = 0
 
-" keyboard mappings
-nnoremap <silent> \ :CtrlP<CR>
-nnoremap <silent> <Tab> :CtrlPCurFile<CR>
-nnoremap <silent> <space> :CtrlPBuffer<CR>
-nnoremap <silent> <leader>mr :CtrlPMRUFiles<CR>
-nnoremap <leader>. :CtrlPTag<cr>
