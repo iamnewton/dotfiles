@@ -288,6 +288,15 @@ fi
 _process "Syncing global git configuration file"
 rsync -avz --quiet ${DIR}/conf/git/config  ${HOME}/.gitconfig
 
+# Force remove the git templates directory if it's already there.
+_process "Removing ${HOME}/.templates/ directory"
+if [ -e "${HOME}/.templates" ]; then
+	rm -rf "${HOME}/.templates"
+fi
+
+# Symlink all necessary git templates
+ln -fs "${DIR}/templates"          "${HOME}/.templates"
+
 # Force remove the vim directory if it's already there.
 _process "Removing ${HOME}/.vim/ directory"
 if [ -e "${HOME}/.vim" ]; then
@@ -355,6 +364,14 @@ if [[ -f "${DIR}/opt/symlinks" ]]; then
 
 	[[ $? ]] && _success "All files have been symlinked"
 fi
+
+# Copy `.ssh/config`.
+# This prevents them being committed to the repository.
+_process "Syncing global ssh configuration file"
+if [[ ! -d "${HOME}/.ssh" ]]; then
+	mkdir -p "${HOME}/.ssh"
+fi
+rsync -avz --quiet "${DIR}/conf/ssh/config"  "${HOME}/.ssh/config"
 
 _process "Sourcing $HOME/.bash_profile"
 source "${HOME}/.bash_profile" 2&>/dev/null
