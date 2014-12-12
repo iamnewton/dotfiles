@@ -41,13 +41,13 @@
 	"bitwise"       : true,   // Prohibit bitwise operators (&, |, ^, etc.).
 	"boss"          : false,  // Tolerate assignments inside if, for & while. Usually conditions & loops are for comparison, not assignments.
 	"curly"         : true,   // Require {} for every new block or scope.
-	"eqeqeq"        : false,   // Require triple equals i.e. `===`.
+	"eqeqeq"        : true,   // Require triple equals i.e. `===`.
 	"eqnull"        : false,  // Tolerate use of `== null`.
 	"evil"          : false,  // Tolerate use of `eval`.
 	"expr"          : false,  // Tolerate `ExpressionStatement` as Programs.
-	"forin"         : false,  // Tolerate `for in` loops without `hasOwnPrototype`.
+	"forin"         : true,   // Prohibit `for in` loops without `hasOwnPrototype`.
 	"immed"         : true,   // Require immediate invocations to be wrapped in parens e.g. `( function(){}() );`
-	"latedef"       : true,   // Prohipit variable use before definition.
+	"latedef"       : true,   // Prohibit variable use before definition.
 	"loopfunc"      : false,  // Allow functions to be defined within loops.
 	"noarg"         : true,   // Prohibit use of `arguments.caller` and `arguments.callee`.
 	"regexp"        : true,   // Prohibit `.` and `[^...]` in regular expressions.
@@ -68,5 +68,8 @@
 	"sub"           : false,  // Tolerate all forms of subscript notation besides dot notation e.g. `dict['key']` instead of `dict.key`.
 	"trailing"      : true,   // Prohibit trailing whitespaces.
 	"white"         : true,   // Check against strict whitespace and indentation rules.
-	"indent"        : 4       // Specify indentation spacing
+	"indent"        : 4,      // Specify indentation spacing
+	"quotmark"      : "single" // Require single quotes
+	"lastsemic"     : "false" // Prohibit omitting a semicolon for the last statement of a 1-line block
+	"camelcase"     : true    // Identifiers must be in camelCase
 }

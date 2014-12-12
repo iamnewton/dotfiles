@@ -1,7 +1,7 @@
 PreCommit:
   ALL:
     exclude:
-      - '**/node_modules/**'
+      - 'node_modules/**'
       - '.bowerrc'
       - '.editorconfig'
       - '.gitattributes'

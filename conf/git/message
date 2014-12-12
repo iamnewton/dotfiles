@@ -1,6 +1,12 @@
-Subject Line (50 chars or less, CRUD style actions)
 
-More detailed explanatory text, if necessary.  Wrap it to about 72
-characters or so.
 
-Issue: #xx
+# Subject Line (50 chars or less, CRUD style actions)
+#
+# More detailed explanatory text, if necessary.  Wrap it to about 72
+# characters or so. Should answer these questions:
+#
+# * Why was this change necessary?
+# * How does it address the problem?
+# * Are there any side effects?
+#
+# Issue: #xx
