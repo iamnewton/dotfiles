@@ -57,3 +57,7 @@ endif
 
 " highlight conflict markers
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
+
+" set location of tags file
+" set tags=tags;/
+set tags=./tags;

@@ -25,6 +25,13 @@
 	# Use: `git browse https://github.com/necolas/dotfiles <commit-ish>`
 	browse = !bash -c 'git fetch $1 ${2:-HEAD} && git checkout FETCH_HEAD' -
 
+	ctags = "!bash -c '[ -f .git/hooks/ctags ] || git init; .git/hooks/ctags' git-ctags"
+
+	# Helpers for branching
+	create-branch = !bash -c 'git push origin head:refs/heads/$1 && git fetch origin && git branch --track $1 origin/$1 && cd . && git checkout $1' -
+	delete-branch = !bash -c 'git push origin :refs/heads/$1 && git branch -d $1' -
+	merge-branch = !git checkout master && git merge @{-1}
+
 	# Diff what is staged for the next commit
 	diffc = diff --cached
 	# Diff overview
@@ -126,6 +133,9 @@
 
 [ghi "highlight"]
 	style = colorful
+
+[init]
+	templatedir = ~/.templates/hooks
 
 [help]
 	# suggests commands for spelling mistakes

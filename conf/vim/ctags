@@ -1,20 +1,23 @@
-# Basic options
 --recurse=yes
 --tag-relative=yes
 --exclude=.git
+--exclude=.sass-cache
+--exclude=node_modules
+--exclude=build
+--exclude=tasks
+--exclude=docs
+--exclude=package.json
+--exclude=Gruntfile.js
 
-# HTML
 --langdef=html2
 --langmap=html2:.html
 --regex-html2=/ id ?= ?.([-a-zA-Z_0-9]*)./\1/i,id/
 --regex-html2=/ class ?= ?.([-a-zA-Z_0-9]*)./\1/c,class/
 
-# CSS
 --langdef=css
 --langmap=css:.css
 --regex-css=/^([\.|#].*)\{/\1/s,style/
 
-# Javascript
 --langdef=js
 --langmap=js:.js
 --regex-js=/(.*) = {/\1/o,object/
@@ -24,19 +27,8 @@
 --regex-js=/[jQuery|$].widget\(\"(.*)\"/\1/w,jquerywidget/
 --regex-js=/[jQuery|$].ux.behavior\(\"(.*)\"/\1/x,ux/
 
-# Objective-C
 --langdef=objc
 --langmap=objc:.m.h
 --regex-objc=/[+|-] ?\([a-zA-Z]*\) ?(.*)[;|{]/\1\2/m,method/
 
-# Groovy
---langdef=groovy
---langmap=groovy:.groovy
---regex-groovy=/^[ \t]*[(private|public|protected) ( \t)]*def[ \t]+([A-Za-z0-9_]+)[ \t()=]*\{/\1/f,function,functions/
---regex-groovy=/^[ \t]*private def[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/v,private,private variables/
---regex-groovy=/^[ \t]*public def[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/u,public,public variables/
---regex-groovy=/^[ \t]*[abstract ( \t)]*[(private|public) ( \t)]*class[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/c,class,classes/
---regex-groovy=/^[ \t]*[abstract ( \t)]*[(private|public) ( \t)]*enum[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/c,class,classes/
-
-# PHP
 --langmap=php:.engine.inc.module.theme.install.php --PHP-kinds=+cf-v
