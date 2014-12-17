@@ -12,6 +12,7 @@ set ttyfast
 " normal OS clipboard interaction
 " commenting out for now as it makes it difficult to yank and paste
 " as you yank into the pasteboard, thus removing what you wanted to paste
+" Just use "* register to use Mac OSX clipboard
 " set clipboard=unnamed
 
 " Change mapleader

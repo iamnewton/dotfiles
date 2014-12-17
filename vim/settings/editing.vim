@@ -46,7 +46,10 @@ if has("wildmenu")
 	" Show a list of possible completions
 	set wildmenu
 	" Tab autocomplete longest possible part of a string, then list
-	set wildmode=longest,list
+	" set wildmode=longest,list
+	" a part of Thoughtbot's dotfiles
+	" https://github.com/thoughtbot/dotfiles/blob/master/vimrc#L98
+	set wildmode=list:longest,list:full
 	if has ("wildignore")
 		set wildignore+=*.a,*.pyc,*.o,*.orig
 		set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.jpeg,*.png
@@ -61,3 +64,8 @@ match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 " set location of tags file
 " set tags=tags;/
 set tags=./tags;
+
+augroup BWCCreateDir
+	autocmd!
+	autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
+augroup END

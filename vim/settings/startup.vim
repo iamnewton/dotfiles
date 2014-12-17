@@ -14,10 +14,11 @@ if has("autocmd")
 	autocmd FocusLost * :wa
 
 	" Restore cursor position upon reopening files {{{
-	autocmd BufReadPost *
-	\ if line("'\"") > 0 && line("'\"") <= line("$") |
-	\     execute "normal! g`\"" |
-	\ endif
+	" commenting out because I need to exclude certain file types
+	" autocmd BufReadPost *
+	" \ if line("'\"") > 0 && line("'\"") <= line("$") |
+	" \     execute "normal! g`\"" |
+	" \ endif
 
 	" somehow, during vim filetype detection, this gets set for vim files, so
 	" explicitly unset it again

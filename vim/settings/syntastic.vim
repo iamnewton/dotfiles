@@ -1,3 +1,5 @@
+" configure syntastic syntax checking to check on open as well as save
+let g:syntastic_check_on_open=1
 let g:syntastic_css_checkers = ['csslint'] " CSS
 let g:syntastic_html_checkers = ['tidy'] " HTML
 let g:syntastic_javascript_checkers = ['jscs', 'jshint'] " Javascript

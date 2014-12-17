@@ -11,21 +11,33 @@ Plugin 'bling/vim-airline' " statusline/tabline
 
 " Editing
 Plugin 'editorconfig/editorconfig-vim' " editorconfig for ViM
+Plugin 'ervandew/supertab' " perform all your ViM insert mode completions with <Tab>
 Plugin 'mattn/emmet-vim' " provides support for expanding abbreviations
 Plugin 'scrooloose/nerdcommenter' " intensely orgasmic commenting
 Plugin 'tpope/vim-surround' " quoting/parenthesizing made simple
+Plugin 'myusuf3/numbers.vim' " switching between relative and absolute numbers
+Plugin 'MattesGroeger/vim-bookmarks' " allows toggling bookmarks per line
+Plugin 'tpope/vim-fugitive' " a Git wrapper so awesome
 
 " Syntax
 Plugin 'scrooloose/syntastic' " syntax checking hacks
 Plugin 'sheerun/vim-polyglot' " solid language pack
 Plugin 'vim-scripts/localrc.vim' " allows per-project vimrc
 Plugin 'luochen1990/rainbow' " shows diff level of parentheses
+Plugin 'ruanyl/vim-fixmyjs' " autofix javascript syntax mistakes/formatting
+" Plugin 'mephux/vim-jsfmt' " autoformat javascript
 
 " Utilities
 Plugin 'kien/ctrlp.vim' " fuzzy file, buffer, mru, tag, etc finder
 Plugin 'scrooloose/nerdtree' " tree explorer plugin for ViM
-Plugin 'ervandew/supertab' " perform all your ViM insert mode completions with <Tab>
 Plugin 'majutsushi/tagbar' " displays tags in a window, ordered by scope
 Plugin 'sjl/clam.vim' " allows you to work with shell commands in ViM
 Plugin 'sjl/gundo.vim' " graphical undo to show the undolist
+Plugin 'rizzatti/dash.vim' " dash commands for ViM
+Plugin 'shougo/vimproc' " dependency for ViM Shell
+Plugin 'shougo/vimshell' " powerful shell implemented by vim
+Plugin 'iandoe/vim-osx-colorpicker' " Color Picker
+Plugin 'yuratomo/w3m.vim' " W3M for ViM
+Plugin 'mattn/webapi-vim' " dependency for Gist ViM
+Plugin 'mattn/gist-vim' " Gists for ViM
 

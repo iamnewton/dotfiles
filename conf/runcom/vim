@@ -26,10 +26,14 @@ call vundle#end()
 
 " Settings to run on startup of ViM
 source ${HOME}/.vim/settings/startup.vim
+" Functions
+source ${HOME}/.vim/settings/functions.vim
 " Basic settings
 source ${HOME}/.vim/settings/general.vim
 " History, backup settings
 source ${HOME}/.vim/settings/history.vim
+" Formatting of files
+source ${HOME}/.vim/settings/formatting.vim
 " Editing/moving around settings
 source ${HOME}/.vim/settings/editing.vim
 " Folding
@@ -40,8 +44,6 @@ source ${HOME}/.vim/settings/theme.vim
 source ${HOME}/.vim/settings/display.vim
 " Abbreviation shortcuts
 source ${HOME}/.vim/settings/abbreviations.vim
-" Functions to toggle various settings
-source ${HOME}/.vim/settings/toggle.vim
 " Keyboard shortcuts (excludes plugins)
 source ${HOME}/.vim/settings/mappings.vim
 " Search settings
@@ -52,16 +54,26 @@ source ${HOME}/.vim/settings/writing.vim
 " Plugins
 " Airline plugin
 source ${HOME}/.vim/settings/airline.vim
+" Bookmarks plugin
+source ${HOME}/.vim/settings/bookmarks.vim
 " CtrlP plugin
 source ${HOME}/.vim/settings/ctrlp.vim
+" Color Picker plugin
+source ${HOME}/.vim/settings/colorpicker.vim
+" Gist plugin
+source ${HOME}/.vim/settings/gist.vim
 " Localrc plugin
 source ${HOME}/.vim/settings/localrc.vim
+" jsfmt plugin
+source ${HOME}/.vim/settings/jsfmt.vim
 " NerdTree plugin
 source ${HOME}/.vim/settings/nerdtree.vim
 " Rainbow plugin
 source ${HOME}/.vim/settings/rainbow.vim
 " Syntastic plugin
 source ${HOME}/.vim/settings/syntastic.vim
+" VimShell plugin
+source ${HOME}/.vim/settings/vimshell.vim
 
 " Load local machine settings if they exist
 if filereadable(glob("$HOME/.vimrc.local"))
