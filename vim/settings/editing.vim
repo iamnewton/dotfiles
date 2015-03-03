@@ -64,8 +64,3 @@ match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 " set location of tags file
 " set tags=tags;/
 set tags=./tags;
-
-augroup BWCCreateDir
-	autocmd!
-	autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
-augroup END

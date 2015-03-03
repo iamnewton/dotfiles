@@ -2,6 +2,7 @@ coreutils
 crafts
 ack
 advancecomp
+archey
 bash
 bash-completion
 boom-completion
@@ -25,6 +26,7 @@ jhead
 jpeg
 jpegoptim
 jq
+less
 lovecolor
 mysql
 node

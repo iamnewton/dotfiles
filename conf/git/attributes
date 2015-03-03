@@ -1,3 +1,4 @@
+* eol=lf
 # https://help.github.com/articles/dealing-with-line-endings/
 # Automatically normalize line endings for all text-based files
 # Set the default behavior, in case people don't have core.autocrlf set
@@ -8,6 +9,14 @@
 *.c text
 *.h text
 
+# https://github.com/google/traceur-compiler/blob/master/.gitattributes
+# http://git-scm.com/docs/gitattributes
+# do not normalize line endings regardless of type
+*.eps -text
+*.ai -text
+*.png -text
+*.sketch -text
+
 # Declare files that will always have CRLF line endings on checkout.
 *.sln text eol=crlf
 # Force svg files to respect Unix-style line endings
@@ -17,4 +26,9 @@
 *.jpg binary
 # Treat png as binary and diff by exif metadata
 *.png diff=exif
+*.gif binary
 
+# Tells git to ignore the line endings for all files.
+# And does not change the files in your working directory.
+# Even if you have the core.autocrlf set to true, false, or input.
+# * -crlf

@@ -1,10 +1,12 @@
 conf/bash/profile .bash_profile
+conf/bash/less .lesskey
+conf/bash/logout .bash_logout
 conf/bash/hushlogin .hushlogin
 conf/git/attributes .gitattributes
 conf/git/ignore .gitignore
 conf/git/message .gitmessage
 conf/misc/tmux .tmux.conf
-conf/misc/image_optim conf/.image_optim.yml
+conf/misc/image_optim .image_optim.yml
 conf/misc/overcommit .overcommit.yml
 conf/runcom/ack .ackrc
 conf/runcom/bash .bashrc
@@ -15,6 +17,7 @@ conf/runcom/input .inputrc
 conf/runcom/jscs .jscsrc
 conf/runcom/jsfmt .jsfmtrc
 conf/runcom/jshint .jshintrc
+conf/runcom/mail .mailrc
 conf/runcom/scss-lint .scss-lint.yml
 conf/runcom/wget .wgetrc
 conf/vim/ctags .ctags

@@ -13,7 +13,7 @@ fi
 # Not part of `load_dotfiles` because it must be sourced before anything else
 # to be sure that commands like `brew` (when installed in a custom location)
 # are already added to the PATH.
-[ -r $HOME/.dotfilesrc ] && source $HOME/.dotfilesrc;
+[ -r "$HOME/.dotfilesrc" ] && source "$HOME/.dotfilesrc";
 
 load_dotfiles() {
 	declare -a files=(
@@ -39,3 +39,7 @@ load_dotfiles() {
 
 load_dotfiles
 unset load_dotfiles
+
+# list out tmux sessions on startup, don't show error if none
+# https://twitter.com/climagic/status/567658485517930497
+tmux list-sessions 2> /dev/null

@@ -11,13 +11,18 @@ location
 max-time = 300
 
 # When following a redirect, automatically set the previous URL as referer
-referer = ";auto"
+# this seems to be bugging out, see http://unix.stackexchange.com/a/139704/58263
+# for more information
+# referer = ";auto"
 
 # Show error messages
 show-error
 
 # Do not show the progress meter
-silent
+# silent
 
 # Send a fake UA string for the HTTP servers that sniff it
 user-agent = "Mozilla/5.0 Gecko"
+
+# Set the header
+header = "Accept: application/json, application/xml, text/plain, */*"

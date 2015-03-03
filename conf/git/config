@@ -148,6 +148,7 @@
 	# Include summaries of merged conflicts in newly created merge commit messages
 	log = true
 	tool = vimdiff
+	summary = true
 
 [pretty]
 	# tut: http://gitimmersion.com/lab_10.html
@@ -184,6 +185,9 @@
 	# %%+---:a raw %
 	# %x00:+print a byte from a hex code
 	nice = "%C(209)%an%C(reset)@%C(yellow)%h%C(reset) said '%C(white bold)%s%C(reset)' about %C(cyan)%ar%C(reset)%C(magenta)%d%C(reset)"
+
+[pull]
+	rebase = true
 
 [push]
 	default = matching

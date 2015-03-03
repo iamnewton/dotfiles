@@ -1,0 +1,14 @@
+# set smtp-use-starttls
+# set nss-config-dir=~/.mozilla/firefox/yyyyyyyy.default/
+# set ssl-verify=ignore
+# set smtp=smtp://smtp.gmail.com:587
+# set smtp-auth=login
+# set smtp-auth-user=$FROM_EMAIL_ADDRESS
+# set smtp-auth-password=$EMAIL_ACCOUNT_PASSWORD
+# set from="$FROM_EMAIL_ADDRESS($FRIENDLY_NAME)"
+
+# keep record of messages sent
+set record=$HOME/.mail
+# set the editor (-e flag) & visual editor (-v flag)
+set editor=/usr/local/bin/vim
+set visual=/usr/local/bin/vim

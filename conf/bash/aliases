@@ -90,6 +90,17 @@ alias eachdir=". eachdir"
 alias undo="git-undo"
 alias rank="rank-contributors"
 
+# -I prompt once before removing more than three files, or when removing 
+# recursively. Less intrusive than -i, while still giving protection against 
+# most mistakes. (depends on brew coreutils)
+# https://github.com/sindresorhus/guides/blob/master/how-not-to-rm-yourself.md
+if brew list "coreutils" &> /dev/null; then
+	alias rm="rm -I"
+else
+	alias rm="rm -i"
+fi
+
+
 # Ring the terminal bell, and put a badge on Terminal.app’s Dock icon
 # (useful when executing time-consuming commands)
 alias badge="tput bel"

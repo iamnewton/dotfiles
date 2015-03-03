@@ -3,6 +3,7 @@ bundler
 friction
 image_optim
 jekyll
+mdl
 overcommit
 pygments.rb
 sass
