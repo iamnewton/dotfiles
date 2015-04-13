@@ -3,6 +3,7 @@
 ._*
 .DS_Store
 Thumbs.db
+.vim-bookmarks
 
 # Files that might appear on external disks
 .Spotlight-V100

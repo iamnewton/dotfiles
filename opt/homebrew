@@ -30,6 +30,7 @@ less
 lovecolor
 mysql
 node
+openssh --with-keychain-support
 optipng
 peco
 phantomjs
@@ -39,11 +40,13 @@ pngcrush
 pngquant
 https://raw.githubusercontent.com/EricChiang/pup/master/pup.rb
 composer
+reattach-to-user-namespace
 rename
 rsync
 seren
 shellcheck
 spark
+ssh-copy-id
 tmux
 tree
 unsplashdownload

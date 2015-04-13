@@ -53,6 +53,9 @@ nnoremap <silent> <leader>m ! open -a marked\ 2.app '%:p'<CR>
 " shortcut to jump to next conflict marker
 nnoremap <silent> <leader>n /^\(<\\|=\\|>\)\{7\}\([^=].\+\)\?$<CR>
 
+" run csscomb on current file, then reload page
+" map <leader>o :execute ":w !csscomb " . expand("%")<CR>:edit<CR>
+
 " toggle numbers between absolute & relative
 nnoremap <leader>N :NumbersToggle<CR>
 " nnoremap <F4> :NumbersOnOff<CR>

@@ -8,6 +8,7 @@ conf/git/message .gitmessage
 conf/misc/tmux .tmux.conf
 conf/misc/image_optim .image_optim.yml
 conf/misc/overcommit .overcommit.yml
+conf/misc/svgo .svgo.yml
 conf/runcom/ack .ackrc
 conf/runcom/bash .bashrc
 conf/runcom/csscomb .csscomb.json

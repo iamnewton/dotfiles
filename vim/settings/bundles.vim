@@ -2,6 +2,7 @@ Plugin 'gmarik/vundle' " ViM bundle manager
 
 " Theme
 Plugin 'chriskempson/base16-vim' " base16 colorscheme
+" Plugin 'trusktr/seti.vim' " seti ui
 
 " UI
 Plugin 'gregsexton/MatchTag' " highlights the matching HTML tag when the cursor is positioned on a tag
@@ -25,6 +26,9 @@ Plugin 'sheerun/vim-polyglot' " solid language pack
 Plugin 'vim-scripts/localrc.vim' " allows per-project vimrc
 Plugin 'luochen1990/rainbow' " shows diff level of parentheses
 Plugin 'ruanyl/vim-fixmyjs' " autofix javascript syntax mistakes/formatting
+Plugin 'csscomb/vim-csscomb' " coding style formatter for CSS
+Plugin 'xolox/vim-misc' " Miscellaneous auto-load Vim scripts
+Plugin 'xolox/vim-easytags' " Automated tag file generation and syntax highlighting of tags
 " Plugin 'mephux/vim-jsfmt' " autoformat javascript
 
 " Utilities

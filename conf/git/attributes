@@ -16,6 +16,8 @@
 *.ai -text
 *.png -text
 *.sketch -text
+*.csv -text
+*.svg -text
 
 # Declare files that will always have CRLF line endings on checkout.
 *.sln text eol=crlf
@@ -28,7 +30,6 @@
 *.png diff=exif
 *.gif binary
 
-# Tells git to ignore the line endings for all files.
-# And does not change the files in your working directory.
-# Even if you have the core.autocrlf set to true, false, or input.
-# * -crlf
+*.html diff=html
+*.tpl diff=html
+*.php diff=php

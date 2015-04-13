@@ -60,6 +60,8 @@ source ${HOME}/.vim/settings/bookmarks.vim
 source ${HOME}/.vim/settings/ctrlp.vim
 " Color Picker plugin
 source ${HOME}/.vim/settings/colorpicker.vim
+" CSSComb plugin
+source ${HOME}/.vim/settings/csscomb.vim
 " Gist plugin
 source ${HOME}/.vim/settings/gist.vim
 " Localrc plugin

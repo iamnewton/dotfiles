@@ -104,10 +104,30 @@
 	# Use custom `.gitignore` and `.gitattributes`
 	excludesfile = ~/.gitignore
 	attributesfile = ~/.gitattributes
+	# http://git-scm.com/docs/gitattributes#_end_of_line_conversion
+	# Other source code management systems normalize all text files in their 
+	# repositories, and there are two ways to enable similar automatic 
+	# normalization in Git.
+	#
+	# If you want to have CRLF line endings in your working directory 
+	# regardless of the repository you are working with, you can set the 
+	# config variable "core.autocrlf" without changing any attributes.
+	#
+	# This does not force normalization of all text files, but does ensure 
+	# that text files that you introduce to the repository have their line 
+	# endings normalized to LF when they are added, and that files that are 
+	# already normalized in the repository stay normalized.
 	autocrlf = input
 	# use vim as editor
 	editor = vim
 	pager = less -+$LESS -FRX
+	# http://git-scm.com/docs/gitattributes#_end_of_line_conversion
+	# If core.safecrlf is set to "true" or "warn", Git verifies if the 
+	# conversion is reversible for the current setting of core.autocrlf. 
+	# For "true", Git rejects irreversible conversions; for "warn", Git only 
+	# prints a warning but accepts an irreversible conversion. The safety 
+	# triggers to prevent such a conversion done to the files in the work 
+	# tree, but there are a few exceptions. Even though…
 	# dont irreversably perform CRLF conversion on a binary file
 	safecrlf = true
 
