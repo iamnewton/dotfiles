@@ -7,6 +7,7 @@ cowsay
 cpy
 csscomb
 csslint
+css-reporter
 david
 dark-mode
 display-notification
@@ -41,12 +42,14 @@ plato
 pretty-ms
 psi
 public-ip
+sitespeed.io
 stylestats
 strip-debug
 superb
 supports-color
 surge
 svgo
+svg2png-cli
 takana
 tldr
 tmi
@@ -57,5 +60,6 @@ urls-md
 vtop
 wallpaper
 webpagetest
+yellowlabtools
 yo
 yosay
