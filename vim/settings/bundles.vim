@@ -44,4 +44,5 @@ Plugin 'iandoe/vim-osx-colorpicker' " Color Picker
 Plugin 'yuratomo/w3m.vim' " W3M for ViM
 Plugin 'mattn/webapi-vim' " dependency for Gist ViM
 Plugin 'mattn/gist-vim' " Gists for ViM
+" Plugin 'mklabs/vimfiles', {'rtp': 'custom-bundle/vim-chrome/'}
 
