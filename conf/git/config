@@ -211,6 +211,9 @@
 
 [push]
 	default = matching
+	# https://github.com/git/git/commit/a8bc269f11b34e60f5fdbd8e831a654dd6b6b67e
+	# push annotated tags that are missing to remote
+	followTags = true
 
 # http://git-scm.com/blog/2010/03/08/rerere.html
 # reuse the recorded resolutions
