@@ -101,6 +101,9 @@ nnoremap <leader>ft vatzf
 " ctrl p search MRU files
 nnoremap <silent> <leader>mr :CtrlPMRUFiles<CR>
 
+" Upload contents of buffer
+nnoremap <leader>sc :%! slackcat -c transact<CR>
+
 " split previously opened file ('#') in a split window
 nnoremap <leader>sh :execute "leftabove vsplit" bufname('#')<CR>
 nnoremap <leader>sl :execute "rightbelow vsplit" bufname('#')<CR>
