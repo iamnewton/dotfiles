@@ -1,5 +1,6 @@
 bower
 browser-sync
+caniuse-cmd
 cat-names
 colorguard
 component
