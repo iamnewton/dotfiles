@@ -5,6 +5,7 @@ hcl
 hue-cli
 image_optim
 jekyll
+json
 mdl
 overcommit
 pygments.rb
@@ -12,3 +13,5 @@ sass
 scss-lint
 showterm
 slackcat
+travis
+w3c_validators

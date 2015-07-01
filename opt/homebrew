@@ -1,3 +1,4 @@
+checkstyle
 coreutils
 crafts
 ack
@@ -22,12 +23,14 @@ go
 graphicsmagick
 grunt-completion
 hub
+hunspell
 imagesnap
 jhead
 jpeg
 jpegoptim
 jq
 less
+libyaml
 lovecolor
 mysql
 node
@@ -48,6 +51,7 @@ seren
 shellcheck
 spark
 ssh-copy-id
+tidy-html5
 tmux
 tree
 unsplashdownload
