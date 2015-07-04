@@ -2,6 +2,7 @@ bower
 browser-sync
 caniuse-cmd
 cat-names
+chalk-cli
 colorguard
 component
 cowsay
