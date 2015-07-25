@@ -30,6 +30,11 @@
 *.png diff=exif
 *.gif binary
 
+# Specify diffing algorithms
 *.html diff=html
 *.tpl diff=html
 *.php diff=php
+*.png  diff=spaceman-diff
+*.jpg  diff=spaceman-diff
+*.jpeg diff=spaceman-diff
+*.gif  diff=spaceman-diff
