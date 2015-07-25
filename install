@@ -282,6 +282,12 @@ else
 	[[ $? ]] && _success "Installed all go libraries"
 fi
 
+# Install spaceman-diff
+if [[ -d "/usr/local/bin" ]]; then
+	sudo sh -c "curl https://raw.githubusercontent.com/holman/spaceman-diff/master/spaceman-diff -o /usr/local/bin/spaceman-diff && chmod +x /usr/local/bin/spaceman-diff"
+fi
+
+
 # Copy `.gitconfig`.
 # Any global git commands in `~/.bash_profile.local` will be written to
 # `.gitconfig`. This prevents them being committed to the repository.
