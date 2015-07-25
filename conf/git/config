@@ -142,6 +142,9 @@
 [diff "exif"]
 	textconv = exiftool
 
+[diff "spaceman-diff"]
+	command = /usr/local/bin/spaceman-diff
+
 [difftool]
 	prompt = false
 
