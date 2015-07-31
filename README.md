@@ -2,6 +2,8 @@
 
 Typically software you buy comes with some sort of installer, why not your dotfiles? After manually setting up my dotfiles and installation for years, I decided to take a page from [some](https://github.com/necolas) [other](https://github.com/mathiasbynens) [people's](https://github.com/cowboy) [books](http://dotfiles.github.io) and set up a script that will configure my machine to run [ViM as an IDE](http://blog.sanctum.geek.nz/series/unix-as-ide/).  Along the way, I figured how to get all of the necessary [Homebrew](http://braumeister.org) & [Node](https://www.npmjs.org) packages installed as well as some useful [Ruby gems](http://rubygems.org). Feel free to [poke around](https://github.com/chrisopedia/dotfiles/commits/master) the repository, [fork it](https://github.com/chrisopedia/dotfiles/fork) to make it your own, [suggest things](https://github.com/chrisopedia/dotfiles/issues?labels=feature+request) for me to include, [log a bug](https://github.com/chrisopedia/dotfiles/issues/new), or maybe checkout the [features list](#features) to see what's included.
 
+**N.B.** This project is released with a [Contributor Code of Conduct](https://github.com/chrisopedia/dotfiles/blob/master/CONTRIBUTING.md#code-of-conduct). By participating in this project you agree to abide by its terms.
+
 [![Version 2.1.2](http://img.shields.io/badge/version-2.1.2-brightgreen.svg)](https://github.com/chrisopedia/bash/releases/tag/2.1.2) [![Stories in Ready](https://badge.waffle.io/chrisopedia/dotfiles.svg?label=Ready&title=Ready)](http://waffle.io/chrisopedia/dotfiles)
 
 ## Installation
