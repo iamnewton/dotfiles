@@ -248,40 +248,6 @@ else
 	[[ $? ]] && _success "Installed all Ruby gems"
 fi
 
-# Install Go libraries
-if ! type -P 'go' &> /dev/null; then
-	_error "go not found"
-else
-	_process "Installing go libraries"
-
-	# Set variable for list of npm packages
-	gofile="${DIR}/opt/go"
-
-	# Store IFS within a temp variable
-	OIFS=$IFS
-
-	# Set the separator to a carriage return & a new line break
-	# read in passed-in file and store as an array
-	IFS=$'\r\n' libraries=($(cat "${gofile}"))
-
-	# Loop through array
-	for index in ${!libraries[*]}
-	do
-		# Test whether a Go library is already installed
-		if ! go list ${formulae[$index]} &> /dev/null; then
-			go get ${libraries[$index]}
-		fi
-	done
-
-	# Reset IFS back
-	IFS=$OIFS
-
-	# Set up hash file for npm installation
-	echo $(md5 "${gofile}" | cut -d ' ' -f 4) > "${DIR}/var/go"
-
-	[[ $? ]] && _success "Installed all go libraries"
-fi
-
 # Install spaceman-diff
 if [[ -d "/usr/local/bin" ]]; then
 	sudo sh -c "curl https://raw.githubusercontent.com/holman/spaceman-diff/master/spaceman-diff -o /usr/local/bin/spaceman-diff && chmod +x /usr/local/bin/spaceman-diff"
@@ -332,9 +298,6 @@ fi
 if [[ -f "${DIR}/opt/symlinks" ]]; then
 	_process "Creating symlinks"
 
-	# Create .ssh directory; if it exists, no harm
-	mkdir -p "${HOME}/.ssh"
-
 	# Set variable for list of symlinks
 	symlinks="${DIR}/opt/symlinks"
 
@@ -377,7 +340,7 @@ _process "Syncing global ssh configuration file"
 if [[ ! -d "${HOME}/.ssh" ]]; then
 	mkdir -p "${HOME}/.ssh"
 fi
-rsync -avz --quiet "${DIR}/conf/ssh/config"  "${HOME}/.ssh/config"
+cp "${DIR}/conf/ssh/config"  "${HOME}/.ssh/config"
 
 _process "Sourcing $HOME/.bash_profile"
 source "${HOME}/.bash_profile" 2&>/dev/null
