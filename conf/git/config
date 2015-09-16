@@ -27,6 +27,7 @@
 
 	ctags = "!bash -c '[ -f .git/hooks/ctags ] || git init; .git/hooks/ctags' git-ctags"
 
+	# Get a list of branches checked on a date (http://davidwalsh.name/git-branches-date)
 	branch-by-date = !bash -c 'git reflog --date=local | grep "$1 .* checkout: moving from .* to" | grep -o "[a-zA-Z0-9\-]*$" | sort | uniq'
 
 	# Helpers for branching
