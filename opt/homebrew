@@ -38,6 +38,7 @@ mysql
 node
 openssh --with-keychain-support
 optipng
+pdftohtml
 peco
 phantomjs
 php55
