@@ -65,6 +65,8 @@ alias flushdns="dscacheutil -flushcache"
 # deep); 1 means one layer of depth 
 alias disk="du -hd 1"
 
+alias dirsize="du -sh"
+
 # File size
 alias fs="stat -f '%z bytes'"
 alias df="df -h"
@@ -82,24 +84,12 @@ alias vhost="sudo vim /etc/apache2/extra/httpd-vhosts.conf"
 # Pass in a process to find, greps the running processes
 alias process="ps aux | grep"
 
-alias tmux="tmux -2"
+if type -P 'tmux' &> /dev/null; then
+	alias tmux="tmux -2"
+fi
 
 # Aliasing eachdir like this allows you to use aliases/functions as commands.
 alias eachdir=". eachdir"
-
-alias undo="git-undo"
-alias rank="rank-contributors"
-
-# -I prompt once before removing more than three files, or when removing 
-# recursively. Less intrusive than -i, while still giving protection against 
-# most mistakes. (depends on brew coreutils)
-# https://github.com/sindresorhus/guides/blob/master/how-not-to-rm-yourself.md
-if brew list "coreutils" &> /dev/null; then
-	alias rm="rm -I"
-else
-	alias rm="rm -i"
-fi
-
 
 # Ring the terminal bell, and put a badge on Terminal.app’s Dock icon
 # (useful when executing time-consuming commands)
@@ -109,14 +99,3 @@ alias badge="tput bel"
 # For example, to list all directories that contain a certain file:
 # find . -name .gitattributes | map dirname
 alias map="xargs -n1"
-
-# One of @janmoesen’s ProTip™s
-for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
-	alias "$method"="lwp-request -m '$method'"
-done
-
-# Update vim plugins from anywhere
-alias vu="vim +PluginInstall +qall"
-
-# Make Grunt print stack traces by default
-#command -v grunt > /dev/null && alias grunt="grunt --stack"
