@@ -1,4 +1,4 @@
-Plugin 'gmarik/vundle' " ViM bundle manager
+Plugin 'VundleVim/Vundle.vim' " ViM bundle manager
 
 " Theme
 Plugin 'chriskempson/base16-vim' " base16 colorscheme
