@@ -1,5 +1,7 @@
 " configure syntastic syntax checking to check on open as well as save
 let g:syntastic_check_on_open=1
+" aggregate errors for multiple checkers into 1
+let g:syntastic_aggregate_errors = 1
 " Enable this option to tell syntastic to always stick any detected errors into
 " the |location-list|: >
 let g:syntastic_always_populate_loc_list = 1
