@@ -1,8 +1,8 @@
 Plugin 'VundleVim/Vundle.vim' " ViM bundle manager
 
 " Theme
-Plugin 'chriskempson/base16-vim' " base16 colorscheme
-" Plugin 'trusktr/seti.vim' " seti ui
+" Plugin 'chriskempson/base16-vim' " base16 colorscheme
+Plugin 'trusktr/seti.vim' " seti ui
 
 " UI
 Plugin 'gregsexton/MatchTag' " highlights the matching HTML tag when the cursor is positioned on a tag
