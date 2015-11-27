@@ -141,7 +141,6 @@ else
 	brew tap homebrew/versions
 	brew tap homebrew/homebrew-php
 	brew tap vitorgalvao/homebrew-tinyscripts
-	brew tap peco/peco
 
 	# Store IFS within a temp variable
 	OIFS=$IFS
