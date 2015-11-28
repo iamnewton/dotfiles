@@ -1,3 +1,4 @@
+bigrig
 bower
 brightness-cli
 browser-sync
@@ -11,6 +12,7 @@ cpy
 csscomb
 csslint
 css-reporter
+credits-cli
 david
 dark-mode
 display-notification
@@ -32,6 +34,8 @@ imageoptim-cli
 internal-ip
 is-online
 is-up
+itunes-remote
+jsbin-sync
 jscs
 jsfmt
 jshint
@@ -50,6 +54,7 @@ psi
 public-ip
 sitespeed.io
 speed-test
+spoof
 stylestats
 strip-debug
 superb

@@ -1,3 +1,4 @@
+conf/bash/functions .functions
 conf/bash/profile .bash_profile
 conf/bash/less .lesskey
 conf/bash/logout .bash_logout

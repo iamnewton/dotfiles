@@ -101,16 +101,16 @@ _bulk_install() {
 	do
 		case $type in
 			homebrew)
-				_install_formula ${apps[index]}
+				_install_formula "${apps[index]}"
 				;;
 			node)
-				_install_package ${apps[index]}
+				_install_package "${apps[index]}"
 				;;
 			ruby)
-				_install_gem ${apps[index]}
+				_install_gem "${apps[index]}"
 				;;
 			*)
-				_symlink_file ${apps[index]}
+				_symlink_file "${apps[index]}"
 				;;
 		esac
 	done
@@ -238,7 +238,7 @@ install_formulae() {
 
 	old_brew="$(cat "${PROGDIR}"/var/homebrew)"
 	new_brew="$(md5 "${brews}" | cut -d ' ' -f 4)"
-	if [[ $new_brew != $old_brew ]]; then
+	if [[ $new_brew != "$old_brew" ]]; then
 		_bulk_install "$brews" 'homebrew'
 	fi
 
@@ -265,7 +265,7 @@ install_packages() {
 	old_file="$(cat "${PROGDIR}"/var/npm)"
 	new_file="$(md5 "${npmfile}" | cut -d ' ' -f 4)"
 	# check hash of var/{{ file }} so that I don't try to install if nothing has changed
-	if [[ $new_file != $old_file ]]; then
+	if [[ $new_file != "$old_file" ]]; then
 		# Install Node packages
 
 		_bulk_install "$npmfile" 'node'
@@ -286,7 +286,7 @@ install_gems() {
 	gemfile="${PROGDIR}/opt/gems"
 	old_gem="$(cat "${PROGDIR}"/var/gems)"
 	new_gem="$(md5 "${gemfile}" | cut -d ' ' -f 4)"
-	if [[ $new_gem != $old_gem ]]; then
+	if [[ $new_gem != "$old_gem" ]]; then
 
 		_bulk_install "$gemfile" 'ruby'
 

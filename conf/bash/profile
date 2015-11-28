@@ -21,6 +21,7 @@ load_dotfiles() {
 		$(dotfiles --prefix)/conf/bash/options # Options
 		$(dotfiles --prefix)/conf/bash/exports # Exports
 		$(dotfiles --prefix)/conf/bash/aliases # Aliases
+		$(dotfiles --prefix)/conf/bash/functions # Options
 		$(dotfiles --prefix)/conf/bash/prompt # Custom bash prompt
 		$(dotfiles --prefix)/conf/bash/paths # Path modifications
 		$(dotfiles --prefix)/conf/bash/completions # Custom bash completion

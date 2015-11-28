@@ -61,6 +61,11 @@
 	# Displays committers in descending order of number of commits
 	who = shortlog --numbered --summary --email --no-merges --since="3 months"
 
+	# sets up a quick git server
+	# touch .git/git-daemon-export-ok  
+	# $ git serve
+	serve = daemon --reuseaddr --verbose  --base-path=. --export-all ./.git
+
 [apply]
 	whitespace = nowarn
 
@@ -106,7 +111,7 @@
 [core]
 	# Use custom `.gitignore` and `.gitattributes`
 	excludesfile = ~/.gitignore
-	attributesfile = ~/.gitattributes
+	# attributesfile = ~/.gitattributes
 	# http://git-scm.com/docs/gitattributes#_end_of_line_conversion
 	# Other source code management systems normalize all text files in their 
 	# repositories, and there are two ways to enable similar automatic 
@@ -123,7 +128,7 @@
 	autocrlf = input
 	# use vim as editor
 	editor = vim
-	pager = less -+$LESS -FRX
+	pager = !bash -lc '$(brew --prefix git)/share/git-core/contrib/diff-highlight/diff-highlight | strip-diff-leading-symbols | less -+$LESS -FRX' -
 	# http://git-scm.com/docs/gitattributes#_end_of_line_conversion
 	# If core.safecrlf is set to "true" or "warn", Git verifies if the 
 	# conversion is reversible for the current setting of core.autocrlf. 
