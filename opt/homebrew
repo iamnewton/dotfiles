@@ -1,6 +1,5 @@
-checkstyle
 coreutils
-crafts
+phantomjs
 ack
 atdtool
 advancecomp
@@ -8,7 +7,9 @@ archey
 bash
 bash-completion
 boom-completion
+checkstyle
 ctags
+crafts
 ffmpeg
 gem-completion
 gfv
@@ -40,7 +41,6 @@ node
 optipng
 pdftohtml
 peco
-phantomjs
 php55
 pip-completion
 pngcrush
