@@ -41,9 +41,8 @@ setw -g automatic-rename on
 
 set-window-option -g window-status-current-bg white
 set-window-option -g window-status-current-fg black
-# sets window option for copy/paste
-set-window-option -g mode-mouse on
 
+# sets window option for copy/paste
 bind v splitw -h -p 40 \; splitw -v -p 25
 
 bind t splitw -v -l 9
@@ -67,6 +66,3 @@ set -g status-right-length 20
 bind C new-window -a
 
 set -g mode-mouse on
-set -g mouse-resize-pane on
-set -g mouse-select-pane on
-set -g mouse-select-window on
