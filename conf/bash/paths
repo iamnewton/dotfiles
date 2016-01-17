@@ -5,6 +5,7 @@
 # Directories to be prepended to PATH
 declare -a dirs_to_prepend=(
 	"/usr/local/bin" # Ensure that this bin always takes precedence over `/usr/bin`
+	"/usr/local/sbin"
 	"$HOME/.linuxbrew/bin" # Add .linuxbrew support 
 )
 
@@ -16,7 +17,6 @@ declare -a dirs_to_append=(
 	"$(brew --prefix coreutils)/libexec/gnubin" # Add brew-installed GNU core utilities bin
 	"$(brew --prefix homebrew/php/php55)/bin" # Add brew-installed php5 bin
 	"$(brew --prefix npm)/bin" # Add npm-installed package bin
-	"$(brew --prefix)/lib/go/bin" # Add go-installed package bin
 )
 
 # Prepend directories to PATH
