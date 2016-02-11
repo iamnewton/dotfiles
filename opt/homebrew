@@ -53,6 +53,8 @@ rename
 rsync
 seren
 shellcheck
+slackcat
+spaceman-diff
 spark
 ssh-copy-id
 tidy-html5
