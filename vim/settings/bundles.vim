@@ -30,6 +30,7 @@ Plugin 'csscomb/vim-csscomb' " coding style formatter for CSS
 Plugin 'xolox/vim-misc' " Miscellaneous auto-load Vim scripts
 Plugin 'xolox/vim-easytags' " Automated tag file generation and syntax highlighting of tags
 " Plugin 'mephux/vim-jsfmt' " autoformat javascript
+Plugin 'vim-scripts/UniCycle' " smart quotes
 
 " Utilities
 Plugin 'kien/ctrlp.vim' " fuzzy file, buffer, mru, tag, etc finder

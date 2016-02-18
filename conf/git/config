@@ -32,6 +32,9 @@
 	delete-branch = !bash -c 'git push origin :refs/heads/$1 && git branch -d $1' -
 	merge-branch = !git checkout master && git merge @{-1}
 
+	# View your latest used git branches
+	latest = for-each-ref --count=30 --sort=-committerdate refs/heads/ --format='%(refname:short)'
+
 	# Diff what is staged for the next commit
 	diffc = diff --cached
 	# Diff overview
@@ -44,6 +47,9 @@
 
 	# Custom pretty log
 	logp = log --pretty=nice --date-order
+
+	# Show last change for a file (https://t.co/Ks4AAKIZxY)
+	lastchange = log -p --follow -n 1
 
 	# Diffstat log
 	logst = log --stat
