@@ -66,4 +66,5 @@ wget
 wp-cli
 wpcli-completion
 vagrant-completion
+youtube-dl
 z
