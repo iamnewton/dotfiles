@@ -8,6 +8,7 @@ cat-names
 chalk-cli
 colorguard
 component
+covgen
 cowsay
 cpy
 csscomb
@@ -16,6 +17,7 @@ css-reporter
 credits-cli
 david
 dark-mode
+devtool
 display-notification
 dog-names
 doiuse
