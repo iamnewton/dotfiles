@@ -99,3 +99,7 @@ alias badge="tput bel"
 # For example, to list all directories that contain a certain file:
 # find . -name .gitattributes | map dirname
 alias map="xargs -n1"
+
+# Since changes to Bash configuration require a reload to the config file to 
+# become effective, save some typing by setting up an alias 
+alias refresh='source ~/.bashrc'

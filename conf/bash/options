@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
+# Spare the hassle of typing cd every time;type the name of your target and
+# Bash will understand
+shopt -s autocd
+
 # Autocorrect typos in path names when using `cd`
 shopt -s cdspell
+shopt -s dirspell
 
 # Check the window size after each command and, if necessary, update the values
 # of LINES and COLUMNS.
@@ -13,6 +18,8 @@ shopt -s histappend
 shopt -s histreedit
 # History expansions will be verified before execution.
 shopt -s histverify
+# Save multi-line commands as one command
+shopt -s cmdhist
 
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob

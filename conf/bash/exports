@@ -24,7 +24,7 @@ export GREP_OPTIONS="--color=auto"
 
 # Increase the maximum number of commands to remember
 # (default is 500)
-export HISTSIZE=32768
+export HISTSIZE=500000
 
 # Entries beginning with space aren't added into history, and duplicate
 # entries will be erased (leaving the most recent entry).
@@ -32,7 +32,7 @@ export HISTCONTROL=ignorespace:erasedups
 
 # Increase the maximum number of lines contained in the history file
 # (default is 500)
-export HISTFILESIZE=$HISTSIZE
+export HISTFILESIZE=100000
 
 # Make some commands not show up in history
 export HISTIGNORE="ls:ls *:cd:cd -:pwd;exit:date:* --help"
