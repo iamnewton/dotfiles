@@ -10,6 +10,7 @@ boom-completion
 checkstyle
 ctags
 crafts
+diff-so-fancy
 ffmpeg
 gem-completion
 gfv
@@ -25,6 +26,7 @@ gist
 go
 graphicsmagick
 grunt-completion
+httpie
 hub
 hunspell
 imagesnap

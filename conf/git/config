@@ -39,6 +39,8 @@
 	diffc = diff --cached
 	# Diff overview
 	diffst = diff --stat
+	# Remove +/- in diff
+	diffcp='diff --color | sed -E "s/^([^-+ ]*)[-+ ]/\\1/" | less -r'
 
 	# Custom graph log (append any tree-ish)
 	graph = log --pretty=nice --date-order --graph
@@ -55,6 +57,10 @@
 	logst = log --stat
 	# Short format diffstat log
 	logsf = log --stat --format=oneline --abbrev-commit
+
+	# remind me what was recently done
+	# Source: https://twitter.com/csswizardry/status/784399286050156544
+	recap = log --oneline --no-merges --author=chrisohpedia@gmail.com
 
 	# Fetch and checkout a GitHub Pull Request from a remote (defaults to `origin`)
 	# https://gist.github.com/gnarf/5406589
@@ -103,6 +109,12 @@
 	whitespace = yellow reverse
 	commit = green ul bold
 
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+
 [color "status"]
 	added = green
 	changed = yellow
@@ -134,7 +146,8 @@
 	autocrlf = input
 	# use vim as editor
 	editor = vim
-	pager = !bash -lc '$(brew --prefix git)/share/git-core/contrib/diff-highlight/diff-highlight | strip-diff-leading-symbols | less -+$LESS -FRX' -
+	# pager = !bash -lc '$(brew --prefix git)/share/git-core/contrib/diff-highlight/diff-highlight | strip-diff-leading-symbols | less -+$LESS -FRX' -
+	pager = diff-so-fancy | less --tabs=4 -RFX
 	# http://git-scm.com/docs/gitattributes#_end_of_line_conversion
 	# If core.safecrlf is set to "true" or "warn", Git verifies if the 
 	# conversion is reversible for the current setting of core.autocrlf. 
@@ -144,6 +157,11 @@
 	# tree, but there are a few exceptions. Even though…
 	# dont irreversably perform CRLF conversion on a binary file
 	safecrlf = true
+	# Sindre Sorhus on Twitter said:  "🔥 Get faster `git status` by upgrading 
+	# to git 2.8.0 and run `$ git config --system core.untrackedCache true` 
+	# https://t.co/eA70g9KJnH"
+	→ https://twitter.com/sindresorhus/status/715593327723343872
+	untrackedCache = true
 
 [credential]
 	# https://help.github.com/articles/set-up-git

@@ -62,5 +62,5 @@
 	"requireSpaceAfterLineComment": true,
 	"disallowNewlineBeforeBlockStatements": true,
 	"validateParameterSeparator" : ", ",
-	"safeContextKeyword": ["self"]
+	"safeContextKeyword": ["ctx"]
 }

@@ -26,6 +26,7 @@ load_dotfiles() {
 		$(dotfiles --prefix)/conf/bash/paths # Path modifications
 		$(dotfiles --prefix)/conf/bash/completions # Custom bash completion
 		$(brew --prefix)/etc/bash_completion # Bash completion (installed via Homebrew)
+		$(brew --prefix nvm)/nvm.sh # nvm 
 		$HOME/.bash_profile.local # Local and private settings not under version control (e.g. git credentials)
 	)
 
@@ -44,3 +45,5 @@ unset load_dotfiles
 # list out tmux sessions on startup, don't show error if none
 # https://twitter.com/climagic/status/567658485517930497
 tmux list-sessions 2> /dev/null
+
+test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
