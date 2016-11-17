@@ -47,8 +47,10 @@ jsinspect
 jsonlint
 js-yaml
 karma-cli
+lighthouse
 mdoc
 myth
+npm-issues
 osx-release
 osx-version
 pageres
