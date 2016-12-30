@@ -75,6 +75,9 @@ alias df="df -h"
 # # and exclude grepping through .svn folders.
 alias grep="grep --color=auto --exclude-dir=\.git"
 
+# curl a blank HTML file into Vim; open stdin in Vim by using the - flag
+alias html="curl -L https://git.io/vMLHh | vim -"
+
 # Restart apache
 alias restart="sudo apachectl restart"
 # Edit host file
