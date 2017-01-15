@@ -1,9 +1,11 @@
 airsonos
 alfred-npms
+alex
 analyze-css
 bigrig
 bower
 brightness-cli
+broken-link-checker
 browser-sync
 caniuse-cmd
 cat-names
@@ -17,9 +19,9 @@ csscomb
 csslint
 css-reporter
 credits-cli
-david
 dark-mode
 devtool
+david
 display-notification
 dog-names
 doiuse
@@ -33,6 +35,7 @@ gify
 git-guilt
 grunt-cli
 grunt-devtools
+gulp
 htmlhint
 html-inspector
 imageoptim-cli
