@@ -253,10 +253,29 @@ if [[ -d "/usr/local/bin" ]]; then
 fi
 
 # Setup GPG
+# https://help.github.com/articles/generating-a-new-gpg-key/
 if ! type -P 'gpg' &> /dev/null; then
 	_error "gpg not found"
 else
-	gpg --list-secret-keys --keyid-format LONG
+	_process "Generating a GPG key"
+	# generate a new GPG key
+	# then if successful, list out the keys
+	gpg --gen-key && gpg --list-secret-keys --keyid-format LONG
+	
+	_question "Which GPG key would you like to copy?"
+	read USER_GIT_GPG_KEY
+	
+	if [[ ! -z "$USER_GIT_GPG_KEY" ]]; then
+		GIT_GPG_KEY="${USER_GIT_GPG_KEY}"
+		_process "Copying GPG key to pasteboard"
+		git config --global user.signingkey $GIT_GPG_KEY
+		gpg --armor --export $GIT_GPG_KEY | pbcopy
+		_process "Opening Github settings; create a new GPG key and paste in the pasteboard"
+		open https://github.com/settings/keys
+
+	else
+		_warning "No GPG key has been set.  Please update manually"
+	fi
 fi
 
 # Copy `.gitconfig`.
