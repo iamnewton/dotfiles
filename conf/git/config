@@ -125,6 +125,8 @@
 [commit]
 	# custom commit message template
 	template = ~/.gitmessage
+	# set up commit signing: https://help.github.com/articles/signing-commits-using-gpg/
+	gpgsign = true
 
 [core]
 	# Use custom `.gitignore` and `.gitattributes`
