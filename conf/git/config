@@ -9,6 +9,8 @@
 	cleanup = !git clean -df && git stash clear
 	undo = !git reset --soft HEAD^
 
+	commit = commit -S
+
 	# Show the diff of everything you haven't pushed yet
 	unpushed = !git diff origin/$(git rev-parse --abbrev-ref HEAD)..HEAD'
 
