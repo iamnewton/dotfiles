@@ -138,8 +138,9 @@ else
 	# Tap some necessary formulae
 	brew tap homebrew/completions
 	brew tap homebrew/dupes
-	brew tap homebrew/versions
+	brew tap caskroom/versions
 	brew tap homebrew/homebrew-php
+	brew tap caskroom/drivers
 	brew tap vitorgalvao/homebrew-tinyscripts
 
 	# Store IFS within a temp variable
