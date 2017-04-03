@@ -12,6 +12,7 @@ checkstyle
 ctags
 crafts
 diff-so-fancy
+dos2unix
 elinks
 ffmpeg
 gem-completion
