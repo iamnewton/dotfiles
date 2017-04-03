@@ -73,3 +73,7 @@ export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
 # NVM directory
 export NVM_DIR=~/.nvm
+
+# GPG Signage
+GPG_TTY=$(tty)
+export GPG_TTY
