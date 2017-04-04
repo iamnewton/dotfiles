@@ -20,6 +20,9 @@
 	# Sets git branch default to list verbosely
 	branch = !git branch --list -v
 
+	# image diff
+	diff-image = !git difftool -y -t Kaleidoscope
+
 	# Sets git remote default to list verbosely
 	remote = !git remote -v
 
@@ -185,7 +188,7 @@
 	prompt = false
 
 [difftool "Kaleidoscope"]
-	cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
+	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 
 [ghi]
 	editor = vim
@@ -208,6 +211,9 @@
 	log = true
 	tool = vimdiff
 	summary = true
+
+[mergetool "Kaleidoscope"]
+	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" \"$REMOTE\"
 
 [pretty]
 	# tut: http://gitimmersion.com/lab_10.html
