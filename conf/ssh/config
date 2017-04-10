@@ -23,3 +23,7 @@ ServerAliveCountMax=6
 
 # Use compression (helpful with scp over low-bandwidth connections)
 Compression=yes
+
+Host *
+	AddKeysToAgent yes
+	UseKeychain yes
