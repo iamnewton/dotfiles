@@ -65,7 +65,7 @@
 
 	# remind me what was recently done
 	# Source: https://twitter.com/csswizardry/status/784399286050156544
-	recap = log --oneline --no-merges --author=chrisohpedia@gmail.com
+	recap = log --since="00:00:00" --oneline --no-merges --author=chrisohpedia@gmail.com
 
 	# Fetch and checkout a GitHub Pull Request from a remote (defaults to `origin`)
 	# https://gist.github.com/gnarf/5406589
