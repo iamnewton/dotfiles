@@ -21,6 +21,7 @@
 	branch = !git branch --list -v
 
 	# image diff
+	merge-image = !git mergetool -y -t Kaleidoscope
 	diff-image = !git difftool -y -t Kaleidoscope
 
 	# Sets git remote default to list verbosely
