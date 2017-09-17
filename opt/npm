@@ -57,6 +57,7 @@ jsonlint
 js-yaml
 karma-cli
 lighthouse
+lock-cli
 mdoc
 myth
 npm-issues
