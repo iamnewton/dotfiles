@@ -27,6 +27,7 @@ load_dotfiles() {
 		$(dotfiles --prefix)/conf/bash/completions # Custom bash completion
 		$(brew --prefix)/etc/bash_completion # Bash completion (installed via Homebrew)
 		$(brew --prefix nvm)/nvm.sh # nvm 
+		$HOME/.fzf.bash # fzf
 		$HOME/.bash_profile.local # Local and private settings not under version control (e.g. git credentials)
 	)
 

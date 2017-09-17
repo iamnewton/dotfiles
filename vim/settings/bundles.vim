@@ -36,6 +36,7 @@ Plugin 'vim-scripts/UniCycle' " smart quotes
 
 " Utilities
 Plugin 'kien/ctrlp.vim' " fuzzy file, buffer, mru, tag, etc finder
+Plugin 'junegunn/fzf.vim' " different kind of fuzzy finder
 Plugin 'scrooloose/nerdtree' " tree explorer plugin for ViM
 Plugin 'majutsushi/tagbar' " displays tags in a window, ordered by scope
 Plugin 'sjl/clam.vim' " allows you to work with shell commands in ViM
