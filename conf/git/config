@@ -47,6 +47,8 @@
 	diffst = diff --stat
 	# Remove +/- in diff
 	diffcp='diff --color | sed -E "s/^([^-+ ]*)[-+ ]/\\1/" | less -r'
+	# min diff
+	mindiff = diff --word-diff-regex=.
 
 	# Custom graph log (append any tree-ish)
 	graph = log --pretty=nice --date-order --graph
@@ -77,7 +79,15 @@
 
 	# Find out who is currently active on the repository
 	# Displays committers in descending order of number of commits
-	who = shortlog --numbered --summary --email --no-merges --since="3 months"
+	who = shortlog --numbered --summary --email --no-merges --since='3 months'
+
+	# The shortlog gives us summaries of git log; 
+	# -s suppresses commit description and provide a commit count summary only
+	# -n sorts output according to the number of commits per author instead of author alphabetic order. 
+	# --all flag logs all branches 
+	# --no-merges ensures that merge commits aren’t being counted
+	# Source: https://csswizardry.com/2017/05/little-things-i-like-to-do-with-git/
+	leader = shortlog -sn --all --no-merges
 
 	# sets up a quick git server
 	# touch .git/git-daemon-export-ok  
