@@ -81,7 +81,7 @@ alias html="curl -L https://git.io/vMLHh | vim -"
 # Restart apache
 alias restart="sudo apachectl restart"
 # Edit host file
-alias host="sudo vim /etc/hosts"
+alias hosts="sudo vim /etc/hosts"
 # Edit vhosts listings
 alias vhost="sudo vim /etc/apache2/extra/httpd-vhosts.conf"
 # Pass in a process to find, greps the running processes

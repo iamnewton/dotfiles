@@ -49,6 +49,8 @@
 	diffcp='diff --color | sed -E "s/^([^-+ ]*)[-+ ]/\\1/" | less -r'
 	# min diff
 	mindiff = diff --word-diff-regex=.
+	# word diff
+	word = diff --word-diff
 
 	# Custom graph log (append any tree-ish)
 	graph = log --pretty=nice --date-order --graph
