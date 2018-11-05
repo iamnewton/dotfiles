@@ -20,7 +20,8 @@ conf/runcom/jscs .jscsrc
 conf/runcom/jsfmt .jsfmtrc
 conf/runcom/jshint .jshintrc
 conf/runcom/mail .mailrc
-conf/runcom/scss-lint .scss-lint.yml
+conf/runcom/markdownlint .markdownlintrc
+conf/runcom/stylelint .stylelintrc
 conf/runcom/wget .wgetrc
 conf/vim/ctags .ctags
 conf/vim/editor .editorconfig

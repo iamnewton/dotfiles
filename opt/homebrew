@@ -1,12 +1,10 @@
 coreutils
-phantomjs
 ack
 atdtool
 advancecomp
 archey
 bash
 bash-completion
-boom-completion
 brew-cask-completion
 checkstyle
 chromedriver
@@ -31,7 +29,6 @@ gist
 go
 gpg
 graphicsmagick
-grunt-completion
 guetzli
 httpie
 hub
@@ -51,12 +48,9 @@ node
 optipng
 pdftohtml
 peco
-php55
-pip-completion
 pngcrush
 pngquant
 https://raw.githubusercontent.com/EricChiang/pup/master/pup.rb
-composer
 reattach-to-user-namespace
 rename
 rsync
@@ -72,8 +66,5 @@ tree
 unsplashdownload
 w3m
 wget
-wp-cli
-wpcli-completion
-vagrant-completion
 youtube-dl
 z

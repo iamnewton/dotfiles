@@ -15,7 +15,6 @@ declare -a dirs_to_append=(
 	"$HOME/bin"
 	"$HOME/.rvm/bin"
 	"$(brew --prefix coreutils)/libexec/gnubin" # Add brew-installed GNU core utilities bin
-	"$(brew --prefix homebrew/php/php55)/bin" # Add brew-installed php5 bin
 	"$(brew --prefix npm)/bin" # Add npm-installed package bin
 )
 

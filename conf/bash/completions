@@ -5,9 +5,6 @@
 # Brew completion
 source "$(brew --prefix)/etc/bash_completion"
 
-# Enable bash <tab> completion for grunt
-eval "$(grunt --completion=bash)"
-
 # Enable bash <tab> completion for gulp
 eval "$(gulp --completion=bash)"
 
