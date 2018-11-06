@@ -19,7 +19,6 @@ gem-completion
 gfv
 gibo
 gifsicle
-gifmaker
 gist
 ghi
 git
@@ -39,7 +38,6 @@ jpeg
 jpegoptim
 jp2a
 jq
-keybase
 less
 libyaml
 lovecolor
@@ -63,7 +61,6 @@ ssh-copy-id
 tidy-html5
 tmux
 tree
-unsplashdownload
 w3m
 wget
 youtube-dl
