@@ -136,12 +136,9 @@ else
 	brew upgrade
 
 	# Tap some necessary formulae
-	brew tap homebrew/completions
-	brew tap homebrew/dupes
 	brew tap caskroom/versions
-	brew tap homebrew/homebrew-php
 	brew tap caskroom/drivers
-	brew tap vitorgalvao/homebrew-tinyscripts
+	brew tap vitorgalvao/tiny-scripts
 
 	# Store IFS within a temp variable
 	OIFS=$IFS
@@ -263,7 +260,7 @@ else
 	# then if successful, list out the keys
 	gpg --gen-key && gpg --list-secret-keys --keyid-format LONG
 	
-	_question "Which GPG key would you like to copy?"
+	_question "Which GPG key would you like to copy? (choose the code on the 'sec' line after the first slash)"
 	read USER_GIT_GPG_KEY
 	
 	if [[ ! -z "$USER_GIT_GPG_KEY" ]]; then
