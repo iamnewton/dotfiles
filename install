@@ -136,8 +136,8 @@ else
 	brew upgrade
 
 	# Tap some necessary formulae
-	brew tap caskroom/versions
-	brew tap caskroom/drivers
+	brew tap homebrew/cask-versions
+	brew tap homebrew/cask-drivers
 	brew tap vitorgalvao/tiny-scripts
 
 	# Store IFS within a temp variable
