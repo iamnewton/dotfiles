@@ -7,7 +7,6 @@ bash
 bash-completion
 brew-cask-completion
 checkstyle
-chromedriver
 ctags
 crafts
 diff-so-fancy
