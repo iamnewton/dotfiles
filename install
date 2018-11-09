@@ -160,7 +160,7 @@ else
 	# Reset IFS back
 	IFS=$OIFS
 
-	brew install vim --HEAD --with-override-system-vi --with-python3
+	brew install vim --HEAD --with-override-system-vi
 	brew cleanup
 
 	# Set up hash file for brew installation
