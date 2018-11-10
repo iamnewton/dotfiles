@@ -186,20 +186,13 @@ else
 	IFS=$'\r\n' packages=($(cat "${npmfile}"))
 
 	# Loop through array
-	for index in ${packages[*]}
+	for index in ${!packages[*]}
 	do
-		# Test whether a npm package is already installed
-		if ! $(npm list -g '${packages[$index]}' | grep '${packages[$index]}') &> /dev/null; then
-			# Create a string of all files with a comma at the end
-			string=$(printf "%s " "${packages[@]}")
-		fi
+		npm install --global --quiet ${packages[$index]}
 	done
 
 	# Reset IFS back
 	IFS=$OIFS
-
-	# Install packages globally and quietly
-	npm install $string --global --quiet
 
 	# Set up hash file for npm installation
 	echo $(md5 "${npmfile}" | cut -d ' ' -f 4) > "${DIR}/var/npm"
