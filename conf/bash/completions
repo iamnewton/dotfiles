@@ -8,6 +8,8 @@ source "$(brew --prefix)/etc/bash_completion"
 # Enable bash <tab> completion for gulp
 eval "$(gulp --completion=bash)"
 
+source "$(brew --prefix)/etc/profile.d/crafts"
+
 # Enable bash <tab> completion for z
 source "$(brew --prefix)/etc/profile.d/z.sh"
 
