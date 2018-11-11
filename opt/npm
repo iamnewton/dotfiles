@@ -1,9 +1,5 @@
-@alexlafroscia/tldr-alfred-workflow
 @captainsafia/legit
 airsonos
-alfred-css-triggers
-alfred-fkill
-alfred-npms
 alex
 analyze-css
 axe-cli
@@ -35,6 +31,7 @@ eslint
 fixmyjs
 fkill-cli
 fullname-native
+fx
 gify
 git-guilt
 gulp
