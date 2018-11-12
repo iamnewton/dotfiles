@@ -1,5 +1,3 @@
-Host *
-
 # Multiplex channels to the same server with a local control file
 # Enable connection sharing
 ControlMaster auto
