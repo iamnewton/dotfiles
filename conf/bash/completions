@@ -22,8 +22,5 @@ fi
 # You could use `-g` instead, but I like being explicit
 complete -W "NSGlobalDomain" defaults
 
-# Enable auto-completion of task aliases
-complete -W "$(cat ~/.hcl/aliases)" hcl
-
 # Add `killall` tab completion for common apps
 complete -o "nospace" -W "Contacts Calendar Dock Finder iTerm2 Mail Safari iTunes SystemUIServer Terminal Twitter" killall
