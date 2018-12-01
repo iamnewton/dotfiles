@@ -5,6 +5,7 @@ advancecomp
 archey
 bash
 bash-completion
+bat
 brew-cask-completion
 checkstyle
 ctags
@@ -18,6 +19,7 @@ gem-completion
 gfv
 gibo
 gifsicle
+gifsky
 gist
 ghi
 git
@@ -27,6 +29,7 @@ gist
 go
 gpg
 graphicsmagick
+gron
 guetzli
 httpie
 hub
@@ -61,6 +64,7 @@ tidy-html5
 tmux
 tree
 w3m
+wallpaper
 wget
 youtube-dl
 z

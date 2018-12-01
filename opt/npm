@@ -35,6 +35,7 @@ fx
 gify
 git-guilt
 gulp
+globby-cli
 htmlhint
 html-inspector
 imageoptim-cli
