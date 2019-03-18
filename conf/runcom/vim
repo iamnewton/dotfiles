@@ -76,6 +76,8 @@ source ${HOME}/.vim/settings/rainbow.vim
 source ${HOME}/.vim/settings/syntastic.vim
 " VimShell plugin
 source ${HOME}/.vim/settings/vimshell.vim
+" Carbon Now plugin
+source ${HOME}/.vim/settings/carbon-now.vim
 
 " Load local machine settings if they exist
 if filereadable(glob("$HOME/.vimrc.local"))

@@ -121,6 +121,9 @@ nmap <silent> <leader>sv :so $MYVIMRC<CR>
 " activate clam shell
 nnoremap ! :Clam<space>
 
+" use F5 for CarbonNow
+vnoremap <F5> :CarbonNowSh<CR>
+
 " ctrl p search
 nnoremap <silent> \ :CtrlP<CR>
 " ctrl p search files

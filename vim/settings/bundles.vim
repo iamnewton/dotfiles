@@ -50,4 +50,5 @@ Plugin 'mattn/webapi-vim' " dependency for Gist ViM
 Plugin 'mattn/gist-vim' " Gists for ViM
 Plugin 'benmills/vimux' "Easily interact with tmux from vim
 " Plugin 'mklabs/vimfiles', {'rtp': 'custom-bundle/vim-chrome/'}
+Plugin 'kristijanhusak/vim-carbon-now-sh' " implementation plugin for opening selected content in https://carbon.now.sh.
 

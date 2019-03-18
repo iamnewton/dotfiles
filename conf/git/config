@@ -11,6 +11,10 @@
 
 	commit = commit -S
 
+	add = add -p
+
+	vadd = add
+
 	# Show the diff of everything you haven't pushed yet
 	unpushed = !git diff origin/$(git rev-parse --abbrev-ref HEAD)..HEAD'
 
@@ -141,6 +145,8 @@
 	nobranch = red bold
 
 [commit]
+	# put the diffs inside the commit message
+	verbose = true
 	# custom commit message template
 	template = ~/.gitmessage
 	# set up commit signing: https://help.github.com/articles/signing-commits-using-gpg/
@@ -263,6 +269,9 @@
 	# %%+---:a raw %
 	# %x00:+print a byte from a hex code
 	nice = "%C(209)%an%C(reset)@%C(yellow)%h%C(reset) said '%C(white bold)%s%C(reset)' about %C(cyan)%ar%C(reset)%C(magenta)%d%C(reset)"
+
+[rebase]
+	autoStash = true
 
 [pull]
 	rebase = true
