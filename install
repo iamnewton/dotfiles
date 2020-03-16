@@ -2,7 +2,7 @@
 
 # variables
 LOG="${HOME}/Library/Logs/dotfiles.log"
-GITHUB_USER="chrisopedia"
+GITHUB_USER="iamnewton"
 GIT_AUTHOR_NAME=""
 GIT_AUTHOR_EMAIL=""
 
@@ -255,7 +255,7 @@ else
 	
 	_question "Which GPG key would you like to copy? (choose the code on the 'sec' line after the first slash)"
 	read USER_GIT_GPG_KEY
-	
+
 	if [[ ! -z "$USER_GIT_GPG_KEY" ]]; then
 		GIT_GPG_KEY="${USER_GIT_GPG_KEY}"
 		_process "Copying GPG key to pasteboard"
