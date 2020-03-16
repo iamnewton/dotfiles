@@ -1,10 +1,8 @@
-# dotfiles
+# dotfiles(1)
 
-Typically software you buy comes with some sort of installer, why not your dotfiles? After manually setting up my dotfiles and installation for years, I decided to take a page from [some](https://github.com/necolas) [other](https://github.com/mathiasbynens) [people's](https://github.com/cowboy) [books](http://dotfiles.github.io) and set up a script that will configure my machine to run [ViM as an IDE](http://blog.sanctum.geek.nz/series/unix-as-ide/).  Along the way, I figured how to get all of the necessary [Homebrew](http://braumeister.org) & [Node](https://www.npmjs.org) packages installed as well as some useful [Ruby gems](http://rubygems.org). Feel free to [poke around](https://github.com/chrisopedia/dotfiles/commits/master) the repository, [fork it](https://github.com/chrisopedia/dotfiles/fork) to make it your own, [suggest things](https://github.com/chrisopedia/dotfiles/issues?labels=feature+request) for me to include, [log a bug](https://github.com/chrisopedia/dotfiles/issues/new), or maybe checkout the [features list](#features) to see what's included.
+Typically software you buy comes with some sort of installer, why not your dotfiles? After manually setting up my dotfiles and installation for years, I decided to take a page from [some](https://github.com/necolas) [other](https://github.com/mathiasbynens) [people's](https://github.com/cowboy) [books](http://dotfiles.github.io) and set up a script that will configure my machine to run [ViM as an IDE](http://blog.sanctum.geek.nz/series/unix-as-ide/).  Along the way, I figured how to get all of the necessary [Homebrew](http://braumeister.org) & [Node](https://www.npmjs.org) packages installed as well as some useful [Ruby gems](http://rubygems.org). Feel free to [poke around](https://github.com/iamewton/dotfiles/commits/master) the repository, [fork it](https://github.com/iamnewton/dotfiles/fork) to make it your own, [suggest things](https://github.com/iamnewton/dotfiles/issues?labels=feature+request) for me to include, [log a bug](https://github.com/iamnewton/dotfiles/issues/new), or maybe checkout the [features list](#features) to see what's included.
 
-**N.B.** This project is released with a [Contributor Code of Conduct](https://github.com/chrisopedia/dotfiles/blob/master/CONTRIBUTING.md#code-of-conduct). By participating in this project you agree to abide by its terms.
-
-[![Version 2.1.2](http://img.shields.io/badge/version-2.1.2-brightgreen.svg)](https://github.com/chrisopedia/bash/releases/tag/2.1.2) [![Stories in Ready](https://badge.waffle.io/chrisopedia/dotfiles.svg?label=Ready&title=Ready)](http://waffle.io/chrisopedia/dotfiles)
+**N.B.** This project is released with a [Contributor Code of Conduct](https://github.com/iamnewton/dotfiles/blob/master/CONTRIBUTING.md#code-of-conduct). By participating in this project you agree to abide by its terms.
 
 ## Installation
 
@@ -25,10 +23,10 @@ Typically software you buy comes with some sort of installer, why not your dotfi
 ### One-line Install
 
 ```bash
-$ bash -c "$(curl -#fL raw.github.com/chrisopedia/dotfiles/go/install)"
+$ bash -c "$(curl -#fL raw.github.com/iamnewton/dotfiles/go/install)"
 ```
 
-:exclamation: N.B. If you wish to [fork this project](https://github.com/chrisopedia/dotfiles/fork) and maintain your own dotfiles, you **MUST** substitute my username for your own in the above command and the variable (`$GITHUB_USER`) found at the top of the `bin/dotfiles` script.
+:exclamation: N.B. If you wish to [fork this project](https://github.com/iamnewton/dotfiles/fork) and maintain your own dotfiles, you **MUST** substitute my username for your own in the above command and the variable (`$GITHUB_USER`) found at the top of the `bin/dotfiles` script.
 
 ## Options
 
@@ -66,23 +64,23 @@ $ dotfiles
 If you need to uninstall for whatever reason, this script will remove all installed Homebrew formulae, Ruby Gems, Node and its packages, configuration symlinks, ViM and all of its plugins, and the library itself.  However, it won't uninstall Homebrew as I didn't want to make that assumption.
 
 ```bash
-$ bash -c "$(curl -#fL raw.github.com/chrisopedia/dotfiles/go/uninstall)"
+$ bash -c "$(curl -#fL raw.github.com/iamnewton/dotfiles/go/uninstall)"
 ```
 
 ## Features
 
-Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several package installations handled via Homebrew, Ruby gems, NPM, & Go that are listed in the [wiki](https://github.com/chrisopedia/dotfiles/wiki). In addition, there are several ViM plugins that are installed via [Vundle](https://github.com/gmarik/vundle), and some `<tab>` completion libraries. If you want to modify what is installed by default, removing or adding is as easy as updating the package in the appropriate file.  Each package is stored in the `opt` directory and named for the package management software that is used.
+Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several package installations handled via Homebrew, Ruby gems, NPM, & Go that are listed in the [wiki](https://github.com/iamnewton/dotfiles/wiki). In addition, there are several ViM plugins that are installed via [Vundle](https://github.com/gmarik/vundle), and some `<tab>` completion libraries. If you want to modify what is installed by default, removing or adding is as easy as updating the package in the appropriate file.  Each package is stored in the `opt` directory and named for the package management software that is used.
 
 :exclamation: N.B. Each package should be on a new line.
 
 ### Package Management libraries
 
-* [Homebrew formulae](https://github.com/chrisopedia/dotfiles/wiki/Homebrew)
-* [Ruby gems](https://github.com/chrisopedia/dotfiles/wiki/Ruby)
-* [Node packages](https://github.com/chrisopedia/dotfiles/wiki/Node)
-* [Go libraries](https://github.com/chrisopedia/dotfiles/wiki/Go)
-* [ViM plugins](https://github.com/chrisopedia/dotfiles/wiki/ViM)
-* [&lt;tab&gt; Completion Libraries](https://github.com/chrisopedia/dotfiles/wiki/-tab--Completion)
+* [Homebrew formulae](https://github.com/iamnewton/dotfiles/wiki/Homebrew)
+* [Ruby gems](https://github.com/iamnewton/dotfiles/wiki/Ruby)
+* [Node packages](https://github.com/iamnewton/dotfiles/wiki/Node)
+* [Go libraries](https://github.com/iamnewton/dotfiles/wiki/Go)
+* [ViM plugins](https://github.com/iamnewton/dotfiles/wiki/ViM)
+* [&lt;tab&gt; Completion Libraries](https://github.com/iamnewton/dotfiles/wiki/-tab--Completion)
 
 ### Custom bash prompt
 
@@ -99,7 +97,7 @@ For best results, you should install [iTerm2](http://chriskempson.github.io/base
 
 #### Screenshot
 
-![](http://cdn.chrisopedia.me/images/dotfiles-screenshot-v2.png)
+![](https://iamnewton.github.io/cdn/images/dotfiles-screenshot-v2.png)
 
 ### Local/private Bash configuration
 
