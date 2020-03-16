@@ -221,7 +221,7 @@ cmdline() {
 # program functions
 _error_out() {
 	_print_error "No $PROGDIR found!"
-	printf 'Run the installer <%shttps://github.com/chrisopedia/dotfiles#how-to-install%s>\n' "$(tput smul)" "$(tput rmul)"
+	printf 'Run the installer <%shttps://github.com/iamnewton/dotfiles#how-to-install%s>\n' "$(tput smul)" "$(tput rmul)"
 	exit 1
 }
 
