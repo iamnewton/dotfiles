@@ -7,19 +7,14 @@ conf/git/attributes .gitattributes
 conf/git/ignore .gitignore
 conf/git/message .gitmessage
 conf/misc/tmux .tmux.conf
-conf/misc/image_optim .image_optim.yml
-conf/misc/overcommit .overcommit.yml
+# conf/misc/image_optim .image_optim.yml
+# conf/misc/overcommit .overcommit.yml
 conf/misc/svgo .svgo.yml
 conf/runcom/ack .ackrc
 conf/runcom/bash .bashrc
-conf/runcom/csscomb .csscomb.json
-conf/runcom/csslint .csslintrc
 conf/runcom/curl .curlrc
 conf/runcom/eslint .eslintrc
 conf/runcom/input .inputrc
-conf/runcom/jscs .jscsrc
-conf/runcom/jsfmt .jsfmtrc
-conf/runcom/jshint .jshintrc
 conf/runcom/mail .mailrc
 conf/runcom/markdownlint .markdownlintrc
 conf/runcom/stylelint .stylelintrc
