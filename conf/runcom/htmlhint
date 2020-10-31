@@ -1,22 +1,31 @@
 {
+  “doctype-first”: true,
+  “doctype-html5”: true,
+  “head-script-disabled”: false,
+  “style-disabled”: true,
+  “title-require”: true,
+
+  “attr-lowercase”: true,
+  “attr-no-duplication”: true,
+  “attr-no-unnecessary-whitespace”: true,
+  “attr-unsafe-chars”: true,
+  “attr-value-double-quotes”: true,
+  “attr-value-not-empty”: true,
+  “alt-require”: true,
+
+  “tag-pair”: true,
+  “tag-self-close”: true,    
   "tagname-lowercase": true,
-  "attr-lowercase": true,
-  "attr-value-double-quotes": true,
-  "doctype-first": true,
-  "tag-pair": true,
-  "spec-char-escape": true,
-  "id-unique": true,
-  "src-not-empty": true,
-  "attr-no-duplication": true,
-  "title-require": true,
-  "attr-value-not-empty": true,
-  "tag-self-close": true,
-  "alt-require": true,
-  "doctype-html5": true,
-  "style-disabled": true,
-  "inline-style-disabled": true,
-  "inline-script-disabled": true,
-  "space-tab-mixed-disabled": "tab",
-  "id-class-ad-disabled": true,
-  "id-class-value": "dash"
+  “empty-tag-not-self-closed”: false,
+  “src-not-empty”: true,
+  
+  “id-class-ad-disabled”: true,
+  “id-class-value”: “dash”,
+  “id-unique”: true,
+  
+  “inline-style-disabled”: true,
+  “inline-script-disabled”: true,
+
+  “space-tab-mixed-disabled”: “tab”,
+  "spec-char-escape": true
 }

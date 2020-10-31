@@ -7,7 +7,7 @@ let g:syntastic_aggregate_errors = 1
 let g:syntastic_always_populate_loc_list = 1
 " When set to 0 the error window will not be opened or closed automatically.
 let g:syntastic_auto_loc_list = 1
-let g:syntastic_css_checkers = ['csslint'] " CSS
+let g:syntastic_css_checkers = ['stylelint'] " CSS
 let g:syntastic_html_checkers = ['tidy', 'htmlhint'] " HTML
 let g:syntastic_html_tidy_exec = '/usr/local/bin/tidy' " Tidy's executable
 let g:syntastic_javascript_checkers = ['eslint'] " Javascript

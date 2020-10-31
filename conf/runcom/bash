@@ -2,4 +2,4 @@
 
 # http://superuser.com/a/2449900
 [ -r "$PS1" ] && source ~/.bash_profile
-# sudo ln -fs /usr/local/opt/dotfiles/conf/bash/profile /var/root/.bash_profile
+# sudo ln -sfn /usr/local/opt/dotfiles/conf/bash/profile /var/root/.bash_profile
