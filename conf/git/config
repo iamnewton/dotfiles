@@ -222,9 +222,6 @@
 	# suggests commands for spelling mistakes
 	autocorrect = 1
 
-[hub]
-	protocol = https
-
 [merge]
 	# Include summaries of merged conflicts in newly created merge commit messages
 	log = true
