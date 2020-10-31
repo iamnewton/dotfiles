@@ -2,12 +2,11 @@
 --tag-relative=yes
 --exclude=.git
 --exclude=.sass-cache
+—-exclude=dist
+-—exclude=build
 --exclude=node_modules
---exclude=build
---exclude=tasks
 --exclude=docs
 --exclude=package.json
---exclude=Gruntfile.js
 
 --langdef=html2
 --langmap=html2:.html
@@ -23,9 +22,6 @@
 --regex-js=/(.*) = {/\1/o,object/
 --regex-js=/(var )?(.*)[=|:] function(.*){/\2\3/f,function/
 --regex-js=/function (.*){/\1/c,function2/
---regex-js=/[jQuery|$].fn\.(.*)=/\1/j,jquery/
---regex-js=/[jQuery|$].widget\(\"(.*)\"/\1/w,jquerywidget/
---regex-js=/[jQuery|$].ux.behavior\(\"(.*)\"/\1/x,ux/
 
 --langdef=objc
 --langmap=objc:.m.h

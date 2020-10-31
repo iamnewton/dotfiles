@@ -2,5 +2,6 @@
 --ignore-dir=tmp
 --ignore-dir=vendor
 --ignore-dir=public/generated
+—-ignore-dir=dist
 --ignore-dir=.sass-cache
 --sort-files
