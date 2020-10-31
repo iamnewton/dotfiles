@@ -3,7 +3,7 @@
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_extensions = ['tag']
 let g:ctrlp_custom_ignore = {
-    \ 'dir':  'node_modules$\|reports$\|\.git$\|WEB-INF$\|META-INF$\|.sass-cache$\|_site$\|dist$\|public$',
+    \ 'dir':  'node_modules$\|dist$\|public$\|reports$\|\.git$\|WEB-INF$\|META-INF$\|.sass-cache$\|_site$\|dist$\|public$',
     \ 'file': '\.DS_Store$\|\.jpg$\|\.png$\|\.jpeg$\|\jpeg.gif$\|\.svg$\|\.class$\|\.iml$\|\.log$'
     \ }
 " set to 1 will put regex search by default
