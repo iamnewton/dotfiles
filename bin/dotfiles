@@ -233,14 +233,7 @@ install_formulae() {
 	brew upgrade
 
 	# Install Homebrew formulae
-	# here check the hash as well
-	brews="${PROGDIR}/opt/homebrew"
-
-	old_brew="$(cat "${PROGDIR}"/var/homebrew)"
-	new_brew="$(md5 "${brews}" | cut -d ' ' -f 4)"
-	if [[ $new_brew != "$old_brew" ]]; then
-		_bulk_install "$brews" 'homebrew'
-	fi
+	brew bundle --file="${PROGDIR}/opt/"
 
 	brew cleanup
 
@@ -357,9 +350,6 @@ main() {
 
 	_require_prog npm "npm is required to install packages" https://www.npmjs.org \
 	&& install_packages
-
-	_require_prog ruby "Ruby is required to install packages" https://www.ruby-lang.org \
-	&& install_gems
 
 	setup_vim
 
