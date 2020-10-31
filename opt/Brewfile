@@ -1,3 +1,4 @@
+tap “teamookla/speedtest”
 brew “coreutils”
 brew “ack”
 brew “atdtool”
@@ -57,6 +58,7 @@ brew “shellcheck”
 brew “slackcat”
 brew “spaceman-diff”
 brew “spark”
+brew “speedtest”
 brew “ssh-copy-id”
 brew “tidy-html5”
 brew “tmux”
