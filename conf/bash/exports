@@ -13,7 +13,9 @@ export EDITOR="vim"
 export GIT_EDITOR="vim"
 
 # Automatically install overcommit hooks
-export GIT_TEMPLATE_DIR="$(overcommit --template-dir)"
+# disabling this in favor of husky and lack of stability
+# in the project
+# export GIT_TEMPLATE_DIR="$(overcommit --template-dir)"
 
 # Automatically install overcommit hooks
 # @TODO: automate this folder creation in dotfiles install
@@ -59,9 +61,6 @@ export LSCOLORS="exfxcxdxbxegedabagacad"
 
 # Don't clear the screen after quitting a manual page
 export MANPAGER="less -X"
-
-# NVM directory
-export NVM_DIR=~/.nvm 
 
 # Make new shells get the history lines from all previous
 # shells instead of the default "last window closed" history
