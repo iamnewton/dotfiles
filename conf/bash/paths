@@ -6,7 +6,8 @@
 declare -a dirs_to_prepend=(
 	"/usr/local/bin" # Ensure that this bin always takes precedence over `/usr/bin`
 	"/usr/local/sbin"
-	"$HOME/.linuxbrew/bin" # Add .linuxbrew support 
+	"$($HOME/.linuxbrew/bin/brew shellenv)" # Add .linuxbrew support
+	"$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" # Add .linuxbrew /home/ support
 )
 
 # Directories to be appended to PATH
