@@ -51,13 +51,6 @@ _require_prog() {
 		exit 2
 	}
 }
-_install_formula() {
-	local formula=$1
-	# Test whether a Homebrew formula is already installed
-	if ! brew list "$formula" &> /dev/null; then
-		brew install "$formula"
-	fi
-}
 _install_package() {
 	local package=$1
 	# Test whether a npm package is already installed
@@ -83,7 +76,7 @@ _symlink_file() {
 		# create symbolic link
 		# create an array of line items
 		symlink=($file)
-		ln -fs "${PROGDIR}/${symlink[0]}" "${HOME}/${symlink[1]}"
+		ln -sfn "${PROGDIR}/${symlink[0]}" "${HOME}/${symlink[1]}"
 	fi
 }
 _bulk_install() {
@@ -296,9 +289,8 @@ setup_vim() {
 	exists "${HOME}/.vim" \
 	&& rm -rf "${HOME}/.vim"
 
-	ln -fs "${PROGDIR}/vim"                "${HOME}/.vim"
-	ln -fs "${PROGDIR}/conf/runcom/gvim"   "${HOME}/.gvimrc"
-	ln -fs "${PROGDIR}/conf/runcom/vim"    "${HOME}/.vimrc"
+	ln -sfn "${PROGDIR}/vim"                "${HOME}/.vim"
+	ln -sfn "${PROGDIR}/conf/runcom/vim"    "${HOME}/.vimrc"
 
 	[[ $? ]] \
 	&& _print_success "Updated ViM settings"
