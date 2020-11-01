@@ -206,15 +206,6 @@
 [difftool]
 	prompt = false
 
-[difftool "Kaleidoscope"]
-	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
-
-[ghi]
-	editor = vim
-
-[ghi "highlight"]
-	style = colorful
-
 [init]
 	templatedir = ~/.templates/hooks
 
@@ -227,9 +218,6 @@
 	log = true
 	tool = vimdiff
 	summary = true
-
-[mergetool "Kaleidoscope"]
-	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" \"$REMOTE\"
 
 [pretty]
 	# tut: http://gitimmersion.com/lab_10.html
