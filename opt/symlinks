@@ -1,6 +1,6 @@
 conf/bash/functions .functions
 conf/bash/profile .bash_profile
-conf/bash/less .lesskey
+conf/bash/lesskey .lesskey
 conf/bash/logout .bash_logout
 conf/bash/hushlogin .hushlogin
 conf/git/attributes .gitattributes
@@ -10,7 +10,6 @@ conf/misc/tmux .tmux.conf
 # conf/misc/image_optim .image_optim.yml
 # conf/misc/overcommit .overcommit.yml
 conf/misc/svgo .svgo.yml
-conf/runcom/ack .ackrc
 conf/runcom/bash .bashrc
 conf/runcom/curl .curlrc
 conf/runcom/eslint .eslintrc
