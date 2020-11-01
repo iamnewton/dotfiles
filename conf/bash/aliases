@@ -76,10 +76,14 @@ alias df="df -h"
 alias grep="grep --color=auto --exclude-dir=\.git"
 
 # curl a blank HTML file into Vim; open stdin in Vim by using the - flag
-alias html="curl -L https://git.io/vMLHh | vim -"
+alias html="curl -L https://git.io/JTQI3 | vim -"
 
 # Restart apache
-alias restart="sudo apachectl restart"
+if [[ "$OSTYPE" =~ ^darwin ]]; then
+	alias restart="sudo apachectl restart"
+else
+	alias restart="sudo apachectl restart"
+fi
 # Edit host file
 alias hosts="sudo vim /etc/hosts"
 # Edit vhosts listings
