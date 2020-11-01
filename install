@@ -47,11 +47,7 @@ fi
 # Check for Homebrew; install brew
 if ! type -P 'brew' &> /dev/null; then
 	_process "Installing Homebrew"
-	if [[ "$OSTYPE" =~ ^darwin ]]; then
-		ruby -e "$(curl -#fkL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-	else
-		ruby -e "$(wget -O- https://raw.github.com/Homebrew/linuxbrew/go/install)"
-	fi
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
 	_process "Running brew doctor"
 	brew doctor
@@ -128,43 +124,15 @@ if ! type -P 'brew' &> /dev/null; then
 else
 	_process "Installing Homebrew packages"
 
-	# Set variable for list of homebrew formulaes
-	brews="${DIR}/opt/homebrew"
-
 	# Update and upgrade all packages
 	brew update
 	brew upgrade
 
-	# Tap some necessary formulae
-	brew tap homebrew/cask-versions
-	brew tap homebrew/cask-drivers
-	brew tap vitorgalvao/tiny-scripts
-
-	# Store IFS within a temp variable
-	OIFS=$IFS
-
-	# Set the separator to a carriage return & a new line break
-	# read in passed-in file and store as an array
-	IFS=$'\r\n' formulae=($(cat "${brews}"))
-
-	# Loop through split list of formulae
-	_process "Checking status of desired Homebrew formulae"
-	for index in ${!formulae[*]}
-	do
-		# Test whether a Homebrew formula is already installed
-		if ! brew list ${formulae[$index]} &> /dev/null; then
-			brew install ${formulae[$index]}
-		fi
-	done
-
-	# Reset IFS back
-	IFS=$OIFS
+	# Install Homebrew formulae
+	brew bundle --file="${DIR}/opt/"
 
 	brew install vim --HEAD --with-override-system-vi
 	brew cleanup
-
-	# Set up hash file for brew installation
-	echo $(md5 "${brews}" | cut -d ' ' -f 4) > "${DIR}/var/homebrew"
 
 	[[ $? ]] && _success "Installed all Homebrew packages"
 fi
@@ -238,11 +206,6 @@ else
 	[[ $? ]] && _success "Installed all Ruby gems"
 fi
 
-# Install spaceman-diff
-if [[ -d "/usr/local/bin" ]]; then
-	sudo sh -c "curl https://raw.githubusercontent.com/holman/spaceman-diff/master/spaceman-diff -o /usr/local/bin/spaceman-diff && chmod +x /usr/local/bin/spaceman-diff"
-fi
-
 # Setup GPG
 # https://help.github.com/articles/generating-a-new-gpg-key/
 if ! type -P 'gpg' &> /dev/null; then
@@ -282,7 +245,7 @@ if [ -e "${HOME}/.templates" ]; then
 fi
 
 # Symlink all necessary git templates
-ln -fs "${DIR}/templates"          "${HOME}/.templates"
+ln -fsn "${DIR}/templates"          "${HOME}/.templates"
 
 # Force remove the vim directory if it's already there.
 _process "Removing ${HOME}/.vim/ directory"
@@ -291,9 +254,8 @@ if [ -e "${HOME}/.vim" ]; then
 fi
 
 # Symlink all necessary vim configuration files
-ln -fs "${DIR}/vim"                "${HOME}/.vim"
-ln -fs "${DIR}/conf/runcom/gvim"   "${HOME}/.gvimrc"
-ln -fs "${DIR}/conf/runcom/vim"    "${HOME}/.vimrc"
+ln -fsn "${DIR}/vim"                "${HOME}/.vim"
+ln -fsn "${DIR}/conf/runcom/vim"    "${HOME}/.vimrc"
 
 # Check for Vim; install bundles
 if [[ -f "${HOME}/.vim/settings/bundles.vim" ]]; then
@@ -334,7 +296,7 @@ if [[ -f "${DIR}/opt/symlinks" ]]; then
 			# create an array of line items
 			symlink=(${links[$index]})
 			# Create symbolic link
-			ln -fs "${DIR}/${symlink[0]}" "${HOME}/${symlink[1]}"
+			ln -fsn "${DIR}/${symlink[0]}" "${HOME}/${symlink[1]}"
 		done
 		# set separater back to carriage return & new line break
 		IFS=$'\r\n'
@@ -407,7 +369,7 @@ chsh -s /usr/local/bin/bash 2>/dev/null
 
 # Symlink library files
 _process "Symlinking dotfiles command & man page"
-ln -fs "${DIR}/bin/dotfiles"                "/usr/local/bin/dotfiles"
-ln -fs "${DIR}/share/man/man1/dotfiles.1"   "/usr/local/share/man/man1/dotfiles.1"
+ln -fsn "${DIR}/bin/dotfiles"                "/usr/local/bin/dotfiles"
+ln -fsn "${DIR}/share/man/man1/dotfiles.1"   "/usr/local/share/man/man1/dotfiles.1"
 
 [[ $? ]] && _success "Dotfiles installed.  To upgrade, run dotfiles"
