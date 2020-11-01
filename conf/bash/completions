@@ -3,7 +3,7 @@
 # common <tab> completions
 
 # Brew completion
-source "$(brew --prefix)/etc/bash_completion"
+[[ -r “$(brew —prefix)/etc/profile.d/bash_completion.sh” ]] && source “$(brew —prefix)/etc/profile.d/bash_completion.sh”
 
 # Enable bash <tab> completion for gulp
 eval "$(gulp --completion=bash)"
