@@ -23,7 +23,7 @@ Typically software you buy comes with some sort of installer, why not your dotfi
 ### One-line Install
 
 ```bash
-$ bash -c "$(curl -#fL raw.github.com/iamnewton/dotfiles/go/install)"
+$ bash -c "$(curl -#fL https://raw.githubusercontent.com/iamnewton/dotfiles/go/install)"
 ```
 
 :exclamation: N.B. If you wish to [fork this project](https://github.com/iamnewton/dotfiles/fork) and maintain your own dotfiles, you **MUST** substitute my username for your own in the above command and the variable (`$GITHUB_USER`) found at the top of the `bin/dotfiles` script.
@@ -64,7 +64,7 @@ $ dotfiles
 If you need to uninstall for whatever reason, this script will remove all installed Homebrew formulae, Ruby Gems, Node and its packages, configuration symlinks, ViM and all of its plugins, and the library itself.  However, it won't uninstall Homebrew as I didn't want to make that assumption.
 
 ```bash
-$ bash -c "$(curl -#fL raw.github.com/iamnewton/dotfiles/go/uninstall)"
+$ bash -c "$(curl -#fL https://raw.githubusercontent.com/iamnewton/dotfiles/go/uninstall)"
 ```
 
 ## Features
