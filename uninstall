@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # variables
-LOG="${HOME}/Library/Logs/dotfiles.log"
+LOG=“/var/log/dotfiles.log”
 DIR="$(dotfiles --prefix)"
 
 # Success logging
