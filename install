@@ -6,6 +6,9 @@ GITHUB_USER="iamnewton"
 GIT_AUTHOR_NAME=""
 GIT_AUTHOR_EMAIL=""
 
+# test for log file; create if not there
+[ -f "$LOG" ] || sudo touch $LOG
+
 # Success logging
 _success() {
 	echo "$(date) SUCCESS:  $@" >> $LOG
@@ -50,7 +53,11 @@ if ! type -P 'brew' &> /dev/null; then
 	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
 	_process "Running brew doctor"
-	brew doctor
+	if [[ "$OSTYPE" =~ ^darwin ]]; then
+		brew doctor
+	then
+		$(/home/linuxbrew/.linuxbrew/bin/brew doctor)
+	fi
 
 	[[ $? ]] && _success "Homebrew installed"
 fi
@@ -63,7 +70,7 @@ else
 	_warning "No ${DIR} found"
 
 	_process "Creating directory at ${DIR} and setting permissions"
-	mkdir -p "${DIR}"
+	sudo mkdir -p "${DIR}"
 
 	_process "Downloading repository to /tmp directory"
 	# (-#) shows the progress bar as # sign
