@@ -11,7 +11,7 @@ brew “elinks”
 brew “ffmpeg”
 brew “fx”
 brew “fzf”
-brew “gem-completion”
+brew “gcc”
 brew “gfv”
 brew “gibo”
 brew “gifsicle”
@@ -33,6 +33,7 @@ brew “jq”
 brew “less”
 brew “libyaml”
 brew “mysql”
+brew “mosh”
 brew “node”
 brew “optipng”
 brew “pdftohtml”
