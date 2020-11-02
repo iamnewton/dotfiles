@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # variables
-LOG="${HOME}/Library/Logs/dotfiles.log"
+LOG="/var/log/dotfiles.log"
 GITHUB_USER="iamnewton"
 GIT_AUTHOR_NAME=""
 GIT_AUTHOR_EMAIL=""
