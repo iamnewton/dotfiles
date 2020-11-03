@@ -3,7 +3,7 @@
 # constants
 readonly PROGNAME="$(basename "$0")"
 # @TODO: need to figure out how to get the programmatic way of doing this
-readonly PROGDIR="/usr/local/opt/dotfiles"
+readonly PROGDIR="$HOME/.dotfiles"
 readonly VERSION=$(cat "$PROGDIR/VERSION.md")
 readonly TODAY=$(date +"%m-%d-%y")
 readonly ARGS="$@"
@@ -124,7 +124,7 @@ _print_help() {
     -h --help              Show this help
     -t --test              Run unit test to check the program
     -v --version           Display dotfiles version
-    --prefix               Display dotfiles install path. Default: /usr/local/opt/dotfiles
+    --prefix               Display dotfiles install path. Default: $HOME/.dotfiles
 
 	Examples:
     Run all tests:
