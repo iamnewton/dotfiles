@@ -125,14 +125,15 @@ if ! type -P 'brew' &> /dev/null; then
 else
 	_process "Installing Homebrew packages"
 
-	# Update and upgrade all packages
-	brew update
-	brew upgrade
-
 	# Install Homebrew formulae
-	brew bundle --file="${DIR}/opt/"
+	brew bundle --file="${DIR}/opt/Brewfile"
 
-	brew install vim --HEAD --with-override-system-vi
+	if [[ "$OSTYPE" == "linux-gnu"*  ]]; then
+		brew install vim
+	else
+		brew install vim --HEAD --with-override-system-vi
+	fi
+	
 	brew cleanup
 
 	[[ $? ]] && _success "Installed all Homebrew packages"
