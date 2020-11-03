@@ -49,6 +49,10 @@ if ! type -P 'brew' &> /dev/null; then
 	_process "Installing Homebrew"
 	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
+	if [[ "$OSTYPE" == "linux-gnu"*  ]]; then
+		eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+	fi
+
 	[[ $? ]] && _success "Homebrew installed"
 fi
 
