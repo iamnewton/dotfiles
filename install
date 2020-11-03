@@ -55,7 +55,7 @@ if ! type -P 'brew' &> /dev/null; then
 	_process "Running brew doctor"
 	if [[ "$OSTYPE" =~ ^darwin ]]; then
 		brew doctor
-	then
+	else
 		$(/home/linuxbrew/.linuxbrew/bin/brew doctor)
 	fi
 
