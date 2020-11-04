@@ -13,20 +13,21 @@ fi
 # Not part of `load_dotfiles` because it must be sourced before anything else
 # to be sure that commands like `brew` (when installed in a custom location)
 # are already added to the PATH.
-[ -r "$HOME/.dotfilesrc" ] && source "$HOME/.dotfilesrc";
+# the following line/file doesn't appear to be present
+test -r "$HOME/.dotfilesrc" && source "$HOME/.dotfilesrc"
+test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
 load_dotfiles() {
 	declare -a files=(
 		#$HOME/.rvm/scripts/rvm # Load RVM into a shell session *as a function*
-		$(dotfiles --prefix)/conf/bash/options # Options
-		$(dotfiles --prefix)/conf/bash/exports # Exports
-		$(dotfiles --prefix)/conf/bash/aliases # Aliases
-		$(dotfiles --prefix)/conf/bash/functions # Options
-		$(dotfiles --prefix)/conf/bash/prompt # Custom bash prompt
-		$(dotfiles --prefix)/conf/bash/paths # Path modifications
-		$(dotfiles --prefix)/conf/bash/completions # Custom bash completion
+		$HOME/.dotfiles/conf/bash/options # Options
+		$HOME/.dotfiles/conf/bash/exports # Exports
+		$HOME/.dotfiles/conf/bash/aliases # Aliases
+		$HOME/.dotfiles/conf/bash/functions # Options
+		$HOME/.dotfiles/conf/bash/prompt # Custom bash prompt
+		$HOME/.dotfiles/conf/bash/paths # Path modifications
+		$HOME/.dotfiles/conf/bash/completions # Custom bash completion
 		$(brew --prefix)/etc/bash_completion # Bash completion (installed via Homebrew)
-		$(brew --prefix)/bin/brew shellenv)
 		$(brew --prefix nvm)/nvm.sh # nvm 
 		$HOME/.fzf.bash # fzf
 		$HOME/.bash_profile.local # Local and private settings not under version control (e.g. git credentials)
