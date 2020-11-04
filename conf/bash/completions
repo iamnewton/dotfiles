@@ -8,8 +8,6 @@
 # Enable bash <tab> completion for gulp
 eval "$(gulp --completion=bash)"
 
-source "$(brew --prefix)/etc/profile.d/crafts"
-
 # Enable bash <tab> completion for z
 source "$(brew --prefix)/etc/profile.d/z.sh"
 
@@ -17,10 +15,3 @@ source "$(brew --prefix)/etc/profile.d/z.sh"
 if [[ -e "$HOME/.ssh/known_hosts" ]]; then
 	complete -o default -W "$(cat "$HOME/.ssh/known_hosts" | sed 's/[, ].*//' | sort | uniq | grep -v '[0-9]')" ssh scp sftp
 fi
-
-# Add tab completion for `defaults read|write NSGlobalDomain`
-# You could use `-g` instead, but I like being explicit
-complete -W "NSGlobalDomain" defaults
-
-# Add `killall` tab completion for common apps
-complete -o "nospace" -W "Contacts Calendar Dock Finder iTerm2 Mail Safari iTunes SystemUIServer Terminal Twitter" killall
