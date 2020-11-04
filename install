@@ -159,9 +159,6 @@ else
 	
 	brew cleanup
 
-	# Set up hash file for brew installation
- 	echo $(md5 "${brews}" | cut -d ' ' -f 4) > "${DIR}/var/homebrew"
-
 	[[ $? ]] && _success "Installed all Homebrew packages"
 fi
 
@@ -190,48 +187,7 @@ else
 	# Reset IFS back
 	IFS=$OIFS
 
-	# Set up hash file for npm installation
-	echo $(md5 "${npmfile}" | cut -d ' ' -f 4) > "${DIR}/var/npm"
-
 	[[ $? ]] && _success "Installed all npm packages"
-fi
-
-# Install Ruby gems
-if ! type -P 'ruby' &> /dev/null; then
-	_error "ruby not found"
-else
-	_process "Installing Ruby gems"
-
-	# Set variable for list of ruby gems
-	gemfile="${DIR}/opt/gems"
-
-	# Store IFS within a temp variable
-	OIFS=$IFS
-
-	# Set the separator to a carriage return & a new line break
-	# read in passed-in file and store as an array
-	IFS=$'\r\n' gems=($(cat "${gemfile}"))
-
-	# Loop through array
-	for index in ${gems[*]}
-	do
-		# Test whether a Ruby gem is already installed
-		if ! $(gem list '${gems[$index]}' | grep '${gems[$index]}') &> /dev/null; then
-			# Create a string of all files with a comma at the end
-			string=$(printf "%s " "${gems[@]}")
-		fi
-	done
-
-	# Reset IFS back
-	IFS=$OIFS
-
-	# Install packages globally and quietly
-	sudo gem install $string
-
-	# Set up hash file for gem installation
-	echo $(md5 "${gemfile}" | cut -d ' ' -f 4) > "${DIR}/var/gems"
-
-	[[ $? ]] && _success "Installed all Ruby gems"
 fi
 
 # Setup GPG
@@ -251,9 +207,10 @@ else
 		GIT_GPG_KEY="${USER_GIT_GPG_KEY}"
 		_process "Copying GPG key to pasteboard"
 		git config --global user.signingkey $GIT_GPG_KEY
-		gpg --armor --export $GIT_GPG_KEY | pbcopy
-		_process "Opening Github settings; create a new GPG key and paste in the pasteboard"
-		open https://github.com/settings/keys
+		gpg --armor --export $GIT_GPG_KEY | xclip -selection clipboard
+		_process "Open Github settings <https://github.com/settings/keys>; create a new GPG key and paste in the pasteboard"
+		# only works on MacOS
+		# open https://github.com/settings/keys
 
 	else
 		_warning "No GPG key has been set.  Please update manually"
@@ -292,7 +249,6 @@ if [[ -f "${HOME}/.vim/settings/bundles.vim" ]]; then
 	# Set variable for vim bundles
 	vimbundles="${HOME}/.vim/settings/bundles.vim"
 	vim "${vimbundles}" +PluginInstall +qall
-	echo $(md5 "${vimbundles}" | cut -d ' ' -f 4) > "${DIR}/var/vim"
 
 	[[ $? ]] && _success "Updated ViM bundles"
 fi
@@ -332,9 +288,6 @@ if [[ -f "${DIR}/opt/symlinks" ]]; then
 
 	# Reset IFS back
 	IFS=$OIFS
-
-	# Set up hash file for brew installation
-	echo $(md5 "${symlinks}" | cut -d ' ' -f 4) > "${DIR}/var/symlinks"
 
 	[[ $? ]] && _success "All files have been symlinked"
 fi
@@ -380,7 +333,11 @@ _process "Changing login shell to Homebrew installed version"
 
 # Mac OS X directory service command line utility
 # sudo dscl . -change /Users/$USER UserShell /bin/bash /usr/local/bin/bash
-echo "/usr/local/bin/bash" | pbcopy
+if [[ "$OSTYPE" == "linux-gnu"*  ]]; then
+	echo "/home/linuxbrew/.linuxbrew/bin/bash" | xclip -selection clipboard
+else
+	echo "/usr/local/bin/bash" | pbcopy
+fi
 _process "Copied /usr/local/bin/bash to pasteboard"
 
 _process "Opening ViM to update /etc/shells with usr/local/bin/bash"
@@ -391,7 +348,7 @@ _process "Opening ViM to update /etc/shells with usr/local/bin/bash"
 sudo vim + -c 'startinsert' -c ':r !pbpaste' -c ':xa' /etc/shells
 
 # Programmatic way to change shell
-chsh -s /usr/local/bin/bash 2>/dev/null
+sudo chsh -s /usr/local/bin/bash 2>/dev/null
 
 [[ $? ]] && _success "Changed default shell to Homebrew installed version"
 
