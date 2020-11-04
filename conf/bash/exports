@@ -22,7 +22,8 @@ export GIT_EDITOR="vim"
 export GOPATH="$(brew --prefix)/lib/go"
 
 # Always enable colored `grep` output
-export GREP_OPTIONS="--color=auto"
+# Noted in terminal that this option is deprecated
+# export GREP_OPTIONS="--color=auto"
 
 # Increase the maximum number of commands to remember
 # (default is 500)
@@ -47,7 +48,7 @@ export LANG="en_US"
 export LC_ALL="en_US.UTF-8"
 
 # Linuxbrew library path
-LD_LIBRARY_PATH="$HOME/.linuxbrew/lib"
+LD_LIBRARY_PATH="/home/linuxbrew/.linuxbrew/lib"
 
 # Highlight section titles in manual pages
 export LESS_TERMCAP_md="$ORANGE"
