@@ -2,7 +2,7 @@ tap “teamookla/speedtest”
 brew “coreutils”
 brew “atdtool”
 brew “bash”
-brew “bash-completion@2”
+# brew “bash-completion@2”
 brew “bat”
 brew “ctags”
 brew “diff-so-fancy”
