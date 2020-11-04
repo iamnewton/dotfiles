@@ -126,7 +126,30 @@ else
 	_process "Installing Homebrew packages"
 
 	# Install Homebrew formulae
-	brew bundle --file="${DIR}/opt/Brewfile"
+	# brew bundle --file="${DIR}/opt/Brewfile"
+
+	# Set variable for list of homebrew formulaes
+ 	brews="${DIR}/opt/homebrew"
+
+	# Store IFS within a temp variable
+ 	OIFS=$IFS
+
+ 	# Set the separator to a carriage return & a new line break
+ 	# read in passed-in file and store as an array
+ 	IFS=$'\r\n' formulae=($(cat "${brews}"))
+
+ 	# Loop through split list of formulae
+ 	_process "Checking status of desired Homebrew formulae"
+ 	for index in ${!formulae[*]}
+ 	do
+ 		# Test whether a Homebrew formula is already installed
+ 		if ! brew list ${formulae[$index]} &> /dev/null; then
+ 			brew install ${formulae[$index]}
+ 		fi
+ 	done
+
+ 	# Reset IFS back
+ 	IFS=$OIFS
 
 	if [[ "$OSTYPE" == "linux-gnu"*  ]]; then
 		brew install vim
@@ -135,6 +158,9 @@ else
 	fi
 	
 	brew cleanup
+
+	# Set up hash file for brew installation
+ 	echo $(md5 "${brews}" | cut -d ' ' -f 4) > "${DIR}/var/homebrew"
 
 	[[ $? ]] && _success "Installed all Homebrew packages"
 fi
