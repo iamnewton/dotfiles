@@ -7,8 +7,6 @@ conf/git/attributes .gitattributes
 conf/git/ignore .gitignore
 conf/git/message .gitmessage
 conf/misc/tmux .tmux.conf
-# conf/misc/image_optim .image_optim.yml
-# conf/misc/overcommit .overcommit.yml
 conf/misc/svgo .svgo.yml
 conf/runcom/bash .bashrc
 conf/runcom/curl .curlrc
