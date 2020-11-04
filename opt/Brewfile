@@ -1,8 +1,8 @@
-# tap “teamookla/speedtest”
+tap “teamookla/speedtest”
 brew “coreutils”
 brew “atdtool”
 brew “bash”
-# brew “bash-completion@2”
+brew “bash-completion@2”
 brew “bat”
 brew “ctags”
 brew “diff-so-fancy”
@@ -49,7 +49,7 @@ brew “the_silver_searcher”
 brew “slackcat”
 brew “spaceman-diff”
 brew “spark”
-# brew “speedtest”
+brew “speedtest”
 brew “ssh-copy-id”
 brew “tidy-html5”
 brew “tmux”
