@@ -334,13 +334,13 @@ _process "Changing login shell to Homebrew installed version"
 # Mac OS X directory service command line utility
 # sudo dscl . -change /Users/$USER UserShell /bin/bash /usr/local/bin/bash
 if [[ "$OSTYPE" == "linux-gnu"*  ]]; then
-	echo "/home/linuxbrew/.linuxbrew/bin/bash" | xclip -selection clipboard
+	echo "$(brew --prefix)/bin/bash" | xclip -selection clipboard
 else
-	echo "/usr/local/bin/bash" | pbcopy
+	echo "$(brew --prefix)/bin/bash" | pbcopy
 fi
-_process "Copied /usr/local/bin/bash to pasteboard"
+_process "Copied brew's /bin/bash to pasteboard"
 
-_process "Opening ViM to update /etc/shells with usr/local/bin/bash"
+_process "Opening ViM to update /etc/shells with brew's /bin/bash"
 # `vim +` runs vim and puts you at the last line of the file
 # -c allows you to run commands and you can have up to 10
 # process reads => open /etc/shells in ViM, go to the last line, put
@@ -348,13 +348,13 @@ _process "Opening ViM to update /etc/shells with usr/local/bin/bash"
 sudo vim + -c 'startinsert' -c ':r !pbpaste' -c ':xa' /etc/shells
 
 # Programmatic way to change shell
-sudo chsh -s /usr/local/bin/bash 2>/dev/null
+sudo chsh -s "$(brew --prefix)/bin/bash" 2>/dev/null
 
 [[ $? ]] && _success "Changed default shell to Homebrew installed version"
 
 # Symlink library files
 _process "Symlinking dotfiles command & man page"
-ln -fsn "${DIR}/bin/dotfiles"                "/usr/local/bin/dotfiles"
-ln -fsn "${DIR}/share/man/man1/dotfiles.1"   "/usr/local/share/man/man1/dotfiles.1"
+ln -fsn "${DIR}/bin/dotfiles"                "$(brew --prefix)/bin/dotfiles"
+ln -fsn "${DIR}/share/man/man1/dotfiles.1"   "$(brew --prefix)/share/man/man1/dotfiles.1"
 
 [[ $? ]] && _success "Dotfiles installed.  To upgrade, run dotfiles"
