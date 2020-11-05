@@ -54,6 +54,7 @@ brew “ssh-copy-id”
 brew “tidy-html5”
 brew “tmux”
 brew “tree”
+brew “xclip”
 brew “w3m”
 brew “wget”
 brew “youtube-dl”
