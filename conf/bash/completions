@@ -3,7 +3,7 @@
 # common <tab> completions
 
 # Brew completion
-[[ -r “$(brew —prefix)/etc/profile.d/bash_completion.sh” ]] && source “$(brew —prefix)/etc/profile.d/bash_completion.sh”
+[[ -r “$(brew —-prefix)/etc/profile.d/bash_completion.sh” ]] && source “$(brew —-prefix)/etc/profile.d/bash_completion.sh”
 
 # Enable bash <tab> completion for z
 source "$(brew --prefix)/etc/profile.d/z.sh"

@@ -45,7 +45,7 @@ export LANG="en_US"
 export LC_ALL="en_US.UTF-8"
 
 # Linuxbrew library path
-LD_LIBRARY_PATH="$(brew —prefix)/lib"
+LD_LIBRARY_PATH="$(brew —-prefix)/lib"
 
 # Highlight section titles in manual pages
 export LESS_TERMCAP_md="$ORANGE"

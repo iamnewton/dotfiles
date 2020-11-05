@@ -10,5 +10,5 @@
 # keep record of messages sent
 set record=$HOME/.mail
 # set the editor (-e flag) & visual editor (-v flag)
-set editor=$(brew —prefix)/vim
-set visual=$(brew —prefix)/vim
+set editor=$(brew —-prefix)/vim
+set visual=$(brew —-prefix)/vim
