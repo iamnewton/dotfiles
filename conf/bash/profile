@@ -16,18 +16,17 @@ fi
 test -r "$HOME/.dotfilesrc" && source "$HOME/.dotfilesrc"
 
 # Add for Linuxbrew
-test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+# test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
 load_dotfiles() {
 	declare -a files=(
-		#$HOME/.rvm/scripts/rvm # Load RVM into a shell session *as a function*
-		$HOME/.dotfiles/conf/bash/options # Options
-		$HOME/.dotfiles/conf/bash/exports # Exports
-		$HOME/.dotfiles/conf/bash/aliases # Aliases
-		$HOME/.dotfiles/conf/bash/functions # Options
-		$HOME/.dotfiles/conf/bash/prompt # Custom bash prompt
-		$HOME/.dotfiles/conf/bash/paths # Path modifications
-		$HOME/.dotfiles/conf/bash/completions # Custom bash completion
+		$(dotfiles --prefix)/conf/bash/options # Options
+		$(dotfiles --prefix)/conf/bash/exports # Exports
+		$(dotfiles --prefix)/conf/bash/aliases # Aliases
+		$(dotfiles --prefix)/conf/bash/functions # Functions
+		$(dotfiles --prefix)/conf/bash/prompt # Custom bash prompt
+		$(dotfiles --prefix)/conf/bash/paths # Path modifications
+		$(dotfiles --prefix)/conf/bash/completions # Custom bash completion
 		$(brew --prefix)/etc/bash_completion # Bash completion (installed via Homebrew)
 		$(brew --prefix nvm)/nvm.sh # nvm 
 		$HOME/.fzf.bash # fzf

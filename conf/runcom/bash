@@ -1,5 +1,3 @@
 #!/usr/bin/env bash
 
-# http://superuser.com/a/2449900
 test -r "$PS1" && source ~/.bash_profile
-# sudo ln -sfn /usr/local/opt/dotfiles/conf/bash/profile /var/root/.bash_profile
