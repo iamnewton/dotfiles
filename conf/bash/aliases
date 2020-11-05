@@ -6,16 +6,15 @@ alias sudo="sudo "
 # Easier navigation: .., ..., ~ and -
 alias ..="cd .."
 alias ...="cd ../.."
-alias ~="cd ~"
-alias -- -="cd -"
 
 # Always use color output for `ls`
 if [[ "$OSTYPE" =~ ^darwin ]]; then
-	alias ls="command ls -G"
+	alias ls="ls -lAFGHhoST"
 else
-	alias ls="command ls --color"
+	alias ls="ls -aAHhloS --color"
 	export LS_COLORS="no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.ogg=01;35:*.mp3=01;35:*.wav=01;35:"
 fi
+
 # Directory listing
 if type -P 'tree' &> /dev/null; then
 	alias ll="tree --dirsfirst -aLpughDFiC 1"
@@ -25,33 +24,13 @@ else
 	alias lsd='CLICOLOR_FORCE=1 ll | grep --color=never "^d"'
 fi
 
-# Add some shortcuts for formatted directory listings and add a touch of color.
-# alias ls="ls -lAFGHhoST"
-# Linux
-alias ls="ls -aAHhloS --color"
-# List dir contents aliases
-# ref: http://ss64.com/osx/ls.html
-# Long form no user group, color
-alias l="ls -oG"
-# Order by last modified, long form no user group, color
-alias lt="ls -toG"
-# List all except . and ..., color, mark file types, long form no user group, file size
-alias la="ls -AGFoh"
-# List all except . and ..., color, mark file types, long form no use group, order by last modified, file size
-alias lat="ls -AGFoth"
-
 # Concatenate and print content of files (add line numbers)
-alias catn="cat -n"
-
-# IP addresses
-alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
-alias localip="ipconfig getifaddr en1"
+if type -P 'bat' &> /dev/null; then
+	alias cat="bat"
+fi
 
 # Copy my public key to the pasteboard
 alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | printf '=> Public key copied to pasteboard.\n'"
-
-# Flush DNS cache
-alias flushdns="dscacheutil -flushcache"
 
 # Runs `git pull` on every directory within the current directory
 # `find .` search the current directory
@@ -62,34 +41,29 @@ alias flushdns="dscacheutil -flushcache"
 # `git --git-dir={}/.git --work-tree=$PWD/{} pull` git-pull each directory
 #alias pullall="find . -type d -print -maxdepth 1 -execdir git --git-dir={}/.git --work-tree=$PWD/{} pull \"
 
-# Adds an alias to Disk Usage 
-# du means disk usage; h* means *human readable; d* means *depth (like layers 
-# deep); 1 means one layer of depth 
+# Disk Usage 
+# `du` means disk usage
+# `-h` print out human readable
+# `-d` depth (like layers deep); 1 means one layer of depth 
 alias disk="du -hd 1"
 
+# Directory Size
+# `du` means disk usage
+# `-h` print out human readable
 alias dirsize="du -sh"
 
 # File size
-alias fs="stat -f '%z bytes'"
-alias df="df -h"
+# `-c/--format` the format to show;
+# `%z` the format of total size, in bytes
+alias filesize="stat -c '%z bytes'"
 
 # Make grep more user friendly by highlighting matches
-# # and exclude grepping through .svn folders.
+# # and exclude grepping through .git folders.
 alias grep="grep --color=auto --exclude-dir=\.git"
 
 # curl a blank HTML file into Vim; open stdin in Vim by using the - flag
 alias html="curl -L https://git.io/JTQI3 | vim -"
 
-# Restart apache
-if [[ "$OSTYPE" =~ ^darwin ]]; then
-	alias restart="sudo apachectl restart"
-else
-	alias restart="sudo apachectl restart"
-fi
-# Edit host file
-alias hosts="sudo vim /etc/hosts"
-# Edit vhosts listings
-alias vhost="sudo vim /etc/apache2/extra/httpd-vhosts.conf"
 # Pass in a process to find, greps the running processes
 alias process="ps aux | grep"
 
@@ -99,10 +73,6 @@ fi
 
 # Aliasing eachdir like this allows you to use aliases/functions as commands.
 alias eachdir=". eachdir"
-
-# Ring the terminal bell, and put a badge on Terminal.app’s Dock icon
-# (useful when executing time-consuming commands)
-alias badge="tput bel"
 
 # Intuitive map function
 # For example, to list all directories that contain a certain file:
