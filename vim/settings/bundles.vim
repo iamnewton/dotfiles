@@ -25,11 +25,11 @@ Plugin 'scrooloose/syntastic' " syntax checking hacks
 Plugin 'sheerun/vim-polyglot' " solid language pack
 Plugin 'vim-scripts/localrc.vim' " allows per-project vimrc
 Plugin 'luochen1990/rainbow' " shows diff level of parentheses
-Plugin 'ruanyl/vim-fixmyjs' " autofix javascript syntax mistakes/formatting
+" Plugin 'ruanyl/vim-fixmyjs' " autofix javascript syntax mistakes/formatting
 " Plugin 'csscomb/vim-csscomb' " coding style formatter for CSS
 Plugin 'xolox/vim-misc' " Miscellaneous auto-load Vim scripts
 Plugin 'xolox/vim-easytags' " Automated tag file generation and syntax highlighting of tags
-Plugin 'gcorne/vim-sass-lint' " A Node-only Sass linter for both sass and scss syntax!
+" Plugin 'gcorne/vim-sass-lint' " A Node-only Sass linter for both sass and scss syntax!
 Plugin 'lepture/vim-jinja' " syntax highlighting for Nunjucks
 " Plugin 'mephux/vim-jsfmt' " autoformat javascript
 Plugin 'vim-scripts/UniCycle' " smart quotes
