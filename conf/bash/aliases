@@ -26,7 +26,9 @@ else
 fi
 
 # Add some shortcuts for formatted directory listings and add a touch of color.
-alias ls="ls -lAFGHhOoST"
+# alias ls="ls -lAFGHhoST"
+# Linux
+alias ls="ls -aAHhloS --color"
 # List dir contents aliases
 # ref: http://ss64.com/osx/ls.html
 # Long form no user group, color

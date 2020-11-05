@@ -13,8 +13,9 @@ fi
 # Not part of `load_dotfiles` because it must be sourced before anything else
 # to be sure that commands like `brew` (when installed in a custom location)
 # are already added to the PATH.
-# the following line/file doesn't appear to be present
 test -r "$HOME/.dotfilesrc" && source "$HOME/.dotfilesrc"
+
+# Add for Linuxbrew
 test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
 load_dotfiles() {
