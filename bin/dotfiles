@@ -5,7 +5,7 @@ readonly PROGNAME="$(basename "$0")"
 # @TODO: need to figure out how to get the programmatic way of doing this
 readonly PROGDIR="$HOME/.dotfiles"
 readonly VERSION=$(cat "$PROGDIR/VERSION.md")
-readonly TODAY=$(date +"%m-%d-%y")
+# readonly TODAY=$(date +"%m-%d-%y")
 readonly ARGS="$@"
 
 # utility functions
@@ -75,7 +75,7 @@ _symlink_file() {
 		IFS=$' '
 		# create symbolic link
 		# create an array of line items
-		symlink=($file)
+		symlink=("$file")
 		ln -sfn "${PROGDIR}/${symlink[0]}" "${HOME}/${symlink[1]}"
 	fi
 }
@@ -225,7 +225,7 @@ install_formulae() {
 	# Upgrade Homebrew formulaes
 	brew upgrade
 
-	# Install Homebrew formulae
+	# Install Homebrew formulae (macOS way only now?; 2020/11/05)
 	brew bundle --file="${PROGDIR}/opt/"
 
 	brew cleanup
@@ -248,40 +248,24 @@ install_packages() {
 	npm update -g
 
 	npmfile="${PROGDIR}/opt/npm"
-	old_file="$(cat "${PROGDIR}"/var/npm)"
-	new_file="$(md5 "${npmfile}" | cut -d ' ' -f 4)"
-	# check hash of var/{{ file }} so that I don't try to install if nothing has changed
-	if [[ $new_file != "$old_file" ]]; then
-		# Install Node packages
 
-		_bulk_install "$npmfile" 'node'
+	# Install Node packages
+	_bulk_install "$npmfile" 'node'
 
-		# set up hash file for npm installation
-		md5 "${npmfile}" | cut -d ' ' -f 4 > "${PROGDIR}/var/npm"
-
-		[[ $? ]] \
-		&& _print_success "npm updated, all packages upgraded, & new packages upgraded"
-	fi
+	[[ $? ]] \
+	&& _print_success "npm updated, all packages upgraded, & new packages upgraded"
 }
 
 install_gems() {
 	sudo gem update
 
 	# Install Ruby gem
-	# here check the hash as well
 	gemfile="${PROGDIR}/opt/gems"
-	old_gem="$(cat "${PROGDIR}"/var/gems)"
-	new_gem="$(md5 "${gemfile}" | cut -d ' ' -f 4)"
-	if [[ $new_gem != "$old_gem" ]]; then
 
-		_bulk_install "$gemfile" 'ruby'
+	_bulk_install "$gemfile" 'ruby'
 
-		# set up hash file for brew installation
-		md5 "${gemfile}" | cut -d ' ' -f 4 > "${PROGDIR}/var/gems"
-
-		[[ $? ]] \
-		&& _print_success "All Ruby gems upgraded, & new gems installed"
-	fi
+	[[ $? ]] \
+	&& _print_success "All Ruby gems upgraded, & new gems installed"
 }
 
 setup_vim() {
@@ -314,9 +298,6 @@ symlink_config_files() {
 	symlinks="${PROGDIR}/opt/symlinks"
 
 	_bulk_install "$symlinks"
-
-	# set up hash file for brew installation
-	md5 "${symlinks}" | cut -d ' ' -f 4 > "${PROGDIR}/var/symlinks"
 
 	[[ $? ]] \
 	&& _print_success "All files have been symlinked"

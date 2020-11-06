@@ -76,9 +76,9 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 ### Package Management libraries
 
 * [Homebrew formulae](https://github.com/iamnewton/dotfiles/wiki/Homebrew)
-* [Ruby gems](https://github.com/iamnewton/dotfiles/wiki/Ruby)
+* ~[Ruby gems](https://github.com/iamnewton/dotfiles/wiki/Ruby)~
 * [Node packages](https://github.com/iamnewton/dotfiles/wiki/Node)
-* [Go libraries](https://github.com/iamnewton/dotfiles/wiki/Go)
+* ~[Go libraries](https://github.com/iamnewton/dotfiles/wiki/Go)~
 * [ViM plugins](https://github.com/iamnewton/dotfiles/wiki/ViM)
 * [&lt;tab&gt; Completion Libraries](https://github.com/iamnewton/dotfiles/wiki/-tab--Completion)
 
