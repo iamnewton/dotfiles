@@ -87,16 +87,16 @@
 	# Displays committers in descending order of number of commits
 	who = shortlog --numbered --summary --email --no-merges --since='3 months'
 
-	# The shortlog gives us summaries of git log; 
+	# The shortlog gives us summaries of git log;
 	# -s suppresses commit description and provide a commit count summary only
-	# -n sorts output according to the number of commits per author instead of author alphabetic order. 
-	# --all flag logs all branches 
+	# -n sorts output according to the number of commits per author instead of author alphabetic order.
+	# --all flag logs all branches
 	# --no-merges ensures that merge commits aren’t being counted
 	# Source: https://csswizardry.com/2017/05/little-things-i-like-to-do-with-git/
 	leader = shortlog -sn --all --no-merges
 
 	# sets up a quick git server
-	# touch .git/git-daemon-export-ok  
+	# touch .git/git-daemon-export-ok
 	# $ git serve
 	serve = daemon --reuseaddr --verbose  --base-path=. --export-all ./.git
 
@@ -157,17 +157,17 @@
 	excludesfile = ~/.gitignore
 	# attributesfile = ~/.gitattributes
 	# http://git-scm.com/docs/gitattributes#_end_of_line_conversion
-	# Other source code management systems normalize all text files in their 
-	# repositories, and there are two ways to enable similar automatic 
+	# Other source code management systems normalize all text files in their
+	# repositories, and there are two ways to enable similar automatic
 	# normalization in Git.
 	#
-	# If you want to have CRLF line endings in your working directory 
-	# regardless of the repository you are working with, you can set the 
+	# If you want to have CRLF line endings in your working directory
+	# regardless of the repository you are working with, you can set the
 	# config variable "core.autocrlf" without changing any attributes.
 	#
-	# This does not force normalization of all text files, but does ensure 
-	# that text files that you introduce to the repository have their line 
-	# endings normalized to LF when they are added, and that files that are 
+	# This does not force normalization of all text files, but does ensure
+	# that text files that you introduce to the repository have their line
+	# endings normalized to LF when they are added, and that files that are
 	# already normalized in the repository stay normalized.
 	autocrlf = input
 	# use vim as editor
@@ -175,24 +175,27 @@
 	# pager = !bash -lc '$(brew --prefix git)/share/git-core/contrib/diff-highlight/diff-highlight | strip-diff-leading-symbols | less -+$LESS -FRX' -
 	pager = diff-so-fancy | less --tabs=4 -RFX
 	# http://git-scm.com/docs/gitattributes#_end_of_line_conversion
-	# If core.safecrlf is set to "true" or "warn", Git verifies if the 
-	# conversion is reversible for the current setting of core.autocrlf. 
-	# For "true", Git rejects irreversible conversions; for "warn", Git only 
-	# prints a warning but accepts an irreversible conversion. The safety 
-	# triggers to prevent such a conversion done to the files in the work 
+	# If core.safecrlf is set to "true" or "warn", Git verifies if the
+	# conversion is reversible for the current setting of core.autocrlf.
+	# For "true", Git rejects irreversible conversions; for "warn", Git only
+	# prints a warning but accepts an irreversible conversion. The safety
+	# triggers to prevent such a conversion done to the files in the work
 	# tree, but there are a few exceptions. Even though…
 	# dont irreversably perform CRLF conversion on a binary file
 	safecrlf = true
-	# Sindre Sorhus on Twitter said:  "🔥 Get faster `git status` by upgrading 
-	# to git 2.8.0 and run `$ git config --system core.untrackedCache true` 
+	# Sindre Sorhus on Twitter said:  "🔥 Get faster `git status` by upgrading
+	# to git 2.8.0 and run `$ git config --system core.untrackedCache true`
 	# https://t.co/eA70g9KJnH"
 	# https://twitter.com/sindresorhus/status/715593327723343872
 	untrackedCache = true
 
 [credential]
 	# https://help.github.com/articles/set-up-git
-	# password caching using the osx keychain
-	helper = osxkeychain
+	# osx password caching using keychain
+	# helper = osxkeychain
+
+	# linux storage of personal access tokens
+	helper = store
 
 [diff]
 	tool = vimdiff
