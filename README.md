@@ -10,7 +10,9 @@ Typically software you buy comes with some sort of installer, why not your dotfi
 
 ### Requirements
 
-* [curl](http://curl.haxx.se)
+Only `curl` is required (if using the installation script), but the following are required if you plan to manually install and run the CLI.
+
+* [curl](http://curl.haxx.se) (_required_)
 * [git](http://git-scm.com)
 * [homebrew](http://brew.sh)
 * [node](http://nodejs.org)
