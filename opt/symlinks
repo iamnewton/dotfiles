@@ -6,6 +6,7 @@ conf/bash/hushlogin .hushlogin
 conf/git/attributes .gitattributes
 conf/git/ignore .gitignore
 conf/git/message .gitmessage
+conf/misc/gpg .gnupg/gpg-agent.conf
 conf/misc/tmux .tmux.conf
 conf/misc/svgo .svgo.yml
 conf/runcom/bash .bashrc

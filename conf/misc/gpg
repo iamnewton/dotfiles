@@ -1,0 +1,3 @@
+# cache the passphrase for 28800 seconds or 8 hours
+default-cache-ttl 28800
+max-cache-ttl 28800
