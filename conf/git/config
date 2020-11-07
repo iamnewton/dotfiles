@@ -209,12 +209,15 @@
 [difftool]
 	prompt = false
 
-[init]
-	templatedir = ~/.templates/hooks
+[gpg]                                                                                                             
+    program = gpg2
 
 [help]
 	# suggests commands for spelling mistakes
 	autocorrect = 1
+
+[init]
+	templatedir = ~/.templates/hooks
 
 [merge]
 	# Include summaries of merged conflicts in newly created merge commit messages
@@ -258,9 +261,6 @@
 	# %x00:+print a byte from a hex code
 	nice = "%C(209)%an%C(reset)@%C(yellow)%h%C(reset) said '%C(white bold)%s%C(reset)' about %C(cyan)%ar%C(reset)%C(magenta)%d%C(reset)"
 
-[rebase]
-	autoStash = true
-
 [pull]
 	rebase = true
 
@@ -269,6 +269,9 @@
 	# https://github.com/git/git/commit/a8bc269f11b34e60f5fdbd8e831a654dd6b6b67e
 	# push annotated tags that are missing to remote
 	followTags = true
+
+[rebase]
+	autoStash = true
 
 # http://git-scm.com/blog/2010/03/08/rerere.html
 # reuse the recorded resolutions
