@@ -34,7 +34,6 @@ brew “less”
 brew “libyaml”
 brew “mysql”
 brew “mosh”
-brew “n”
 brew “node”
 brew “optipng”
 brew “pdftohtml”

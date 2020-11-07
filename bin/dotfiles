@@ -236,8 +236,7 @@ install_formulae() {
 
 upgrade_node() {
 	sudo npm cache clean -f
-	sudo npm install -g n
-	sudo n stable
+	n stable
 
 	[[ $? ]] \
 	&& _print_success "Node updated"
