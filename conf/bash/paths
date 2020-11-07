@@ -6,8 +6,6 @@
 declare -a dirs_to_prepend=(
 	"/usr/local/bin" # Ensure that this bin always takes precedence over `/usr/bin`
 	"/usr/local/sbin"
-	"/home/linuxbrew/.linuxbrew/bin" # Add .linuxbrew support
-	"/home/linuxbrew/.linuxbrew/sbin/" # Add .linuxbrew support
 )
 
 # Directories to be appended to PATH
@@ -16,6 +14,7 @@ declare -a dirs_to_append=(
 	"$HOME/bin"
 	"$(brew --prefix coreutils)/libexec/gnubin" # Add brew-installed GNU core utilities bin
 	"$(brew --prefix npm)/bin" # Add npm-installed package bin
+	"$HOME/.n/bin" # n (node version manager)
 )
 
 # Prepend directories to PATH

@@ -61,8 +61,11 @@ export MANPAGER="less -X"
 # shells instead of the default "last window closed" history
 export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
-# NVM directory
-export NVM_DIR=~/.nvm
+# NVM directory (choosing n over nvm)
+# export NVM_DIR=$HOME/.nvm
+
+# N (node version manager) directory
+export N_PREFIX="$HOME/.n"
 
 # GPG Signage
 GPG_TTY=$(tty)
