@@ -10,7 +10,9 @@ Typically software you buy comes with some sort of installer, why not your dotfi
 
 ### Requirements
 
-* [curl](http://curl.haxx.se)
+Only `curl` is required (if using the installation script), but the following are required if you plan to manually install and run the CLI.
+
+* [curl](http://curl.haxx.se) (_required_)
 * [git](http://git-scm.com)
 * [homebrew](http://brew.sh)
 * [node](http://nodejs.org)
@@ -32,15 +34,15 @@ $ /bin/bash -c "$(curl -#fL https://raw.githubusercontent.com/iamnewton/dotfiles
 
 | Flag              | Meaning                          |
 | :-----------------| :------------------------------- |
-| `-e`, `--edit`    | Edit the dotfiles                |
-| `-h`, `--help`    | Print help text                  |
 | `--prefix`        | Print the installation directory |
+| `-e`, `--edit`    | Edit the dotfiles                |
 | `-t`, `--test`    | Run the test suite               |
+| `-h`, `--help`    | Print help text                  |
 | `-v`, `--version` | Print the current version        |
 
 ## Man page
 
-The man page is symlinked in the install process. As long as `/usr/local/bin` is in your `$PATH`, then you should be able to access it via `man dotfiles`.
+The man page is symlinked in the install process. As long as `$(brew --prefix)` (`/usr/local/bin` on macOS and `/home/linuxbrew/.linuxbrew/bin` on Linux) is in your `$PATH`, then you should be able to access it via `man dotfiles`.
 
 ## Update
 
