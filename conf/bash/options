@@ -4,6 +4,12 @@
 # Bash will understand
 shopt -s autocd
 
+# In bash, aliases are not expanded in shell scripts. This is not standardized
+# among the POSIX-type shells. If you want aliases to be expanded in shell
+# scripts, the shell script must use a bash-specific shell option
+# https://github.com/sindresorhus/guides/blob/master/how-not-to-rm-yourself.md#safeguard-rm
+shopt -s expand_aliases
+
 # Autocorrect typos in path names when using `cd`
 shopt -s cdspell
 shopt -s dirspell
