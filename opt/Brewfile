@@ -52,6 +52,7 @@ brew “spark”
 brew “speedtest”
 brew “ssh-copy-id”
 brew “tidy-html5”
+brew "tig"
 brew “tmux”
 brew “tree”
 brew “xclip”
