@@ -1,28 +1,31 @@
 #!/usr/bin/env bash
 
-# Although the Readline library comes with a set of default keybindings, 
-# it is possible to modify these by putting commands into a .inputrc file, 
-# typically in the home directory. The name of this file is taken from the 
-# value of the shell variable INPUTRC. If that variable is unset, the 
-# default is ~/.inputrc If that file does not exist or cannot be read, the 
+# Although the Readline library comes with a set of default keybindings,
+# it is possible to modify these by putting commands into a .inputrc file,
+# typically in the home directory. The name of this file is taken from the
+# value of the shell variable INPUTRC. If that variable is unset, the
+# default is ~/.inputrc If that file does not exist or cannot be read, the
 # ultimate default is /etc/inputrc
 #
-# The configuration options in .inputrc are particularly useful for 
+# The configuration options in .inputrc are particularly useful for
 # customising the way Tab-completion works, e.g. with the ls command
 #
-# When a program which uses the Readline library starts up, the init file 
-# is read, and the key bindings are set. In addition, the C-x C-r command 
-# re-reads this init file, thus incorporating any changes that you might 
+# When a program which uses the Readline library starts up, the init file
+# is read, and the key bindings are set. In addition, the C-x C-r command
+# re-reads this init file, thus incorporating any changes that you might
 # have made to it.
 #
 # http://www.ss64.com/bash/syntax-inputrc.html
+
+# Make sure we don't output everything on the 1 line
+set horizontal-scroll-mode Off
 #
 # Vi in bash (http://blog.sanctum.geek.nz/vi-mode-in-bash/)
 # If this annoys you, and you still want to get the full power of Vi
 # in bash, then comment out this line and use Ctrl+x Ctrl+e to bring up
 # the command line in your $EDITOR
 set editing-mode vi
-# Words which have more than one possible completion cause the matches 
+# Words which have more than one possible completion cause the matches
 # to be listed immediately instead of ringing the bell.
 set show-all-if-ambiguous on
 # Readline performs filename matching and completion in a case-insensitive fashion
