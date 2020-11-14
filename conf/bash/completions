@@ -3,7 +3,10 @@
 # common <tab> completions
 
 # Brew completion
-[[ -r “$(brew --prefix)/etc/profile.d/bash_completion.sh” ]] && source “$(brew --prefix)/etc/profile.d/bash_completion.sh”
+[[ -r "/home/linuxbrew/.linuxbrew/etc/profile.d/bash_completion.sh" ]] && source "/home/linuxbrew/.linuxbrew/etc/profile.d/bash_completion.sh"
+
+# Enable bash <tab> completion for Digital Ocean control panel
+source <(doctl completion bash)
 
 # Enable bash <tab> completion for z
 source "$(brew --prefix)/etc/profile.d/z.sh"

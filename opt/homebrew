@@ -5,6 +5,7 @@ bash-completion@2
 bat
 ctags
 diff-so-fancy
+doctl
 dos2unix
 elinks
 ffmpeg
