@@ -190,6 +190,14 @@ else
 	[[ $? ]] && _success "Installed all npm packages"
 fi
 
+# Install 1password
+if ! [ -x "$(command -v op)" ]; then
+  export OP_VERSION="v1.8.0"
+  curl -sS -o /tmp/1password.zip https://cache.agilebits.com/dist/1P/op/pkg/${OP_VERSION}/op_linux_amd64_${OP_VERSION}.zip
+  unzip /tmp/1password.zip op -d $(brew --prefix)/bin
+  rm -f /tmp/1password.zip
+fi
+
 # Setup GPG
 # https://help.github.com/articles/generating-a-new-gpg-key/
 if ! type -P 'gpg' &> /dev/null; then
@@ -220,8 +228,8 @@ fi
 # Copy `.gitconfig`.
 # Any global git commands in `~/.bash_profile.local` will be written to
 # `.gitconfig`. This prevents them being committed to the repository.
-_process "Syncing global git configuration file"
-rsync -avz --quiet ${DIR}/conf/git/config  ${HOME}/.gitconfig
+_process "Moving global git configuration file"
+mv ${DIR}/conf/git/config  ${HOME}/.gitconfig
 
 # Force remove the git templates directory if it's already there.
 _process "Removing ${HOME}/.templates/ directory"
