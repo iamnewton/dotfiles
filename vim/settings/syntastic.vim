@@ -19,6 +19,7 @@ let g:syntastic_ruby_checkers = ['rubocop'] " Ruby
 let g:syntastic_sass_checkers = ['stylelint'] " SCSS
 let g:syntastic_scss_checkers = ['stylelint'] " SCSS
 let g:syntastic_sh_checkers = ['shellcheck'] " Bourne/Shell
+let g:syntastic_sh_shellcheck_args="-x"
 let g:syntastic_text_checkers = ['atdtool'] " Grammar, spelling, style
 let g:syntastic_xhtml_checkers = ['tidy'] " xHTML
 let g:syntastic_yaml_checkers = ['jsyaml'] " YAML
