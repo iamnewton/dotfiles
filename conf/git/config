@@ -24,10 +24,6 @@
 	# Sets git branch default to list verbosely
 	branch = !git branch --list -v
 
-	# image diff
-	merge-image = !git mergetool -y -t Kaleidoscope
-	diff-image = !git difftool -y -t Kaleidoscope
-
 	# Sets git remote default to list verbosely
 	remote = !git remote -v
 
@@ -74,7 +70,7 @@
 
 	# remind me what was recently done
 	# Source: https://twitter.com/csswizardry/status/784399286050156544
-	recap = log --since="00:00:00" --oneline --no-merges --author=chrisohpedia@gmail.com
+	recap = log --since="00:00:00" --oneline --no-merges --author=$GIT_COMMITTER_EMAIL
 
 	# Fetch and checkout a GitHub Pull Request from a remote (defaults to `origin`)
 	# https://gist.github.com/gnarf/5406589
@@ -155,7 +151,7 @@
 [core]
 	# Use custom `.gitignore` and `.gitattributes`
 	excludesfile = ~/.gitignore
-	# attributesfile = ~/.gitattributes
+	attributesfile = ~/.gitattributes
 	# http://git-scm.com/docs/gitattributes#_end_of_line_conversion
 	# Other source code management systems normalize all text files in their
 	# repositories, and there are two ways to enable similar automatic
@@ -189,14 +185,6 @@
 	# https://twitter.com/sindresorhus/status/715593327723343872
 	untrackedCache = true
 
-[credential]
-	# https://help.github.com/articles/set-up-git
-	# osx password caching using keychain
-	# helper = osxkeychain
-
-	# linux storage of personal access tokens
-	helper = store
-
 [diff]
 	tool = vimdiff
 
@@ -204,12 +192,12 @@
 	textconv = exiftool
 
 [diff "spaceman-diff"]
-	command = /usr/local/bin/spaceman-diff
+	command = $(brew --prefix)/bin/spaceman-diff
 
 [difftool]
 	prompt = false
 
-[gpg]                                                                                                             
+[gpg]
     program = gpg2
 
 [help]
@@ -218,6 +206,11 @@
 
 [init]
 	templatedir = ~/.templates/hooks
+
+[include]
+	path = ~/.gitconfig.macos
+	path = ~/.gitconfig.linux
+	path = ~/.gitconfig.local
 
 [merge]
 	# Include summaries of merged conflicts in newly created merge commit messages
