@@ -1,0 +1,160 @@
+#!/usr/bin/env bash
+
+# shellcheck source=/dev/null
+source "$DOTFILES_DIRECTORY/lib/homebrew_formulae"
+# shellcheck source=/dev/null
+source "$DOTFILES_DIRECTORY/lib/npm_packages"
+# shellcheck source=/dev/null
+source "$DOTFILES_DIRECTORY/lib/symlinks"
+# shellcheck source=/dev/null
+source "$DOTFILES_DIRECTORY/lib/vim"
+
+PROGNAME="$(basename "$0")"
+
+_is_not_valid_option() {
+	local option=$1
+
+	printf "bash: %s: %s: invalid option\n" "$PROGNAME" "$option"
+}
+
+_print_directory() {
+	echo "$DOTFILES_DIRECTORY"
+}
+
+_print_help() {
+	cat <<- EOF
+
+	usage: $PROGNAME [options]
+
+	Update $PROGNAME with any new dependencies
+
+	OPTIONS:
+    -h --help              Show this help
+    -t --test              Run unit tests
+    -v --version           Print current version
+    --prefix               Display install path. Default: $DOTFILES_DIRECTORY
+
+	Examples:
+    Run all tests:
+    $PROGNAME --test
+
+	Print current version:
+    $PROGNAME --version
+
+	Run:
+    $PROGNAME
+
+	EOF
+}
+
+_print_usage() {
+	printf "%s: usage: %s [-h|--help] [--prefix] [-v|--version]"  "$PROGNAME" "$PROGNAME"
+}
+
+_print_version() {
+	local version=$(cat "$DOTFILES_DIRECTORY/VERSION.md")
+
+	printf 'v%s\n' "$version"
+}
+
+_edit_program() {
+	cd "$DOTFILES_DIRECTORY" && vim
+}
+
+_run_tests() {
+	is_required roundup "Roundup is required to run tests" https://github.com/bmizerany/roundup \
+		&& roundup ./tests/*.sh
+}
+
+# options
+cmdline() {
+	# got this idea from here:
+	# http://kirk.webfinish.com/2009/10/bash-shell-script-to-use-getopts-with-gnu-style-long-positional-parameters/
+	local arg=
+
+	for arg
+	do
+		local delim=""
+
+		case "$arg" in
+			#translate --gnu-long-options to -g (short options)
+			--brew)         args="${args}-b ";;
+			--edit)         args="${args}-e ";;
+			--help)         args="${args}-h ";;
+			--npm)          args="${args}-n ";;
+			--prefix)       args="${args}-p ";;
+			--symlink)      args="${args}-s ";;
+			--test)         args="${args}-t ";;
+			--version)      args="${args}-v ";;
+			--vim)          args="${args}-x ";;
+			#pass through anything else
+			*) [[ "${arg:0:1}" == "-" ]] || delim="\""
+				args="${args}${delim}${arg}${delim} ";;
+		esac
+	done
+
+	#Reset the positional parameters to the short options
+	eval set -- "$args"
+
+	while getopts ":behnpstvx" OPTION
+	do
+		case $OPTION in
+			b)
+				# install homebrew formulae
+				install_formulae "$DOTFILES_DIRECTORY/opt/"
+				exit 0
+				;;
+			e)
+				_edit_program
+				exit 0
+				;;
+			h)
+				_print_help
+				exit 0
+				;;
+			n)
+				# install npm packages
+				install_packages "$DOTFILES_DIRECTORY/opt/npm"
+				exit 0
+				;;
+			p)
+				_print_directory
+				exit 0
+				;;
+			s)
+				# has to come last to setup all things that came before it
+				symlink_files "$DOTFILES_DIRECTORY/opt/symlinks"
+				exit 0
+				;;
+			t)
+				_run_tests
+				exit 0
+				;;
+			v)
+				_print_version
+				exit 0
+				;;
+			x)
+				# setup ViM
+				setup_vim
+				exit 0
+				;;
+			*)
+				install_formulae "$DOTFILES_DIRECTORY/opt/"
+				install_packages "$DOTFILES_DIRECTORY/opt/npm"
+				setup_vim
+				symlink_files "$DOTFILES_DIRECTORY/opt/symlinks"
+
+				# shellcheck source=/dev/null
+				is_a_file "$HOME/.bash_profile" \
+					&& source "$HOME/.bash_profile" \
+					&& print_success "$PROGNAME updated"
+
+				#_is_not_valid_option "-$OPTARG"
+				exit 1
+				;;
+		esac
+	done
+
+	return 0
+}
