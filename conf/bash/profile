@@ -16,7 +16,7 @@ fi
 test -r "$HOME/.dotfilesrc" && source "$HOME/.dotfilesrc"
 
 # Add for Linuxbrew
-test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+test -d "/home/linuxbrew/.linuxbrew" && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 load_dotfiles() {
 	declare -a files=(
@@ -43,6 +43,9 @@ load_dotfiles() {
 
 load_dotfiles
 unset load_dotfiles
+
+## DIRCOLORS
+eval "$(dircolors -b ~/.dircolors)"
 
 # list out tmux sessions on startup, don't show error if none
 # https://twitter.com/climagic/status/567658485517930497

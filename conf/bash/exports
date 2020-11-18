@@ -54,8 +54,8 @@ LD_LIBRARY_PATH="$(brew --prefix)/lib"
 export LESS_TERMCAP_md="$ORANGE"
 
 # Add colors format to the LS command output
-export CLICOLOR=1
-export LSCOLORS="exfxcxdxbxegedabagacad"
+# export CLICOLOR=1
+# export LSCOLORS="exfxcxdxbxegedabagacad"
 
 # Don't clear the screen after quitting a manual page
 export MANPAGER="less -X"
