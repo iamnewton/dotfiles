@@ -9,7 +9,7 @@ it_shows_help() {
 	$dotfiles --help | grep "usage: dotfiles"
 }
 it_shows_a_version() {
-	$dotfiles --version | grep "Version"
+	$dotfiles --version | grep "v"
 }
 it_prints_the_install_directory() {
 	status=$(set +e ; $dotfiles --prefix >/dev/null ; echo $?)
