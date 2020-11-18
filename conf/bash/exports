@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Make code directory default location
+export CODE_DIRECTORY="${HOME}/code"
+
 # Make dotfiles default location
 export DOTFILES_DIRECTORY="$HOME/.dotfiles"
 
@@ -70,3 +73,6 @@ export N_PREFIX="$HOME/.n"
 # GPG Signage
 GPG_TTY=$(tty)
 export GPG_TTY
+
+# Enable terraform logging to Standard Output (stdout)
+export TF_LOG=1

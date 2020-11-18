@@ -41,10 +41,10 @@ alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | printf '=> Public key copied to 
 # `git --git-dir={}/.git --work-tree=$PWD/{} pull` git-pull each directory
 #alias pullall="find . -type d -print -maxdepth 1 -execdir git --git-dir={}/.git --work-tree=$PWD/{} pull \"
 
-# Disk Usage 
+# Disk Usage
 # `du` means disk usage
 # `-h` print out human readable
-# `-d` depth (like layers deep); 1 means one layer of depth 
+# `-d` depth (like layers deep); 1 means one layer of depth
 alias disk="du -hd 1"
 
 # Directory Size
@@ -79,9 +79,31 @@ alias eachdir=". eachdir"
 # find . -name .gitattributes | map dirname
 alias map="xargs -n1"
 
-# Since changes to Bash configuration require a reload to the config file to 
-# become effective, save some typing by setting up an alias 
+# Since changes to Bash configuration require a reload to the config file to
+# become effective, save some typing by setting up an alias
 alias refresh="source ~/.bashrc"
 
 alias spoof="sudo ifconfig en0 ether fa:ke:ma:c"
 # alias freewifi='sudo ifconfig en0 ether "$(openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//')"'
+
+# Hit the Code directory from anywhere
+alias code='cd ${CODE_DIRECTORY}'
+
+# Play Star Wars as ASCII art
+alias starwars="telnet towel.blinkenlights.nl"
+
+# -I prompt once before removing more than three files, or when removing
+# recursively. Less intrusive than -i, while still giving protection against
+# most mistakes. (depends on brew coreutils)
+# https://github.com/sindresorhus/guides/blob/master/how-not-to-rm-yourself.md
+if brew list "coreutils" &> /dev/null; then
+	alias rm="rm -I"
+else
+	alias rm="rm -i"
+fi
+
+# Update vim plugins from anywhere
+alias vu="vim +PluginInstall +qall"
+
+# reinstall deps
+alias npmplease="rm -rf node_modules/ && rm -f package-lock.json && npm install"

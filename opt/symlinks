@@ -4,6 +4,7 @@ conf/bash/lesskey .lesskey
 conf/bash/logout .bash_logout
 conf/bash/hushlogin .hushlogin
 conf/git/attributes .gitattributes
+conf/git/config .gitconfig
 conf/git/ignore .gitignore
 conf/git/message .gitmessage
 conf/misc/gpg-agent .gnupg/gpg-agent.conf

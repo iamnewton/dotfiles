@@ -208,8 +208,6 @@
 	templatedir = ~/.templates/hooks
 
 [include]
-	path = ~/.gitconfig.macos
-	path = ~/.gitconfig.linux
 	path = ~/.gitconfig.local
 
 [merge]
