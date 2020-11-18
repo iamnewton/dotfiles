@@ -1,0 +1,9 @@
+[alias]
+	# image diff
+	merge-image = !git mergetool -y -t Kaleidoscope
+	diff-image = !git difftool -y -t Kaleidoscope
+
+[credential]
+	# https://help.github.com/articles/set-up-git
+	# osx password caching using keychain
+	helper = osxkeychain
