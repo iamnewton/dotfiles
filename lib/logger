@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # location of log file
-readonly LOG="/tmp/dotfiles.log"
+LOG="/tmp/dotfiles.log"
 # readonly TODAY=$(date +"%m-%d-%y")
 
 # Success logging

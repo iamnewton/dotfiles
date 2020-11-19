@@ -1,87 +1,38 @@
 [alias]
 	# https://git.wiki.kernel.org/articles/a/l/i/Aliases.html
 
-	# `git remote prune origin`: remove remote-tracking branches that were deleted from the remote repo
-	# `git gc`: cleanup unnecessary files and optimize the local repository
-	# `git clean -df`: remove untracked files and directories from the working tree
-	# `git stash clear`: remove all stashed states
-	trim = !git remote prune origin && git gc
-	cleanup = !git clean -df && git stash clear
-	undo = !git reset --soft HEAD^
-
-	commit = commit -S
-
-	add = add -p
-
-	vadd = add
-
-	# Show the diff of everything you haven't pushed yet
-	unpushed = !git diff origin/$(git rev-parse --abbrev-ref HEAD)..HEAD'
-
-	# Add untracked, remove deleted, and show status
-	adda = !git add -A && git status
+	# add via the patch
+	ad = add --patch
 
 	# Sets git branch default to list verbosely
-	branch = !git branch --list -v
-
-	# Sets git remote default to list verbosely
-	remote = !git remote -v
+	br = branch --list --verbose
 
 	# Fetch a repository ($1) and checkout its ref ($2) HEAD
 	# Use: `git browse https://github.com/necolas/dotfiles <commit-ish>`
 	browse = !bash -c 'git fetch $1 ${2:-HEAD} && git checkout FETCH_HEAD' -
 
-	ctags = "!bash -c '[ -f .git/hooks/ctags ] || git init; .git/hooks/ctags' git-ctags"
+	# remove untracked files and directories from the working tree, clear the stash
+	cleanup = !git clean -df && git stash clear
 
-	# Helpers for branching
+	# sign all commits
+	co = commit --gpg-sign
+
 	create-branch = !bash -c 'git push origin head:refs/heads/$1 && git fetch origin && git branch --track $1 origin/$1 && cd . && git checkout $1' -
+
+	# @TODO: figure out how this works
+	ctags = !bash -c 'test -f .git/hooks/ctags || git init && .git/hooks/ctags git-ctags' -
+
 	delete-branch = !bash -c 'git push origin :refs/heads/$1 && git branch -d $1' -
-	merge-branch = !git checkout master && git merge @{-1}
+
+	# Diff what is staged for the next commit
+	diffc = diff --staged
+
+	# Show last change for a file (https://t.co/Ks4AAKIZxY)
+	# usage: git lastchange <file>
+	lastchange = log -p --follow -n 1
 
 	# View your latest used git branches
 	latest = for-each-ref --count=30 --sort=-committerdate refs/heads/ --format='%(refname:short)'
-
-	# Diff what is staged for the next commit
-	diffc = diff --cached
-	# Diff overview
-	diffst = diff --stat
-	# Remove +/- in diff
-	diffcp='diff --color | sed -E "s/^([^-+ ]*)[-+ ]/\\1/" | less -r'
-	# min diff
-	mindiff = diff --word-diff-regex=.
-	# word diff
-	word = diff --word-diff
-
-	# Custom graph log (append any tree-ish)
-	graph = log --pretty=nice --date-order --graph
-	# Custom graph log for all branches
-	grapha = log --pretty=nice --date-order --graph --all
-
-	# Custom pretty log
-	logp = log --pretty=nice --date-order
-
-	# Show last change for a file (https://t.co/Ks4AAKIZxY)
-	lastchange = log -p --follow -n 1
-
-	# Diffstat log
-	logst = log --stat
-	# Short format diffstat log
-	logsf = log --stat --format=oneline --abbrev-commit
-
-	# remind me what was recently done
-	# Source: https://twitter.com/csswizardry/status/784399286050156544
-	recap = log --since="00:00:00" --oneline --no-merges --author=$GIT_COMMITTER_EMAIL
-
-	# Fetch and checkout a GitHub Pull Request from a remote (defaults to `origin`)
-	# https://gist.github.com/gnarf/5406589
-	# @TODO: better served as a bash function in the form of `git-pr`, thus allowing it
-	# to be run as git pr 123
-	# Use: `git pr 123` or `git pr 123 upstream`
-	pr = !bash -c 'git fetch -fu ${2:-origin} refs/pull/$1/head:gh-pr/$1 && git checkout gh-pr/$1' -
-
-	# Find out who is currently active on the repository
-	# Displays committers in descending order of number of commits
-	who = shortlog --numbered --summary --email --no-merges --since='3 months'
 
 	# The shortlog gives us summaries of git log;
 	# -s suppresses commit description and provide a commit count summary only
@@ -91,10 +42,56 @@
 	# Source: https://csswizardry.com/2017/05/little-things-i-like-to-do-with-git/
 	leader = shortlog -sn --all --no-merges
 
+	# Custom pretty log
+	lo = log --pretty=nice --date-order --graph --all
+	# old alias from the previous one; hoping to break the habit
+	logp = log --pretty=nice --date-order --graph --all
+
+	# Diffstat log
+	logs = log --stat
+
+	# Short format diffstat log
+	logsf = log --stat --format=oneline --abbrev-commit
+
+	merge-branch = !git checkout master && git merge @{-1}
+
+	# Fetch and checkout a GitHub Pull Request from a remote (defaults to `origin`)
+	# https://gist.github.com/gnarf/5406589
+	# @TODO: better served as a bash function in the form of `git-pr`, thus allowing it
+	# to be run as git pr 123
+	# Use: `git pr 123` or `git pr 123 upstream`
+	pr = !bash -c 'git fetch -fu ${2:-origin} refs/pull/$1/head:gh-pr/$1 && git checkout gh-pr/$1' -
+
+	# Sets git remote default to list verbosely
+	re = remote -v
+
+	# remind me what was recently done
+	# Source: https://twitter.com/csswizardry/status/784399286050156544
+	recap = log --since="00:00:00" --oneline --no-merges --author=$GIT_COMMITTER_EMAIL
+
 	# sets up a quick git server
 	# touch .git/git-daemon-export-ok
 	# $ git serve
 	serve = daemon --reuseaddr --verbose  --base-path=. --export-all ./.git
+
+	# Stash and force a save with a description
+	stas = !bash -c 'test -n $1 && git stash push -m $1'
+
+	# `git remote prune origin`: remove remote-tracking branches that were deleted from the remote repo
+	# `git cleanup` (alias): cleanup unnecessary files and optimize the local repository
+	trim = !git remote prune origin && git cleanup
+
+	undo = !git reset --soft HEAD^
+
+	# Show the diff of everything you haven't pushed yet
+	unpushed = !"git diff origin/$(git rev-parse --abbrev-ref HEAD)..HEAD"
+
+	# Find out who is currently active on the repository
+	# Displays committers in descending order of number of commits
+	who = shortlog --numbered --summary --email --no-merges --since='3 months'
+
+	# word diff
+	word = diff --word-diff
 
 [apply]
 	whitespace = nowarn
