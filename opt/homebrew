@@ -32,8 +32,9 @@ jp2a
 jq
 less
 libyaml
-mysql
+miller
 mosh
+mysql
 node
 optipng
 pdftohtml
