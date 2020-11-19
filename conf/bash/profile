@@ -16,7 +16,7 @@ fi
 test -r "$HOME/.dotfilesrc" && source "$HOME/.dotfilesrc"
 
 # Add for Linuxbrew
-test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+test -d "/home/linuxbrew/.linuxbrew" && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 load_dotfiles() {
 	declare -a files=(
