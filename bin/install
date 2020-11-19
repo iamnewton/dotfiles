@@ -4,7 +4,7 @@
 readonly USERNAME="iamnewton"
 readonly GITHUB_USER="$USERNAME"
 readonly OP_DOMAIN="$USERNAME"
-readonly LOG="/tmp/dotfiles.log"
+LOG="/tmp/dotfiles.log"
 
 # variables
 DIR="$HOME/.dotfiles"
