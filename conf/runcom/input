@@ -32,6 +32,8 @@ set show-all-if-ambiguous on
 set completion-ignore-case on
 # completed names which are symbolic links to directories have a slash appended
 set mark-symlinked-directories on
+# Treat hyphens and underscores as equivalent
+set completion-map-case on
 # Using Tab, will cycle through completions
 TAB: menu-complete
 # Shift-Tab will cycle backwards through completions
