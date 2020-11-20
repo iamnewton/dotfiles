@@ -69,6 +69,10 @@
 	# Source: https://twitter.com/csswizardry/status/784399286050156544
 	recap = log --since="00:00:00" --oneline --no-merges --author=$GIT_COMMITTER_EMAIL
 
+	# adds all changes including untracked files and creates a commit
+	# run `git undo` when coming back
+	save = !git add -A && git commit -m 'SAVEPOINT'
+
 	# sets up a quick git server
 	# touch .git/git-daemon-export-ok
 	# $ git serve
@@ -81,7 +85,7 @@
 	# `git cleanup` (alias): cleanup unnecessary files and optimize the local repository
 	trim = !git remote prune origin && git cleanup
 
-	undo = !git reset --soft HEAD^
+	undo = reset HEAD~1 --mixed
 
 	# Show the diff of everything you haven't pushed yet
 	unpushed = !"git diff origin/$(git rev-parse --abbrev-ref HEAD)..HEAD"
@@ -89,6 +93,11 @@
 	# Find out who is currently active on the repository
 	# Displays committers in descending order of number of commits
 	who = shortlog --numbered --summary --email --no-merges --since='3 months'
+
+	# https://haacked.com/archive/2014/07/28/github-flow-aliases/
+	# commit everything in working directory, then hard reset to remove that commit
+	# run the `git reflog` command and find the SHA of the commit to redo
+	wipe = !git add -A && git commit -qm 'WIPE SAVEPOINT' && git reset HEAD~1 --hard
 
 	# word diff
 	word = diff --word-diff
