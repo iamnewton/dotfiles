@@ -84,7 +84,7 @@ If you're unfamiliar with the Github flow, please [read this guide](https://guid
 > Contributions are always welcome, but surprise patches are mostly just a burden. Yes, you are offering your help, but someone else will have to maintain your code over the long term - get their buy-in first, avoid surprises. Even worse, a localized change to address a specific problem will often miss the full implications to the project: other existing use cases, future roadmap plans, or overall architectural decisions. A good idea can be implemented inappropriately for the specific project; it can be invalidated by another effort that you may not even be aware of; the timing may be wrong, and a dozen other reasons can conspire against you.
 
 1. Clone the repo (`git clone https://github.com/iamnewton/dotfiles`)
-2. If you've cloned previously, then get latest changes (`git checkout master; git pull origin master`).
+2. If you've cloned previously, then get latest changes (`git checkout main; git pull origin main`).
 3. Create your feature branch (`git checkout -b <my-new-feature>`); checkout the
    guide below for our branching strategy.
 4. Commit your changes (`git commit`), following the format suggested below. Please don't use the shortcut flag `git commit -m <message>` as there is more detail required than what is allowed by only using that flag.
@@ -95,7 +95,7 @@ If you're unfamiliar with the Github flow, please [read this guide](https://guid
 
 ### Gotchas
 
-- Please avoid working directly on the `master` branch.
+- Please avoid working directly on the `main` branch.
 - Make commits of logical units.
 - Check for unnecessary whitespace with `git diff --check` before committing.
 - Make sure your commit messages are in the [proper format](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html), also listed below in our guides.
@@ -109,7 +109,7 @@ PR reviews use [GitHub's own review feature](https://help.github.com/articles/ab
 *ALL PULL REQUESTS* being approved must:
 
 * be approved by at least 2 reviewers, one of which should come from a code owner from within the [CODEOWNERS](./CODEOWNERS) file, unless submitted by a Maintainer or above.
-* be up-to-date and have no conflicts with the master branch.
+* be up-to-date and have no conflicts with the main branch.
 * be covered by a test either by a previously-failing test, an existing test that covers the entire functionality of the submitted code, or new tests that verify any new/changed behavior.
 * have all tests pass and follow established conventions.
 * not drop the test coverage percentages, unless the specific case is considered reasonable by maintainers.
@@ -133,7 +133,7 @@ After a pull request has been given the green light, it's time to prepare for th
 
 ### Preparation
 
-1. Merge your feature branch into master by pressing the button on GitHub's interface. Use the **Squash and merge** button in case there are other options. It's okay to merge multiple features and release once for those different features.
+1. Merge your feature branch into main by pressing the button on GitHub's interface. Use the **Squash and merge** button in case there are other options. It's okay to merge multiple features and release once for those different features.
 2. Ensure that the title of the PR is in the form of [conventional commits](https://conventionalcommits.org/). If you named the title of your PR in this format then it should follow through when you go to merge.
 3. Read below for versioning.
 

@@ -20,7 +20,7 @@ Third-party patches are essential for keeping open-source software great.  In th
 1. Make sure you have a GitHub account.
 2. Please ask the [CODEOWNERS](./CODEOWNERS) before making significant changes.  I'd hate for you to put in a lot of work for something that doesn't align with the vision of this project.
 3. Search on Github within the repo for the issue or Pull Request. This means you have to read through the issue(s) in order to determine if your particular issue has already been created. Don't forget to look through the closed ones as well.
-4. If the issue has not been fixed then try to reproduce the issue in a fresh clone of the repository off the master branch. Read below on [how to set up your environment](#create-a-pull-request).
+4. If the issue has not been fixed then try to reproduce the issue in a fresh clone of the repository off the main branch. Read below on [how to set up your environment](#create-a-pull-request).
 5. Create a [reduced test case](http://css-tricks.com/reduced-test-cases/) as outlined by Chris Coyier of [CSS Tricks](http://css-tricks.com/).  Link to the [Code Pen](http://codepen.io), [JS Bin](http://jsbin.com), or whatever you use, as long as its publicly accessible.
 6. Read our [branching strategy](#branching-strategy), [commit conventions](#commit-conventions) below for tips on how to contribute. We won't accept any pull request that doesn't adhere, so be forewarned.
 
@@ -182,16 +182,16 @@ For those of you willing to help out, that's great!!! Here's a quick how-to with
 
 ### Gotchas
 
-- Please avoid working directly on the `master` branch.
+- Please avoid working directly on the `main` branch.
 - Make commits of logical units.
 - Check for unnecessary whitespace with `git diff --check` before committing.
 - Make sure your commit messages are in the [proper format](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html), also listed below in our guides.
 
 ### Branching Strategy
 
-**ALL WORK REQUIRES A BRANCH. WE DO NOT PUSH DIRECTLY TO MASTER!**
+**ALL WORK REQUIRES A BRANCH. WE DO NOT PUSH DIRECTLY TO MAIN!**
 
-There are a lot of [various](http://nvie.com/posts/a-successful-git-branching-model/) [opinions](https://docs.microsoft.com/en-us/vsts/git/concepts/git-branching-guidance) on [branching](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow) [strategies](https://barro.github.io/2016/02/a-succesful-git-branching-model-considered-harmful/) and while all of them are great and have their place, they all tend to add a lot of overhead and maintenance with little value to the workflow. We prefer to use the simplified strategy known as [Github flow](https://guides.github.com/introduction/flow/). So when working with the library, there's no need to prefix it with `feature/` or `hotfix/` or anything like that; Github's PR-style workflow allows for quick and disposable branches. Create branches off `master` and use descriptive names such as `create-donut-chart`, `refactor-dropdown` so that users can easily see what's being worked on. 
+There are a lot of [various](http://nvie.com/posts/a-successful-git-branching-model/) [opinions](https://docs.microsoft.com/en-us/vsts/git/concepts/git-branching-guidance) on [branching](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow) [strategies](https://barro.github.io/2016/02/a-succesful-git-branching-model-considered-harmful/) and while all of them are great and have their place, they all tend to add a lot of overhead and maintenance with little value to the workflow. We prefer to use the simplified strategy known as [Github flow](https://guides.github.com/introduction/flow/). So when working with the library, there's no need to prefix it with `feature/` or `hotfix/` or anything like that; Github's PR-style workflow allows for quick and disposable branches. Create branches off `main` and use descriptive names such as `create-donut-chart`, `refactor-dropdown` so that users can easily see what's being worked on. 
 
 #### Naming
 
@@ -228,7 +228,7 @@ All changes should be connected and without 1 change your entire commit would fa
 
 A few tips to consider:
 
-* Absolutely no working directly on the master branch!!!
+* Absolutely no working directly on the main branch!!!
 * Check for unnecessary whitespace with `git diff --check` before committing.
 * And be sure to run git commit and NOT `git commit -m <message>` so that you can fill out the body of the message
 
