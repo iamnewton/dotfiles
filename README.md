@@ -156,7 +156,7 @@ Updating individual submodules within the superproject:
 cd <path/to/submodule>
 # Checkout the desired branch (of the submodule)
 git checkout main
-# Pull from the tip of master (of the submodule - could be any sha or pointer)
+# Pull from the tip of main (of the submodule - could be any sha or pointer)
 git pull origin main
 # Go back to main dotfiles repo root
 cd $(dotfiles --prefix)
