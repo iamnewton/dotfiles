@@ -72,7 +72,7 @@ fi
 
 # If missing, download and extract the dotfiles repository
 if [[ -d "$DIR" ]]; then
-	_process "${REPO} already installed.  Upgrading ${REPO}"
+	_process "$REPO already installed.  Upgrading $REPO"
 	dotfiles
 else
 	_warning "No $DIR found"
@@ -85,13 +85,13 @@ else
 	# (-f) fail silently
 	# (-L) follow the headers
 	# (-o) output to a file
-	curl -#fLo /tmp/dotfiles.tar.gz "https://github.com/$GITHUB_USER/dotfiles/tarball/master"
+	curl -#fLo /tmp/dotfiles.tar.gz "https://github.com/$GITHUB_USER/$REPO/tarball/main"
 
 	_process "Extracting files to $DIR"
-	tar -zxf /tmp/${REPO}.tar.gz --strip-components 1 -C "$DIR"
+	tar -zxf "/tmp/$REPO.tar.gz" --strip-components 1 -C "$DIR"
 
 	_process "Removing tarball from /tmp directory"
-	rm -rf /tmp/${REPO}.tar.gz
+	rm -rf "/tmp/$REPO.tar.gz"
 
 	[[ $? ]] && _success "$DIR created, repository downloaded and extracted"
 fi
@@ -103,8 +103,8 @@ cd "$DIR" || exit
 _process "Initializing git repository"
 git init
 
-_process "Adding https://github.com/$GITHUB_USER/${REPO}.git as origin"
-git remote add origin "https://github.com/$GITHUB_USER/${REPO}.git"
+_process "Adding https://github.com/$GITHUB_USER/$REPO.git as origin"
+git remote add origin "https://github.com/$GITHUB_USER/$REPO.git"
 
 _process "Downloading changes from origin"
 git fetch origin main
