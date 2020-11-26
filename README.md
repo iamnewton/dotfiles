@@ -1,8 +1,8 @@
 # dotfiles(1)
 
-Typically software you buy comes with some sort of installer, why not your dotfiles? After manually setting up my dotfiles and installation for years, I decided to take a page from [some](https://github.com/necolas) [other](https://github.com/mathiasbynens) [people's](https://github.com/cowboy) [books](http://dotfiles.github.io) and set up a script that will configure my machine to run [ViM as an IDE](http://blog.sanctum.geek.nz/series/unix-as-ide/).  Along the way, I figured how to get all of the necessary [Homebrew](http://braumeister.org) & [Node](https://www.npmjs.org) packages installed as well as some useful [Ruby gems](http://rubygems.org). Feel free to [poke around](https://github.com/iamewton/dotfiles/commits/master) the repository, [fork it](https://github.com/iamnewton/dotfiles/fork) to make it your own, [suggest things](https://github.com/iamnewton/dotfiles/issues?labels=feature+request) for me to include, [log a bug](https://github.com/iamnewton/dotfiles/issues/new), or maybe checkout the [features list](#features) to see what's included.
+Typically software you buy comes with some sort of installer, why not your dotfiles? After manually setting up my dotfiles and installation for years, I decided to take a page from [some](https://github.com/necolas) [other](https://github.com/mathiasbynens) [people's](https://github.com/cowboy) [books](http://dotfiles.github.io) and set up a script that will configure my machine to run [ViM as an IDE](http://blog.sanctum.geek.nz/series/unix-as-ide/).  Along the way, I figured how to get all of the necessary [Homebrew](http://braumeister.org) & [Node](https://www.npmjs.org) packages installed as well as some useful [Ruby gems](http://rubygems.org). Feel free to [poke around](https://github.com/iamewton/dotfiles/commits/main) the repository, [fork it](https://github.com/iamnewton/dotfiles/fork) to make it your own, [suggest things](https://github.com/iamnewton/dotfiles/issues?labels=feature+request) for me to include, [log a bug](https://github.com/iamnewton/dotfiles/issues/new), or maybe checkout the [features list](#features) to see what's included.
 
-**N.B.** This project is released with a [Contributor Code of Conduct](https://github.com/iamnewton/dotfiles/blob/master/CONTRIBUTING.md#code-of-conduct). By participating in this project you agree to abide by its terms.
+**N.B.** This project is released with a [Contributor Code of Conduct](https://github.com/iamnewton/dotfiles/blob/main/CONTRIBUTING.md#code-of-conduct). By participating in this project you agree to abide by its terms.
 
 ## Installation
 
@@ -25,7 +25,7 @@ Only `curl` is required (if using the installation script), but the following ar
 ### One-line Install
 
 ```bash
-$ /bin/bash -c "$(curl -#fL https://raw.githubusercontent.com/iamnewton/dotfiles/go/install)"
+$ /bin/bash -c "$(curl -#fL https://raw.githubusercontent.com/iamnewton/dotfiles/main/bin/install)"
 ```
 
 :exclamation: N.B. If you wish to [fork this project](https://github.com/iamnewton/dotfiles/fork) and maintain your own dotfiles, you **MUST** substitute my username for your own in the above command and the variable (`$GITHUB_USER`) found at the top of the `bin/dotfiles` script.
@@ -66,7 +66,7 @@ $ dotfiles
 If you need to uninstall for whatever reason, this script will remove all installed Homebrew formulae, Ruby Gems, Node and its packages, configuration symlinks, ViM and all of its plugins, and the library itself.  However, it won't uninstall Homebrew as I didn't want to make that assumption.
 
 ```bash
-$ /bin/bash -c "$(curl -#fL https://raw.githubusercontent.com/iamnewton/dotfiles/go/uninstall)"
+$ /bin/bash -c "$(curl -#fL https://raw.githubusercontent.com/iamnewton/dotfiles/main/bin/uninstall)"
 ```
 
 ## Features
@@ -155,9 +155,9 @@ Updating individual submodules within the superproject:
 # Change to the submodule directory
 cd <path/to/submodule>
 # Checkout the desired branch (of the submodule)
-git checkout master
+git checkout main
 # Pull from the tip of master (of the submodule - could be any sha or pointer)
-git pull origin master
+git pull origin main
 # Go back to main dotfiles repo root
 cd $(dotfiles --prefix)
 # Stage the submodule changes
@@ -165,7 +165,7 @@ git add <path/to/submodule>
 # Commit the submodule changes
 git commit -m "Update submodule '<submodule>' to the latest version"
 # Push to a remote repository
-git push origin master
+git push origin main
 ```
 
 Now, if anyone updates their local repository from the remote repository, then using `git submodule update` will update the submodules (that have been initialized) in their local repository.
