@@ -61,7 +61,7 @@ fi
 # Check for Homebrew; install brew
 if ! type -P 'brew' &> /dev/null; then
 	_process "Installing Homebrew"
-	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 	# If we're on Linux, insert brew into the path temporarily to be able to use later
 	if [[ "$OSTYPE" == "linux-gnu"*  ]]; then
