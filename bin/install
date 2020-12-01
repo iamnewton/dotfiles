@@ -65,6 +65,7 @@ if ! type -P 'brew' &> /dev/null; then
 
 	# If we're on Linux, insert brew into the path temporarily to be able to use later
 	if [[ "$OSTYPE" == "linux-gnu"*  ]]; then
+		_process "Sourcing Homebrew to PATH"
 		eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 	fi
 
@@ -131,7 +132,8 @@ git submodule update --recursive --init --quiet
 
 [[ $? ]] && _success "Repository has been updated"
 
-if [[ -f "$HOME/.bash_profile.local" ]]; then
+if [[ ! -f "$HOME/.bash_profile.local" ]]; then
+	_process "Copying local bash_profile template to $HOME"
 	cp "$DIR/conf/bash/profile.local" "$HOME/.bash_profile.local"
 fi
 
@@ -143,7 +145,7 @@ else
 	_process "Installing Homebrew packages"
 
 	# Install Homebrew formulae
-	brew bundle --file="$DIR/opt/"
+	brew bundle --file="$DIR/opt/Brewfile"
 
 	if [[ "$OSTYPE" == "linux-gnu"*  ]]; then
 		brew install vim
