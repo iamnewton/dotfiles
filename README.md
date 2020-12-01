@@ -1,8 +1,8 @@
 # dotfiles(1)
 
-Typically software you buy comes with some sort of installer, why not your dotfiles? After manually setting up my dotfiles and installation for years, I decided to take a page from [some](https://github.com/necolas) [other](https://github.com/mathiasbynens) [people's](https://github.com/cowboy) [books](http://dotfiles.github.io) and set up a script that will configure my machine to run [ViM as an IDE](http://blog.sanctum.geek.nz/series/unix-as-ide/).  Along the way, I figured how to get all of the necessary [Homebrew](http://braumeister.org) & [Node](https://www.npmjs.org) packages installed as well as some useful [Ruby gems](http://rubygems.org). Feel free to [poke around](https://github.com/iamewton/dotfiles/commits/main) the repository, [fork it](https://github.com/iamnewton/dotfiles/fork) to make it your own, [suggest things](https://github.com/iamnewton/dotfiles/issues?labels=feature+request) for me to include, [log a bug](https://github.com/iamnewton/dotfiles/issues/new), or maybe checkout the [features list](#features) to see what's included.
+Typically software you buy comes with some sort of installer, why not your dotfiles? After manually setting up my dotfiles and installation for years, I decided to take a page from [some](https://github.com/necolas) [other](https://github.com/mathiasbynens) [people's](https://github.com/cowboy) [books](http://dotfiles.github.io) and set up a script that will configure my machine to run [ViM as an IDE](http://blog.sanctum.geek.nz/series/unix-as-ide/).  Along the way, I figured how to get all of the necessary [Homebrew](http://braumeister.org) & [Node](https://www.npmjs.org) packages installed as well as some useful [Ruby gems](http://rubygems.org). Feel free to [poke around](https://github.com/iamnewton/dotfiles/commits/main) the repository, [fork it](https://github.com/iamnewton/dotfiles/fork) to make it your own, [suggest things](https://github.com/iamnewton/dotfiles/issues?labels=feature+request) for me to include, [log a bug](https://github.com/iamnewton/dotfiles/issues/new), or maybe checkout the [features list](#features) to see what's included.
 
-**N.B.** This project is released with a [Contributor Code of Conduct](https://github.com/iamnewton/dotfiles/blob/main/CONTRIBUTING.md#code-of-conduct). By participating in this project you agree to abide by its terms.
+**N.B.** This project has a [Code of Conduct](./.github/CODE_OF_CONDUCT.md). By interacting with this repository, organization, and/or community you agree to abide by its terms.
 
 ## Installation
 
@@ -10,15 +10,16 @@ Typically software you buy comes with some sort of installer, why not your dotfi
 
 ### Requirements
 
-Only `curl` is required (if using the installation script), but the following are required if you plan to manually install and run the CLI.
+No matter which method you choose for installation, ensure that you have the following dependencies installed on your system.  If you're on MacOS then you already have these, but a Linux system may not come with all.
 
-* [curl](http://curl.haxx.se) (_required_)
+* [curl](http://curl.haxx.se)
 * [git](http://git-scm.com)
+
+If you use the [one-line installation](#one-line-install), no need to worry as it will handle all of the dependencies for you, so it's best advised to use, but the following are also required if you plan to manually install and run the CLI.
+
 * [homebrew](http://brew.sh)
 * [node](http://nodejs.org)
 * [npm](https://www.npmjs.org)
-* [ruby](https://www.ruby-lang.org)
-* [rsync](http://rsync.samba.org)
 
 :exclamation: N.B. [one-line installation](#one-line-install) will handle all of the dependencies for you, so it's best advised to use. Also note, [HTML Inspector](#node-packages) requires the full [xCode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) installation, so choose accordingly when Homebrew asks you up front.
 
@@ -32,17 +33,23 @@ $ /bin/bash -c "$(curl -#fL https://raw.githubusercontent.com/iamnewton/dotfiles
 
 ## Options
 
-| Flag              | Meaning                          |
-| :-----------------| :------------------------------- |
-| `--prefix`        | Print the installation directory |
-| `-e`, `--edit`    | Edit the dotfiles                |
-| `-t`, `--test`    | Run the test suite               |
-| `-h`, `--help`    | Print help text                  |
-| `-v`, `--version` | Print the current version        |
+| Flag              | Meaning                                |
+| :-----------------| :------------------------------------- |
+| `-b`, `--brew`    | Install the Homebrew formulae          |
+| `-e`, `--edit`    | Edit the program                       |
+| `-h`, `--help`    | Print help text                        |
+| `--install`       | Install the setup library              |
+| `-n`, `--npm`     | Install the NPM packages               |
+| `--prefix`        | Print the installation directory       |
+| `-s`, `--symlink` | Symlink all of the configuration files |
+| `-t`, `--test`    | Run the test suite                     |
+| `--upgrade`       | Upgrade and install dependencies       |
+| `-v`, `--version` | Print the current version              |
+| `--vim`           | Install ViM and plugins                |
 
 ## Man page
 
-The man page is symlinked in the install process. As long as `$(brew --prefix)` (`/usr/local/bin` on macOS and `/home/linuxbrew/.linuxbrew/bin` on Linux) is in your `$PATH`, then you should be able to access it via `man dotfiles`.
+The man page is symlinked in the install process. As long as `$(brew --prefix)` (`/usr/local/bin` on MacOS and `/home/linuxbrew/.linuxbrew/bin` on Linux) is in your `$PATH`, then you should be able to access it via `man dotfiles`.
 
 ## Update
 
@@ -56,7 +63,6 @@ $ dotfiles
 
 ### When to Update
 
-* A change is made to `$(dotfiles --prefix)/conf/git/config` (the only file that is copied rather than symlinked).
 * You want to pull changes from the remote repository
 * You add a new Homebrew formulae, Ruby gems, Node packages.
 * You want to update Homebrew formulae, Ruby gems, Node packages.
@@ -78,15 +84,15 @@ Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several
 ### Package Management libraries
 
 * [Homebrew formulae](https://github.com/iamnewton/dotfiles/wiki/Homebrew)
-* ~[Ruby gems](https://github.com/iamnewton/dotfiles/wiki/Ruby)~
+* [~Ruby gems~](https://github.com/iamnewton/dotfiles/wiki/Ruby)
 * [Node packages](https://github.com/iamnewton/dotfiles/wiki/Node)
-* ~[Go libraries](https://github.com/iamnewton/dotfiles/wiki/Go)~
+* [~Go libraries~](https://github.com/iamnewton/dotfiles/wiki/Go)
 * [ViM plugins](https://github.com/iamnewton/dotfiles/wiki/ViM)
 * [&lt;tab&gt; Completion Libraries](https://github.com/iamnewton/dotfiles/wiki/-tab--Completion)
 
 ### Custom bash prompt
 
-I use a custom bash prompt based on the [Base16 color palette](http://chriskempson.github.io/base16/) and influenced by [@necolas](https://github.com/necolas), [@gf3](https://github.com/gf3) and [@cowboy](https://github.com/cowboy) custom prompts. When your current working directory is a Git repository, the `$PROMPT` will display the checked-out branch's name (and failing that, the commit SHA that `HEAD` is pointing to). The state of the working tree is reflected in the following way:
+A custom bash prompt based on the [Seti UI color palette](https://github.com/jesseweed/seti-ui) and influenced by [@necolas](https://github.com/necolas), [@gf3](https://github.com/gf3) and [@cowboy](https://github.com/cowboy) custom prompts. When your current working directory is a Git repository, the `$PROMPT` will display the checked-out branch's name (and failing that, the commit SHA that `HEAD` is pointing to). The state of the working tree is reflected in the following way:
 
 | Symbol | Meaning                          |
 | :----: | :------------------------------- |
@@ -95,7 +101,7 @@ I use a custom bash prompt based on the [Base16 color palette](http://chriskemps
 | ?      | Untracked files                  |
 | $      | Stashed files                    |
 
-For best results, you should install [iTerm2](http://chriskempson.github.io/base16-iterm2/) and import [Base16 Eighties Dark.itermcolors](https://github.com/chriskempson/base16-iterm2/blob/master/base16-eighties.dark.256.itermcolors). Further details are in the `$(dotfiles --prefix)/conf/bash/prompt` file.
+For best results with iTerm, you should install [the SETI color scheme for iTerm](https://github.com/willmanduffy/seti-iterm). Further details are in the `$(dotfiles --prefix)/conf/bash/prompt` file.
 
 #### Screenshot
 
@@ -144,7 +150,7 @@ git submodule update --init
 # Stage the changes
 git add <submodule>
 # Commit the changes
-git commit -m "Update library with new submodule: <submodule-name>"
+git commit -m "feat: add <submodule>"
 ```
 
 ## Updating git submodules
@@ -163,7 +169,7 @@ cd $(dotfiles --prefix)
 # Stage the submodule changes
 git add <path/to/submodule>
 # Commit the submodule changes
-git commit -m "Update submodule '<submodule>' to the latest version"
+git commit -m "feat: update '<submodule>' to the latest version"
 # Push to a remote repository
 git push origin main
 ```

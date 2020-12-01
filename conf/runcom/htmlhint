@@ -14,15 +14,15 @@
   “alt-require”: true,
 
   “tag-pair”: true,
-  “tag-self-close”: true,    
+  “tag-self-close”: true,
   "tagname-lowercase": true,
   “empty-tag-not-self-closed”: false,
   “src-not-empty”: true,
-  
+
   “id-class-ad-disabled”: true,
   “id-class-value”: “dash”,
   “id-unique”: true,
-  
+
   “inline-style-disabled”: true,
   “inline-script-disabled”: true,
 

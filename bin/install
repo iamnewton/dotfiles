@@ -2,13 +2,14 @@
 
 # constants
 readonly USERNAME="iamnewton"
-readonly REPO="dotfiles"
+readonly GITHUB_URL="github.com"
+readonly GITHUB_REPO="dotfiles"
 readonly GITHUB_USER="$USERNAME"
 readonly OP_DOMAIN="$USERNAME"
-LOG="/tmp/${REPO}.log"
+LOG="/tmp/$GITHUB_REPO.log"
 
 # variables
-DIR="$HOME/.${REPO}"
+DIR="$HOME/.$GITHUB_REPO"
 GIT_AUTHOR_NAME=""
 GIT_AUTHOR_EMAIL=""
 
@@ -16,40 +17,40 @@ GIT_AUTHOR_EMAIL=""
 _success() {
 	local message=$1
 
-	echo "$(date) SUCCESS: $message" >> $LOG
-	printf "%s✓ Success:%s\n" "$(tput setaf 2)" "$(tput sgr0) $message"
+	echo "$(date) SUCCESS: $message" >> "$LOG"
+	printf "%s✓ Success:%s\\n" "$(tput setaf 2)" "$(tput sgr0) $message"
 }
 
 # Warning logging
 _warning() {
 	local message=$1
 
-	echo "$(date) WARNING: $message" >> $LOG
-	printf "%s ⚠Warning:%s!\n" "$(tput setaf 3)" "$(tput sgr0) $message"
+	echo "$(date) WARNING: $message" >> "$LOG"
+	printf "%s ⚠Warning:%s!\\n" "$(tput setaf 3)" "$(tput sgr0) $message"
 }
 
 # Error logging
 _error() {
 	local message=$1
 
-	echo "$(date) ERROR: $message" >> $LOG
-	printf "%s⊘ Error:%s %s. Aborting!\n" "$(tput setaf 1)" "$(tput sgr0)" "$message"
+	echo "$(date) ERROR: $message" >> "$LOG"
+	printf "%s⊘ Error:%s %s. Aborting!\\n" "$(tput setaf 1)" "$(tput sgr0)" "$message"
 }
 
 # Command/Processing logging
 _process() {
 	local message=$1
 
-	echo "$(date) PROCESSING: $message" >> $LOG
-	printf "%s┃%s %s...\n" "$(tput setaf 6)" "$(tput sgr0)$(tput setaf 7)" "$message$(tput sgr0)"
+	echo "$(date) PROCESSING: $message" >> "$LOG"
+	printf "%s┃%s %s...\\n" "$(tput setaf 6)" "$(tput sgr0)$(tput setaf 7)" "$message$(tput sgr0)"
 }
 
 # Question logging
 _question() {
 	local message=$1
 
-	echo "$(date) QUESTION:  $message" >> $LOG
-	printf "\n%s===> %s?%s " "$(tput setaf 3)" "$message" "$(tput sgr0)"
+	echo "$(date) QUESTION:  $message" >> "$LOG"
+	printf "\\n%s===> %s?%s " "$(tput setaf 3)" "$message" "$(tput sgr0)"
 }
 
 # Check for environment variable for directory, otherwise set to default
@@ -72,7 +73,7 @@ fi
 
 # If missing, download and extract the dotfiles repository
 if [[ -d "$DIR" ]]; then
-	_process "$REPO already installed.  Upgrading $REPO"
+	_process "$GITHUB_REPO already installed.  Upgrading $GITHUB_REPO"
 	dotfiles
 else
 	_warning "No $DIR found"
@@ -85,13 +86,13 @@ else
 	# (-f) fail silently
 	# (-L) follow the headers
 	# (-o) output to a file
-	curl -#fLo /tmp/dotfiles.tar.gz "https://github.com/$GITHUB_USER/$REPO/tarball/main"
+	curl -#fLo /tmp/dotfiles.tar.gz "https://$GITHUB_URL/$GITHUB_USER/$GITHUB_REPO/tarball/main"
 
 	_process "Extracting files to $DIR"
-	tar -zxf "/tmp/$REPO.tar.gz" --strip-components 1 -C "$DIR"
+	tar -zxf "/tmp/$GITHUB_REPO.tar.gz" --strip-components 1 -C "$DIR"
 
 	_process "Removing tarball from /tmp directory"
-	rm -rf "/tmp/$REPO.tar.gz"
+	rm -rf "/tmp/$GITHUB_REPO.tar.gz"
 
 	[[ $? ]] && _success "$DIR created, repository downloaded and extracted"
 fi
@@ -103,8 +104,8 @@ cd "$DIR" || exit
 _process "Initializing git repository"
 git init
 
-_process "Adding https://github.com/$GITHUB_USER/$REPO.git as origin"
-git remote add origin "https://github.com/$GITHUB_USER/$REPO.git"
+_process "Adding https://$GITHUB_URL/$GITHUB_USER/$GITHUB_REPO.git as origin"
+git remote add origin "https://$GITHUB_URL/$GITHUB_USER/$GITHUB_REPO.git"
 
 _process "Downloading changes from origin"
 git fetch origin main
@@ -206,10 +207,10 @@ else
 		if [[ "$OSTYPE" =~ ^darwin ]]; then
 			# only works on MacOS
 			gpg --armor --export "$GIT_GPG_KEY" | pbcopy
-			open https://github.com/settings/keys
+			open "https://$GITHUB_URL/settings/keys"
 		else
 			gpg --armor --export "$GIT_GPG_KEY"
-			_process "Open Github settings <https://github.com/settings/keys>; create a new GPG key and paste in the pasteboard"
+			_process "Open Github settings <https://$GITHUB_URL/settings/keys>; create a new GPG key and paste in the pasteboard"
 		fi
 	else
 		_warning "No GPG key has been set.  Please update manually"
@@ -313,8 +314,8 @@ sudo chsh -s "$(brew --prefix)/bin/bash" 2>/dev/null
 [[ $? ]] && _success "Changed default shell to Homebrew installed version"
 
 # Symlink library files
-_process "Symlinking ${REPO} command & man page"
-ln -fsn "$DIR/bin/${REPO}"                "$(brew --prefix)/bin/${REPO}"
-ln -fsn "$DIR/share/man/man1/${REPO}.1"   "$(brew --prefix)/share/man/man1/${REPO}.1"
+_process "Symlinking ${GITHUB_REPO} command & man page"
+ln -fsn "$DIR/bin/${GITHUB_REPO}"                "$(brew --prefix)/bin/${GITHUB_REPO}"
+ln -fsn "$DIR/share/man/man1/${GITHUB_REPO}.1"   "$(brew --prefix)/share/man/man1/${GITHUB_REPO}.1"
 
 [[ $? ]] && _success "Dotfiles installed.  To upgrade, run dotfiles"
