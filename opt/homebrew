@@ -24,6 +24,7 @@ go
 gpg
 graphicsmagick
 gron
+hadolint
 httpie
 hunspell
 jpeg
