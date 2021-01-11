@@ -10,6 +10,7 @@ conf/git/ignore .gitignore
 conf/git/message .gitmessage
 conf/misc/gpg-agent .gnupg/gpg-agent.conf
 conf/misc/gpg .gnupg/gpg.conf
+conf/misc/hadolint.yaml .config/hadolint.yaml
 conf/misc/tmux .tmux.conf
 conf/misc/svgo .svgo.yml
 conf/runcom/bash .bashrc
