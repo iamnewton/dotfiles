@@ -11,6 +11,10 @@ source <(doctl completion bash)
 # Enable bash <tab> completion for z
 source "$(brew --prefix)/etc/profile.d/z.sh"
 
+# Enable bash <tab> completion for fzf
+source "$(brew --prefix)/opt/fzf/shell/completion.bash"
+source "$(brew --prefix)/opt/fzf/shell/key-bindings.bash"
+
 # SSH auto-completion based on entries in known_hosts.
 if [[ -e "$HOME/.ssh/known_hosts" ]]; then
 	complete -o default -W "$(cat "$HOME/.ssh/known_hosts" | sed 's/[, ].*//' | sort | uniq | grep -v '[0-9]')" ssh scp sftp
