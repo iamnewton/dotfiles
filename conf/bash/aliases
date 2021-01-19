@@ -102,6 +102,16 @@ else
 	alias rm="rm -i"
 fi
 
+# > An additional neat feature of FZF is that it can show a preview window to 
+# > display the results of a command. For example, we can use `fzf` with `bat` 
+# > to pretty-print the contents of a file, like in the command below. Bat is 
+# > an alternative to `cat` that supports syntax highlighting. The {-1} stands 
+# > for the selected file.
+# https://medium.com/@GroundControl/better-git-diffs-with-fzf-89083739a9cb
+if brew list "fzf" &> /dev/null && brew list "bat" &> /dev/null; then
+	alias fzf=fzf --preview 'bat {-1} --color=always'
+fi
+
 # Update vim plugins from anywhere
 alias vu="vim +PluginInstall +qall"
 
