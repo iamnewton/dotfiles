@@ -24,8 +24,11 @@
 
 	delete-branch = !bash -c 'git push origin :refs/heads/$1 && git branch -d $1' -
 
+	# Diff with a Preview pane using FZF
+	dif = !bash -c $(git diff --name-only | fzf -m --ansi --preview 'git diff $@ --color=always -- {-1}') -
+
 	# Diff what is staged for the next commit
-	diffc = diff --staged
+	difc = diff --staged
 
 	# Show last change for a file (https://t.co/Ks4AAKIZxY)
 	# usage: git lastchange <file>
