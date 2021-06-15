@@ -123,61 +123,6 @@ alias code="cd ~/Code"
 
 :exclamation: N.B. Because the `$(dotfiles --prefix)/conf/git/config` file is copied to `$HOME/.gitconfig`, any private git configuration specified in `$HOME/.bash_profile.local` will not be committed to your dotfiles repository.
 
-## Adding new ViM plugins
-
-If you want to add more ViM plugins, to be managed by [Vundle](https://github.com/gmarik/Vundle.vim), then follow these steps while in the root of the superproject.
-
-```bash
-# Open Vundle
-vim $(dotfiles --prefix)/vim/settings/bundles.vim
-# Add new ViM bundle
-Plugin 'chriskempson/base16-vim'
-# Exit ViM, save and close all buffers
-:xa
-# Open ViM to source changes to vundle, install and quit
-vim -u ${HOME}/.vim/settings/bundles.vim +PluginClean +PluginInstall +PluginUpdate +qa
-```
-
-## Adding new git submodules
-
-If you want to add more git submodules, e.g., libraries not available through any package manager, then follow these steps while in the root of the superproject.
-
-```bash
-# Add the new submodule
-git submodule add https://example.com/remote/path/to/repo.git [optional location]
-# Initialize and clone the submodule
-git submodule update --init
-# Stage the changes
-git add <submodule>
-# Commit the changes
-git commit -m "feat: add <submodule>"
-```
-
-## Updating git submodules
-
-Updating individual submodules within the superproject:
-
-```bash
-# Change to the submodule directory
-cd <path/to/submodule>
-# Checkout the desired branch (of the submodule)
-git checkout main
-# Pull from the tip of main (of the submodule - could be any sha or pointer)
-git pull origin main
-# Go back to main dotfiles repo root
-cd $(dotfiles --prefix)
-# Stage the submodule changes
-git add <path/to/submodule>
-# Commit the submodule changes
-git commit -m "feat: update '<submodule>' to the latest version"
-# Push to a remote repository
-git push origin main
-```
-
-Now, if anyone updates their local repository from the remote repository, then using `git submodule update` will update the submodules (that have been initialized) in their local repository.
-
-:exclamation: N.B This will wipe away any local changes made to those submodules.
-
 * * *
 
 ## Acknowledgements

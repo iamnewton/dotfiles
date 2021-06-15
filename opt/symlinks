@@ -8,6 +8,8 @@ conf/git/attributes .gitattributes
 conf/git/config .gitconfig
 conf/git/ignore .gitignore
 conf/git/message .gitmessage
+conf/misc/ctags .ctags
+conf/misc/editor .editorconfig
 conf/misc/gpg-agent .gnupg/gpg-agent.conf
 conf/misc/gpg .gnupg/gpg.conf
 conf/misc/tmux .tmux.conf
@@ -20,5 +22,3 @@ conf/runcom/mail .mailrc
 conf/runcom/markdownlint .markdownlintrc
 conf/runcom/stylelint .stylelintrc
 conf/runcom/wget .wgetrc
-conf/vim/ctags .ctags
-conf/vim/editor .editorconfig

@@ -86,7 +86,6 @@ cmdline() {
 			--symlink)      args="${args}-s ";;
 			--test)         args="${args}-t ";;
 			--version)      args="${args}-v ";;
-			--vim)          args="${args}-x ";;
 			#pass through anything else
 			*) [[ "${arg:0:1}" == "-" ]] || delim="\""
 				args="${args}${delim}${arg}${delim} ";;
@@ -134,15 +133,7 @@ cmdline() {
 				_print_version
 				exit 0
 				;;
-			x)
-				# setup ViM
-				setup_vim
-				exit 0
-				;;
 			*)
-				install_formulae "$DOTFILES_DIRECTORY/opt/"
-				install_packages "$DOTFILES_DIRECTORY/opt/npm"
-				setup_vim
 				symlink_files "$DOTFILES_DIRECTORY/opt/symlinks"
 
 				# shellcheck source=/dev/null
