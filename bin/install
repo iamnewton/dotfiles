@@ -5,14 +5,52 @@ readonly USERNAME="iamnewton"
 readonly GITHUB_URL="github.com"
 readonly GITHUB_REPO="dotfiles"
 readonly GITHUB_USER="$USERNAME"
+readonly LOG="/tmp/$GITHUB_REPO.install.log"
 
 # variables
-export DOTFILES_DIRECTORY="$HOME/.$GITHUB_REPO"
 GIT_AUTHOR_NAME=""
 GIT_AUTHOR_EMAIL=""
+INSTALL_DIRECTORY="$HOME/.$GITHUB_REPO"
 
-# shellcheck source=/dev/null
-source "$DOTFILES_DIRECTORY/lib/logger"
+# Question logging
+print_question() {
+	local message=$1
+
+	echo "$(date) QUESTION:  $message" >> "$LOG"
+	printf "\\n%s===> %s?%s " "$(tput setaf 3)" "$message" "$(tput sgr0)"
+}
+
+# Command/Processing logging
+print_process() {
+	local message=$1
+
+	echo "$(date) PROCESSING: $message" >> "$LOG"
+	printf "%s┃%s %s...\\n" "$(tput setaf 6)" "$(tput sgr0)$(tput setaf 7)" "$message$(tput sgr0)"
+}
+
+# Warning logging
+print_warning() {
+	local message=$1
+
+	echo "$(date) WARNING: $message" >> "$LOG"
+	printf "%s ⚠Warning:%s!\\n" "$(tput setaf 3)" "$(tput sgr0) $message"
+}
+
+# Error logging
+print_error() {
+	local message=$1
+
+	echo "$(date) ERROR: $message" >> "$LOG"
+	printf "%s⊘ Error:%s %s. Aborting!\\n" "$(tput setaf 1)" "$(tput sgr0)" "$message"
+}
+
+# Success logging
+print_success() {
+	local message=$1
+
+	echo "$(date) SUCCESS: $message" >> "$LOG"
+	printf "%s✓ Success:%s\\n" "$(tput setaf 2)" "$(tput sgr0) $message"
+}
 
 # Check for Homebrew; install brew
 if ! type -P 'brew' &> /dev/null; then
@@ -29,14 +67,14 @@ if ! type -P 'brew' &> /dev/null; then
 fi
 
 # If missing, download and extract the dotfiles repository
-if [[ -d "$DOTFILES_DIRECTORY" ]]; then
+if [[ -d "$INSTALL_DIRECTORY" ]]; then
 	print_process "$GITHUB_REPO already installed.  Upgrading $GITHUB_REPO"
 	dotfiles
 else
-	print_warning "No $DOTFILES_DIRECTORY found"
+	print_warning "No $INSTALL_DIRECTORY found"
 
-	print_process "Creating directory at $DOTFILES_DIRECTORY and setting permissions"
-	mkdir -p "$DOTFILES_DIRECTORY"
+	print_process "Creating directory at $INSTALL_DIRECTORY and setting permissions"
+	mkdir -p "$INSTALL_DIRECTORY"
 
 	print_process "Downloading repository to /tmp directory"
 	# (-#) shows the progress bar as # sign
@@ -45,17 +83,17 @@ else
 	# (-o) output to a file
 	curl -#fLo "/tmp/$GITHUB_REPO.tar.gz" "https://$GITHUB_URL/$GITHUB_USER/$GITHUB_REPO/tarball/main"
 
-	print_process "Extracting files to $DOTFILES_DIRECTORY"
-	tar -zxf "/tmp/$GITHUB_REPO.tar.gz" --strip-components 1 -C "$DOTFILES_DIRECTORY"
+	print_process "Extracting files to $INSTALL_DIRECTORY"
+	tar -zxf "/tmp/$GITHUB_REPO.tar.gz" --strip-components 1 -C "$INSTALL_DIRECTORY"
 
 	print_process "Removing tarball from /tmp directory"
 	rm -rf "/tmp/$GITHUB_REPO.tar.gz"
 
-	[[ $? ]] && print_success "$DOTFILES_DIRECTORY created, repository downloaded and extracted"
+	[[ $? ]] && print_success "$INSTALL_DIRECTORY created, repository downloaded and extracted"
 fi
 
 # Change to the dotfiles directory
-cd "$DOTFILES_DIRECTORY" || exit
+cd "$INSTALL_DIRECTORY" || exit
 
 # Initialize the git repository if it's missing
 print_process "Initializing git repository"
@@ -82,15 +120,11 @@ git clean -fd
 print_process "Pulling down latest changes"
 git pull --rebase origin main
 
-# Update submodules
-print_process "Updating submodules"
-git submodule update --recursive --init --quiet
-
 [[ $? ]] && print_success "Repository has been updated"
 
 if [[ ! -f "$HOME/.bash_profile.local" ]]; then
 	print_process "Copying local bash_profile template to $HOME"
-	cp "$DOTFILES_DIRECTORY/conf/bash/profile.local" "$HOME/.bash_profile.local"
+	cp "$INSTALL_DIRECTORY/conf/bash/profile.local" "$HOME/.bash_profile.local"
 fi
 
 # Setup GPG
@@ -129,15 +163,15 @@ fi
 # Any global git commands in `~/.bash_profile.local` will be written to
 # `.gitconfig`. This prevents them being committed to the repository.
 print_process "Symlinking global git configuration file"
-ln -fsn "$DOTFILES_DIRECTORY/conf/git/config"  "$HOME/.gitconfig"
+ln -fsn "$INSTALL_DIRECTORY/conf/git/config"  "$HOME/.gitconfig"
 if [[ "$OSTYPE" == "linux-gnu"*  ]]; then
 	print_process "Symlinking global git configuration file"
-	ln -fsn "$DOTFILES_DIRECTORY/conf/git/config.linux"  "$HOME/.gitconfig.linux"
+	ln -fsn "$INSTALL_DIRECTORY/conf/git/config.linux"  "$HOME/.gitconfig.linux"
 	git config --global include.path "$HOME/.gitconfig.linux"
 fi
 if [[ "$OSTYPE" =~ ^darwin ]]; then
 	print_process "Symlinking global git configuration file"
-	ln -fsn "$DOTFILES_DIRECTORY/conf/git/config.macos"  "$HOME/.gitconfig.macos"
+	ln -fsn "$INSTALL_DIRECTORY/conf/git/config.macos"  "$HOME/.gitconfig.macos"
 	git config --global include.path "$HOME/.gitconfig.macos"
 fi
 
@@ -148,20 +182,20 @@ if [ -e "$HOME/.templates" ]; then
 fi
 
 # Symlink all necessary git templates
-ln -fsn "$DOTFILES_DIRECTORY/templates"  "$HOME/.templates"
+ln -fsn "$INSTALL_DIRECTORY/templates"  "$HOME/.templates"
 
 # Create the necessary symbolic links between the `.dotfiles` and `HOME`
 # directory. The `bash_profile` sources other files directly from the
 # `.dotfiles` repository.
 # shellcheck source=/dev/null
-source "$DOTFILES_DIRECTORY/lib/symlinks"
-symlink_files "$DOTFILES_DIRECTORY/opt/symlinks"
+source "$INSTALL_DIRECTORY/lib/symlinks"
+symlink_files "$INSTALL_DIRECTORY/opt/symlinks"
 
 # Copy `.ssh/config`.
 # This prevents them being committed to the repository.
 print_process "Syncing global ssh configuration file"
 mkdir -p "$HOME/.ssh"
-cp "$DOTFILES_DIRECTORY/conf/ssh/config"  "$HOME/.ssh/config"
+cp "$INSTALL_DIRECTORY/conf/ssh/config"  "$HOME/.ssh/config"
 
 print_process "Sourcing $HOME/.bash_profile"
 # shellcheck source=/dev/null
@@ -216,7 +250,7 @@ sudo chsh -s "$(brew --prefix)/bin/bash" 2>/dev/null
 
 # Symlink library files
 print_process "Symlinking ${GITHUB_REPO} command & man page"
-ln -fsn "$DOTFILES_DIRECTORY/bin/${GITHUB_REPO}"                "$(brew --prefix)/bin/${GITHUB_REPO}"
-ln -fsn "$DOTFILES_DIRECTORY/share/man/man1/${GITHUB_REPO}.1"   "$(brew --prefix)/share/man/man1/${GITHUB_REPO}.1"
+ln -fsn "$INSTALL_DIRECTORY/bin/${GITHUB_REPO}"                "$(brew --prefix)/bin/${GITHUB_REPO}"
+ln -fsn "$INSTALL_DIRECTORY/share/man/man1/${GITHUB_REPO}.1"   "$(brew --prefix)/share/man/man1/${GITHUB_REPO}.1"
 
 [[ $? ]] && print_success "Dotfiles installed.  To upgrade, run dotfiles"
