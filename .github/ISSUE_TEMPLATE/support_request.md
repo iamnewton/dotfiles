@@ -4,7 +4,7 @@ about: Ask a question about this project
 ---
 
 **How can we help you?**
-_A clear and concise description of what the bug is_
+<!-- A clear and concise description of what the bug is -->
 
-**Additional context**
-_Add any other context about here_
+**Additional context _(optional)_**
+<!-- Add any other context about here -->

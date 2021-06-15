@@ -1,14 +1,14 @@
 **Description**
-_A clear and concise description of why the feature is necessary_
+<!-- A clear and concise description of why the feature is necessary -->
 
 **Screenshots**
-_If applicable, add screenshots to help explain your problem_
+<!-- If applicable, add screenshots to help explain your problem -->
 
 **Additional context**
-_Add any other context about the problem here. Where there any challenges that need to be documented_
+<!-- Add any other context about the problem here. Where there any challenges that need to be documented -->
 
 **Checklist**
-_Have you considered all of the following?_
+<!-- Have you considered all of the following? -->
 
 Please confirm by checking off each item to ensure you've considered it:
 
