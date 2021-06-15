@@ -5,8 +5,6 @@ readonly USERNAME="iamnewton"
 readonly GITHUB_URL="github.com"
 readonly GITHUB_REPO="dotfiles"
 readonly GITHUB_USER="$USERNAME"
-readonly OP_DOMAIN="$USERNAME"
-LOG="/tmp/$GITHUB_REPO.log"
 
 # variables
 DIR="$HOME/.$GITHUB_REPO"
@@ -133,59 +131,8 @@ git submodule update --recursive --init --quiet
 [[ $? ]] && _success "Repository has been updated"
 
 if [[ ! -f "$HOME/.bash_profile.local" ]]; then
-	_process "Copying local bash_profile template to $HOME"
-	cp "$DIR/conf/bash/profile.local" "$HOME/.bash_profile.local"
-fi
-
-# Install Homebrew formulae
-if ! type -P 'brew' &> /dev/null; then
-	_error "Homebrew not found"
-	exit 1
-else
-	_process "Installing Homebrew packages"
-
-	# Install Homebrew formulae
-	brew bundle --file="$DIR/opt/Brewfile"
-
-	if [[ "$OSTYPE" == "linux-gnu"*  ]]; then
-		brew install vim
-	fi
-	if [[ "$OSTYPE" =~ ^darwin ]]; then
-		brew install vim --HEAD --with-override-system-vi
-	fi
-
-	brew cleanup
-
-	[[ $? ]] && _success "Installed all Homebrew packages"
-fi
-
-# Install Node packages
-if ! type -P 'npm' &> /dev/null; then
-	_error "npm not found"
-	exit 1
-else
-	# shellcheck source=/dev/null
-	source "$DIR/lib/utils"
-	# shellcheck source=/dev/null
-	source "$DIR/lib/npm_packages"
-	_process "Installing and updating npm packages"
-	bulk_install _npm_package "$DIR/opt/npm"
-
-	[[ $? ]] \
-		&& _success "Node & NPM have been updated, all packages have been upgraded, and all new packages have been installed"
-fi
-
-# Install 1password
-if ! [ -x "$(command -v op)" ]; then
-	_process "Installing 1Password CLI"
-	OP_VERSION="v1.8.0"
-	curl -sS -o /tmp/1password.zip https://cache.agilebits.com/dist/1P/op/pkg/$OP_VERSION/op_linux_amd64_$OP_VERSION.zip
-	unzip /tmp/1password.zip op -d "$(brew --prefix)/bin"
-	rm -f /tmp/1password.zip
-
-	# Automatically set 1Password session after logging in
-	eval "$(op signin $OP_DOMAIN)" >> "$HOME/.bash_profile.local"
-	[[ $? ]] && _success "Installed 1Password CLI"
+	print_process "Copying local bash_profile template to $HOME"
+	cp "$DOTFILES_DIRECTORY/conf/bash/profile.local" "$HOME/.bash_profile.local"
 fi
 
 # Setup GPG

@@ -1,13 +1,7 @@
 #!/usr/bin/env bash
 
 # shellcheck source=/dev/null
-source "$DOTFILES_DIRECTORY/lib/homebrew_formulae"
-# shellcheck source=/dev/null
-source "$DOTFILES_DIRECTORY/lib/npm_packages"
-# shellcheck source=/dev/null
 source "$DOTFILES_DIRECTORY/lib/symlinks"
-# shellcheck source=/dev/null
-source "$DOTFILES_DIRECTORY/lib/vim"
 
 PROGNAME="$(basename "$0")"
 
@@ -78,10 +72,8 @@ cmdline() {
 
 		case "$arg" in
 			#translate --gnu-long-options to -g (short options)
-			--brew)         args="${args}-b ";;
 			--edit)         args="${args}-e ";;
 			--help)         args="${args}-h ";;
-			--npm)          args="${args}-n ";;
 			--prefix)       args="${args}-p ";;
 			--symlink)      args="${args}-s ";;
 			--test)         args="${args}-t ";;
@@ -95,25 +87,15 @@ cmdline() {
 	#Reset the positional parameters to the short options
 	eval set -- "$args"
 
-	while getopts ":behnpstvx" OPTION
+	while getopts ":ehpstv" OPTION
 	do
 		case $OPTION in
-			b)
-				# install homebrew formulae
-				install_formulae "$DOTFILES_DIRECTORY/opt/"
-				exit 0
-				;;
 			e)
 				_edit_program
 				exit 0
 				;;
 			h)
 				_print_help
-				exit 0
-				;;
-			n)
-				# install npm packages
-				install_packages "$DOTFILES_DIRECTORY/opt/npm"
 				exit 0
 				;;
 			p)

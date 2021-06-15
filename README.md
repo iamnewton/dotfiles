@@ -15,14 +15,6 @@ No matter which method you choose for installation, ensure that you have the fol
 * [curl](http://curl.haxx.se)
 * [git](http://git-scm.com)
 
-If you use the [one-line installation](#one-line-install), no need to worry as it will handle all of the dependencies for you, so it's best advised to use, but the following are also required if you plan to manually install and run the CLI.
-
-* [homebrew](http://brew.sh)
-* [node](http://nodejs.org)
-* [npm](https://www.npmjs.org)
-
-:exclamation: N.B. [one-line installation](#one-line-install) will handle all of the dependencies for you, so it's best advised to use. Also note, [HTML Inspector](#node-packages) requires the full [xCode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) installation, so choose accordingly when Homebrew asks you up front.
-
 ### One-line Install
 
 ```bash
@@ -35,17 +27,15 @@ $ /bin/bash -c "$(curl -#fL https://raw.githubusercontent.com/iamnewton/dotfiles
 
 | Flag              | Meaning                                |
 | :-----------------| :------------------------------------- |
-| `-b`, `--brew`    | Install the Homebrew formulae          |
 | `-e`, `--edit`    | Edit the program                       |
 | `-h`, `--help`    | Print help text                        |
-| `--install`       | Install the setup library              |
-| `-n`, `--npm`     | Install the NPM packages               |
-| `--prefix`        | Print the installation directory       |
-| `-s`, `--symlink` | Symlink all of the configuration files |
+| `-i`, `--install` | Install the setup library              |
 | `-t`, `--test`    | Run the test suite                     |
-| `--upgrade`       | Upgrade and install dependencies       |
+| `-u`, `--upgrade` | Upgrade and install dependencies       |
 | `-v`, `--version` | Print the current version              |
-| `--vim`           | Install ViM and plugins                |
+| `--prefix`        | Print the installation directory       |
+| `--symlink`       | Symlink all of the configuration files |
+| `--uninstall`     | Uninstall the library                  |
 
 ## Man page
 
@@ -64,31 +54,19 @@ $ dotfiles
 ### When to Update
 
 * You want to pull changes from the remote repository
-* You add a new Homebrew formulae, Ruby gems, Node packages.
-* You want to update Homebrew formulae, Ruby gems, Node packages.
+* You want to add or update a configuration file
 
 ### Uninstall
 
 If you need to uninstall for whatever reason, this script will remove all installed Homebrew formulae, Ruby Gems, Node and its packages, configuration symlinks, ViM and all of its plugins, and the library itself.  However, it won't uninstall Homebrew as I didn't want to make that assumption.
 
 ```bash
-$ /bin/bash -c "$(curl -#fL https://raw.githubusercontent.com/iamnewton/dotfiles/main/bin/uninstall)"
+$ dotfiles --uninstall
 ```
 
 ## Features
 
-Besides some [custom bash prompts](#shell-custom-bash-prompt), there are several package installations handled via Homebrew, Ruby gems, NPM, & Go that are listed in the [wiki](https://github.com/iamnewton/dotfiles/wiki). In addition, there are several ViM plugins that are installed via [Vundle](https://github.com/gmarik/vundle), and some `<tab>` completion libraries. If you want to modify what is installed by default, removing or adding is as easy as updating the package in the appropriate file.  Each package is stored in the `opt` directory and named for the package management software that is used.
-
-:exclamation: N.B. Each package should be on a new line.
-
-### Package Management libraries
-
-* [Homebrew formulae](https://github.com/iamnewton/dotfiles/wiki/Homebrew)
-* [~Ruby gems~](https://github.com/iamnewton/dotfiles/wiki/Ruby)
-* [Node packages](https://github.com/iamnewton/dotfiles/wiki/Node)
-* [~Go libraries~](https://github.com/iamnewton/dotfiles/wiki/Go)
-* [ViM plugins](https://github.com/iamnewton/dotfiles/wiki/ViM)
-* [&lt;tab&gt; Completion Libraries](https://github.com/iamnewton/dotfiles/wiki/-tab--Completion)
+Besides some [custom bash prompts](#shell-custom-bash-prompt), there are some [&lt;tab&gt; completion libraries](https://github.com/iamnewton/dotfiles/wiki/-tab--Completion) installed as well.
 
 ### Custom bash prompt
 
