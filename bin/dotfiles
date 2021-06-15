@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 
-# constants
-export DOTFILES_DIRECTORY="$HOME/.dotfiles"
-
 # imports
-# shellcheck source=/dev/null
-source "$DOTFILES_DIRECTORY/lib/logger"
 # shellcheck source=/dev/null
 source "$DOTFILES_DIRECTORY/lib/utils"
 # shellcheck source=/dev/null
@@ -15,8 +10,7 @@ readonly ARGS="$*"
 
 main() {
 	# requirements first, error first
-	is_empty "$DOTFILES_DIRECTORY" \
-		&& error_out "No $DOTFILES_DIRECTORY found!"
+	is_empty "$DOTFILES_DIRECTORY" && error_out "No $DOTFILES_DIRECTORY found!"
 
 	# command line arguments to be passed in
 	cmdline "$ARGS"

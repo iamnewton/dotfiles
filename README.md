@@ -93,7 +93,7 @@ Here is an example `~/.bash_profile.local`:
 
 ```bash
 # Github Issues library token
-export GHI_TOKEN="<insert github issues token>"
+export GH_TOKEN="<insert github token>"
 
 # Aliases
 alias code="cd ~/Code"

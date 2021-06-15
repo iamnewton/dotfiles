@@ -11,20 +11,16 @@ source "$DOTFILES_DIRECTORY/lib/utils"
 _symlink() {
 	local file=$1
 	# split input on space, and return 2nd part (the symbolic link desired)
-	local symbolic_link="$(echo "$file" | cut -d ' ' -f 2)"
+	local symlink=($file)
 
 	# Test whether a symbolic link already exists
-	print_process "Checking if $symbolic_link is symlinked"
-	if [[ ! -L "$symbolic_link" ]]; then
-		# set IFS back to space to split string on
-		IFS=$' '
-		# create symbolic link
+	print_process "Checking if ${symlink[1]} is symlinked"
+	if [[ ! -L "$HOME/${symlink[1]}" ]]; then
 		# create an array of line items
-		symlink=("$file")
-		print_process "Symlinking $symbolic_link"
+		print_process "Symlinking ${symlink[0]}"
 		ln -sfn "$DOTFILES_DIRECTORY/${symlink[0]}" "$HOME/${symlink[1]}"
 	else
-		print_info "$symbolic_link is already symlinked. Skipping."
+		print_info "$HOME/${symlink[1]} is already symlinked. Skipping."
 	fi
 }
 
@@ -39,6 +35,5 @@ symlink_files() {
 	print_process "Symlinking configuration files"
 	bulk_install _symlink "$file"
 
-	[[ $? ]] \
-		&& print_success "Symlinked configuration files"
+	[[ $? ]] && print_success "Symlinked configuration files"
 }

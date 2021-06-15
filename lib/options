@@ -8,7 +8,7 @@ PROGNAME="$(basename "$0")"
 _is_not_valid_option() {
 	local option=$1
 
-	printf "bash: %s: %s: invalid option\n" "$PROGNAME" "$option"
+	printf "bash: %s: %s: invalid option\\n" "$PROGNAME" "$option"
 }
 
 _print_directory() {
@@ -23,7 +23,9 @@ _print_help() {
 	Update $PROGNAME with any new dependencies
 
 	OPTIONS:
+    -e --edit              Edit the program
     -h --help              Show this help
+    -s --symlink           Symlink the configuration files
     -t --test              Run unit tests
     -v --version           Print current version
     --prefix               Display install path. Default: $DOTFILES_DIRECTORY

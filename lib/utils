@@ -70,6 +70,6 @@ error_out() {
 	local message=$1
 
 	print_error "$message"
-	printf "Run the installer <%shttps://github.com/iamnewton/dotfiles#how-to-install%s>\n" "$(tput smul)" "$(tput rmul)"
+	printf "Run the installer <%shttps://github.com/iamnewton/dotfiles#how-to-install%s>\\n" "$(tput smul)" "$(tput rmul)"
 	exit 1
 }

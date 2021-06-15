@@ -6,10 +6,14 @@
 [[ -r "/home/linuxbrew/.linuxbrew/etc/profile.d/bash_completion.sh" ]] && source "/home/linuxbrew/.linuxbrew/etc/profile.d/bash_completion.sh"
 
 # Enable bash <tab> completion for Digital Ocean control panel
-source <(doctl completion bash)
+if brew list "doctl" &> /dev/null; then
+	source <(doctl completion bash)
+fi
 
 # Enable bash <tab> completion for z
-source "$(brew --prefix)/etc/profile.d/z.sh"
+if brew list "z" &> /dev/null; then
+	source "$(brew --prefix)/etc/profile.d/z.sh"
+fi
 
 # SSH auto-completion based on entries in known_hosts.
 if [[ -e "$HOME/.ssh/known_hosts" ]]; then
