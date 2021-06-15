@@ -209,7 +209,7 @@ ln -fsn "$INSTALL_DIR/templates"  "$HOME/.templates"
 # `.dotfiles` repository.
 if [[ -f "$INSTALL_DIR/opt/symlinks" ]]; then
 	print_process "Symlinking configuration files"
-	symlink "$file"
+	symlink "$INSTALL_DIR/opt/symlinks"
 fi
 
 [[ $? ]] && print_success "Symlinked configuration files"
