@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 
 # constants
-readonly USERNAME="iamnewton"
 readonly GITHUB_URL="github.com"
-readonly GITHUB_REPO="dotfiles"
-readonly GITHUB_USER="$USERNAME"
-readonly LOG="/tmp/$GITHUB_REPO.install.log"
+readonly USERNAME="iamnewton"
+readonly REPO="dotfiles"
+readonly LOG="/tmp/$REPO.install.log"
+readonly INSTALL_DIR="$HOME/.$REPO"
+OS="$(uname)"
+readonly OS="${OS,,}"
 
 # variables
 GIT_AUTHOR_NAME=""
 GIT_AUTHOR_EMAIL=""
-INSTALL_DIRECTORY="$HOME/.$GITHUB_REPO"
 
 # Question logging
 print_question() {
@@ -52,55 +53,84 @@ print_success() {
 	printf "%s✓ Success:%s\\n" "$(tput setaf 2)" "$(tput sgr0) $message"
 }
 
+# @private
+# @requires logger (local)
+# @param $file - path to file where symlinks are listed out
+link_it() {
+	local file=$1
+	# split input on space, and return 2nd part (the symbolic link desired)
+	local symlink=($file)
+
+	# Test whether a symbolic link already exists
+	print_process "Checking if ${symlink[1]} is symlinked"
+	if [[ ! -L "$HOME/${symlink[1]}" ]]; then
+		# create an array of line items
+		print_process "Symlinking ${symlink[0]}"
+		ln -sfn "$INSTALL_DIR/${symlink[0]}" "$HOME/${symlink[1]}"
+	else
+		print_info "$HOME/${symlink[1]} is already symlinked. Skipping."
+	fi
+}
+
+# @private
+# @param $program - a function or program to process each item
+# @param $file - path to a file with each item separated on a line
+symlink() {
+	local file=$1
+
+	while IFS="" read -r p || [ -n "$p" ]
+	do
+		#printf '%s\n' "$p"
+		link_it "$p"
+	done < "$file"
+}
+
 # Check for Homebrew; install brew
 if ! type -P 'brew' &> /dev/null; then
 	print_process "Installing Homebrew"
 	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 	# If we're on Linux, insert brew into the path temporarily to be able to use later
-	if [[ "$OSTYPE" == "linux-gnu"*  ]]; then
+	if [[ "$OS" == "linux"  ]]; then
 		print_process "Sourcing Homebrew to PATH"
 		eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+		sudo apt-get install build-essential
+		brew install gcc gpg node
 	fi
 
 	[[ $? ]] && print_success "Homebrew installed"
 fi
 
 # If missing, download and extract the dotfiles repository
-if [[ -d "$INSTALL_DIRECTORY" ]]; then
-	print_process "$GITHUB_REPO already installed.  Upgrading $GITHUB_REPO"
-	dotfiles
-else
-	print_warning "No $INSTALL_DIRECTORY found"
-
-	print_process "Creating directory at $INSTALL_DIRECTORY and setting permissions"
-	mkdir -p "$INSTALL_DIRECTORY"
+if [[ ! -d "$INSTALL_DIR" ]]; then
+	print_process "Creating directory at $INSTALL_DIR and setting permissions"
+	mkdir -p "$INSTALL_DIR"
 
 	print_process "Downloading repository to /tmp directory"
 	# (-#) shows the progress bar as # sign
 	# (-f) fail silently
 	# (-L) follow the headers
 	# (-o) output to a file
-	curl -#fLo "/tmp/$GITHUB_REPO.tar.gz" "https://$GITHUB_URL/$GITHUB_USER/$GITHUB_REPO/tarball/main"
+	curl -#fLo "/tmp/$REPO.tar.gz" "https://$GITHUB_URL/$USERNAME/$REPO/tarball/main"
 
-	print_process "Extracting files to $INSTALL_DIRECTORY"
-	tar -zxf "/tmp/$GITHUB_REPO.tar.gz" --strip-components 1 -C "$INSTALL_DIRECTORY"
+	print_process "Extracting files to $INSTALL_DIR"
+	tar -zxf "/tmp/$REPO.tar.gz" --strip-components 1 -C "$INSTALL_DIR"
 
 	print_process "Removing tarball from /tmp directory"
-	rm -rf "/tmp/$GITHUB_REPO.tar.gz"
+	rm -rf "/tmp/$REPO.tar.gz"
 
-	[[ $? ]] && print_success "$INSTALL_DIRECTORY created, repository downloaded and extracted"
+	[[ $? ]] && print_success "$INSTALL_DIR created, repository downloaded and extracted"
 fi
 
 # Change to the dotfiles directory
-cd "$INSTALL_DIRECTORY" || exit
+cd "$INSTALL_DIR" || exit
 
 # Initialize the git repository if it's missing
 print_process "Initializing git repository"
 git init
 
-print_process "Adding https://$GITHUB_URL/$GITHUB_USER/$GITHUB_REPO.git as origin"
-git remote add origin "https://$GITHUB_URL/$GITHUB_USER/$GITHUB_REPO.git"
+print_process "Adding https://$GITHUB_URL/$USERNAME/$REPO.git as origin"
+git remote add origin "https://$GITHUB_URL/$USERNAME/$REPO.git"
 
 print_process "Downloading changes from origin"
 git fetch origin main
@@ -124,16 +154,12 @@ git pull --rebase origin main
 
 if [[ ! -f "$HOME/.bash_profile.local" ]]; then
 	print_process "Copying local bash_profile template to $HOME"
-	cp "$INSTALL_DIRECTORY/conf/bash/profile.local" "$HOME/.bash_profile.local"
+	cp "$INSTALL_DIR/conf/bash/profile.local" "$HOME/.bash_profile.local"
 fi
 
 # Setup GPG
 # https://help.github.com/articles/generating-a-new-gpg-key/
-if ! type -P 'gpg' &> /dev/null; then
-	print_error "gpg not found"
-	exit 1
-else
-	brew install gpg
+if type -P 'gpg' &> /dev/null; then
 	print_process "Generating a GPG key"
 	# generate a new GPG key
 	# then if successful, list out the keys
@@ -146,7 +172,7 @@ else
 		GIT_GPG_KEY="$USER_GIT_GPG_KEY"
 		print_process "Copying GPG key to pasteboard"
 		git config --file "$HOME/.gitconfig.local" user.signingkey "$GIT_GPG_KEY"
-		if [[ "$OSTYPE" =~ ^darwin ]]; then
+		if [[ "$OS" == "darwin" ]]; then
 			# only works on MacOS
 			gpg --armor --export "$GIT_GPG_KEY" | pbcopy
 			open "https://$GITHUB_URL/settings/keys"
@@ -154,6 +180,7 @@ else
 			gpg --armor --export "$GIT_GPG_KEY"
 			print_process "Open Github settings <https://$GITHUB_URL/settings/keys>; create a new GPG key and paste in the pasteboard"
 		fi
+		git config --global include.path "$HOME/.gitconfig.local"
 	else
 		print_warning "No GPG key has been set.  Please update manually"
 	fi
@@ -163,17 +190,10 @@ fi
 # Any global git commands in `~/.bash_profile.local` will be written to
 # `.gitconfig`. This prevents them being committed to the repository.
 print_process "Symlinking global git configuration file"
-ln -fsn "$INSTALL_DIRECTORY/conf/git/config"  "$HOME/.gitconfig"
-if [[ "$OSTYPE" == "linux-gnu"*  ]]; then
-	print_process "Symlinking global git configuration file"
-	ln -fsn "$INSTALL_DIRECTORY/conf/git/config.linux"  "$HOME/.gitconfig.linux"
-	git config --global include.path "$HOME/.gitconfig.linux"
-fi
-if [[ "$OSTYPE" =~ ^darwin ]]; then
-	print_process "Symlinking global git configuration file"
-	ln -fsn "$INSTALL_DIRECTORY/conf/git/config.macos"  "$HOME/.gitconfig.macos"
-	git config --global include.path "$HOME/.gitconfig.macos"
-fi
+ln -fsn "$INSTALL_DIR/conf/git/config"  "$HOME/.gitconfig"
+print_process "Symlinking OS git configuration file"
+ln -fsn "$INSTALL_DIR/conf/git/config.$OS"  "$HOME/.gitconfig.$OS"
+git config --global include.path "$HOME/.gitconfig.$OS"
 
 # Force remove the git templates directory if it's already there.
 print_process "Removing $HOME/.templates/ directory"
@@ -182,20 +202,23 @@ if [ -e "$HOME/.templates" ]; then
 fi
 
 # Symlink all necessary git templates
-ln -fsn "$INSTALL_DIRECTORY/templates"  "$HOME/.templates"
+ln -fsn "$INSTALL_DIR/templates"  "$HOME/.templates"
 
 # Create the necessary symbolic links between the `.dotfiles` and `HOME`
 # directory. The `bash_profile` sources other files directly from the
 # `.dotfiles` repository.
-# shellcheck source=/dev/null
-source "$INSTALL_DIRECTORY/lib/symlinks"
-symlink_files "$INSTALL_DIRECTORY/opt/symlinks"
+if [[ -f "$INSTALL_DIR/opt/symlinks" ]]; then
+	print_process "Symlinking configuration files"
+	symlink "$file"
+fi
+
+[[ $? ]] && print_success "Symlinked configuration files"
 
 # Copy `.ssh/config`.
 # This prevents them being committed to the repository.
 print_process "Syncing global ssh configuration file"
 mkdir -p "$HOME/.ssh"
-cp "$INSTALL_DIRECTORY/conf/ssh/config"  "$HOME/.ssh/config"
+cp "$INSTALL_DIR/conf/ssh/config"  "$HOME/.ssh/config"
 
 print_process "Sourcing $HOME/.bash_profile"
 # shellcheck source=/dev/null
@@ -231,7 +254,7 @@ print_process "Changing login shell to Homebrew installed version"
 
 # Mac OS X directory service command line utility
 # sudo dscl . -change /Users/$USER UserShell /bin/bash /usr/local/bin/bash
-if [[ "$OSTYPE" =~ ^darwin ]]; then
+if [[ "$OS" == "darwin" ]]; then
 	echo "$(brew --prefix)/bin/bash" | pbcopy
 	print_process "Copied brew's /bin/bash to pasteboard"
 
@@ -243,14 +266,11 @@ if [[ "$OSTYPE" =~ ^darwin ]]; then
 	sudo vim + -c 'startinsert' -c ':r !pbpaste' -c ':xa' /etc/shells
 fi
 
-# Programmatic way to change shell
-sudo chsh -s "$(brew --prefix)/bin/bash" 2>/dev/null
+if [[ "$OS" == "linux" ]]; then
+	# Programmatic way to change shell
+	sudo chsh -s "$(brew --prefix)/bin/bash" 2>/dev/null
+fi
 
-[[ $? ]] && print_success "Changed default shell to Homebrew installed version"
-
-# Symlink library files
-print_process "Symlinking ${GITHUB_REPO} command & man page"
-ln -fsn "$INSTALL_DIRECTORY/bin/${GITHUB_REPO}"                "$(brew --prefix)/bin/${GITHUB_REPO}"
-ln -fsn "$INSTALL_DIRECTORY/share/man/man1/${GITHUB_REPO}.1"   "$(brew --prefix)/share/man/man1/${GITHUB_REPO}.1"
-
-[[ $? ]] && print_success "Dotfiles installed.  To upgrade, run dotfiles"
+[[ $? ]] \
+	&& print_success "Changed default shell to Homebrew installed version" \
+	&& print_success "Dotfiles installed.  To upgrade, run dotfiles"

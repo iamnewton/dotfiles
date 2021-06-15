@@ -8,60 +8,25 @@ Typically software you buy comes with some sort of installer, why not your dotfi
 
 :warning: This will overwrite existing dotfiles in your `$HOME` and `.vim` directories.
 
+```bash
+$ /bin/bash -c "$(curl -#fL https://raw.githubusercontent.com/iamnewton/dotfiles/main/bin/install.sh)"
+```
+
 ### Requirements
 
-No matter which method you choose for installation, ensure that you have the following dependencies installed on your system.  If you're on MacOS then you already have these, but a Linux system may not come with all.
+Ensure that you have the following dependencies installed on your system.  If you're on MacOS then you already have these, but a Linux system may not come with all.
 
 * [curl](http://curl.haxx.se)
 * [git](http://git-scm.com)
 
-### One-line Install
-
-```bash
-$ /bin/bash -c "$(curl -#fL https://raw.githubusercontent.com/iamnewton/dotfiles/main/bin/install)"
-```
-
-:exclamation: N.B. If you wish to [fork this project](https://github.com/iamnewton/dotfiles/fork) and maintain your own dotfiles, you **MUST** substitute my username for your own in the above command and the variable (`$GITHUB_USER`) found at the top of the `bin/dotfiles` script.
-
-## Options
-
-| Flag              | Meaning                                |
-| :-----------------| :------------------------------------- |
-| `-e`, `--edit`    | Edit the program                       |
-| `-h`, `--help`    | Print help text                        |
-| `-i`, `--install` | Install the setup library              |
-| `-t`, `--test`    | Run the test suite                     |
-| `-u`, `--upgrade` | Upgrade and install dependencies       |
-| `-v`, `--version` | Print the current version              |
-| `--prefix`        | Print the installation directory       |
-| `--symlink`       | Symlink all of the configuration files |
-| `--uninstall`     | Uninstall the library                  |
-
-## Man page
-
-The man page is symlinked in the install process. As long as `$(brew --prefix)` (`/usr/local/bin` on MacOS and `/home/linuxbrew/.linuxbrew/bin` on Linux) is in your `$PATH`, then you should be able to access it via `man dotfiles`.
-
-## Update
-
-So it's time to update for [whatever reason](#when-to-update); don't fret, there is a command for that. Given everything is set up correctly, the following command should be available in your `$PATH`, meaning you can run from anywhere.
-
-### How to update
-
-```bash
-$ dotfiles
-```
-
-### When to Update
-
-* You want to pull changes from the remote repository
-* You want to add or update a configuration file
+:exclamation: N.B. If you wish to [fork this project](https://github.com/iamnewton/dotfiles/fork) and maintain your own dotfiles, you **MUST** substitute my username for your own in the above command and the variable (`$USERNAME`) found at the top of the `bin/install.sh` script.
 
 ### Uninstall
 
 If you need to uninstall for whatever reason, this script will remove all installed Homebrew formulae, Ruby Gems, Node and its packages, configuration symlinks, ViM and all of its plugins, and the library itself.  However, it won't uninstall Homebrew as I didn't want to make that assumption.
 
 ```bash
-$ dotfiles --uninstall
+$ /bin/bash -c "$(curl -#fL https://raw.githubusercontent.com/iamnewton/dotfiles/main/bin/uninstall.sh)"
 ```
 
 ## Features
@@ -99,7 +64,7 @@ export GH_TOKEN="<insert github token>"
 alias code="cd ~/Code"
 ```
 
-:exclamation: N.B. Because the `$(dotfiles --prefix)/conf/git/config` file is copied to `$HOME/.gitconfig`, any private git configuration specified in `$HOME/.bash_profile.local` will not be committed to your dotfiles repository.
+:exclamation: N.B. Because the `$(dotfiles --prefix)/conf/git/config` file is copied to `$HOME/.gitconfig`, any private git configuration specified in `$HOME/.gitconfig.local` will not be committed to your dotfiles repository.
 
 * * *
 
