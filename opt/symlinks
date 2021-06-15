@@ -1,5 +1,4 @@
 conf/bash/dircolors .dircolors
-conf/bash/functions .functions
 conf/bash/hushlogin .hushlogin
 conf/bash/lesskey .lesskey
 conf/bash/logout .bash_logout

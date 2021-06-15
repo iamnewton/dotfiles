@@ -20,13 +20,13 @@ test -d "/home/linuxbrew/.linuxbrew" && eval "$(/home/linuxbrew/.linuxbrew/bin/b
 
 load_dotfiles() {
 	declare -a files=(
-		$(dotfiles --prefix)/conf/bash/options # Options
-		$(dotfiles --prefix)/conf/bash/exports # Exports
-		$(dotfiles --prefix)/conf/bash/aliases # Aliases
-		$(dotfiles --prefix)/conf/bash/functions # Functions
-		$(dotfiles --prefix)/conf/bash/prompt # Custom bash prompt
-		$(dotfiles --prefix)/conf/bash/paths # Path modifications
-		$(dotfiles --prefix)/conf/bash/completions # Custom bash completion
+		$HOME/.dotfiles/conf/profile/options # Options
+		$HOME/.dotfiles/conf/profile/exports # Exports
+		$HOME/.dotfiles/conf/profile/aliases # Aliases
+		$HOME/.dotfiles/conf/profile/functions # Functions
+		$HOME/.dotfiles/conf/profile/prompt # Custom bash prompt
+		$HOME/.dotfiles/conf/profile/paths # Path modifications
+		$HOME/.dotfiles/conf/profile/completions # Custom bash completion
 		$(brew --prefix)/etc/bash_completion # Bash completion (installed via Homebrew)
 		$HOME/.fzf.bash # fzf
 		$HOME/.bash_profile.local # Local and private settings not under version control (e.g. git credentials)
