@@ -29,6 +29,14 @@ print_process() {
 	printf "%s┃%s %s...\\n" "$(tput setaf 6)" "$(tput sgr0)$(tput setaf 7)" "$message$(tput sgr0)"
 }
 
+# Informational logging
+print_info() {
+	local message=$1
+
+	echo "$(date) INFO: $message" >> $LOG
+	printf "%s Info:%s\\n" "$(tput setaf 6)" "$(tput sgr0) $message"
+}
+
 # Warning logging
 print_warning() {
 	local message=$1
