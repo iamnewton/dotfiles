@@ -165,6 +165,15 @@ if [[ ! -f "$HOME/.bash_profile.local" ]]; then
 	cp "$INSTALL_DIR/conf/profile/profile.local" "$HOME/.bash_profile.local"
 fi
 
+# Copy `.gitconfig`.
+# Any global git commands in `~/.bash_profile.local` will be written to
+# `.gitconfig`. This prevents them being committed to the repository.
+print_process "Symlinking global git configuration file"
+ln -fsn "$INSTALL_DIR/conf/git/config"  "$HOME/.gitconfig"
+print_process "Symlinking OS git configuration file"
+ln -fsn "$INSTALL_DIR/conf/git/config.$OS"  "$HOME/.gitconfig.$OS"
+git config --global include.path "$HOME/.gitconfig.$OS"
+
 # Setup GPG
 # https://help.github.com/articles/generating-a-new-gpg-key/
 if type -P 'gpg' &> /dev/null; then
@@ -188,20 +197,13 @@ if type -P 'gpg' &> /dev/null; then
 			gpg --armor --export "$GIT_GPG_KEY"
 			print_process "Open Github settings <https://$GITHUB_URL/settings/keys>; create a new GPG key and paste in the pasteboard"
 		fi
-		git config --global include.path "$HOME/.gitconfig.local"
 	else
 		print_warning "No GPG key has been set.  Please update manually"
 	fi
 fi
 
-# Copy `.gitconfig`.
-# Any global git commands in `~/.bash_profile.local` will be written to
-# `.gitconfig`. This prevents them being committed to the repository.
-print_process "Symlinking global git configuration file"
-ln -fsn "$INSTALL_DIR/conf/git/config"  "$HOME/.gitconfig"
-print_process "Symlinking OS git configuration file"
-ln -fsn "$INSTALL_DIR/conf/git/config.$OS"  "$HOME/.gitconfig.$OS"
-git config --global include.path "$HOME/.gitconfig.$OS"
+# print_process "Symlinking local git configuration file"
+# git config --global include.path "$HOME/.gitconfig.local"
 
 # Force remove the git templates directory if it's already there.
 print_process "Removing $HOME/.templates/ directory"
