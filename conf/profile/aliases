@@ -8,7 +8,7 @@ alias ..="cd .."
 alias ...="cd ../.."
 
 # Always use color output for `ls`
-if [[ "$OSTYPE" =~ ^darwin ]]; then
+if [[ "$(uname)" == "Darwin" ]]; then
 	alias ls="ls -lAFGHhoST"
 else
 	alias ls="ls -aAHhloS --color"
@@ -30,7 +30,9 @@ if type -P 'bat' &> /dev/null; then
 fi
 
 # Copy my public key to the pasteboard
-alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | printf '=> Public key copied to pasteboard.\n'"
+if [[ "$(uname)" == "Darwin" ]]; then
+	alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | printf '=> Public key copied to pasteboard.\\n'"
+fi
 
 # Runs `git pull` on every directory within the current directory
 # `find .` search the current directory
@@ -59,7 +61,7 @@ alias filesize="stat -c '%z bytes'"
 
 # Make grep more user friendly by highlighting matches
 # # and exclude grepping through .git folders.
-alias grep="grep --color=auto --exclude-dir=\.git"
+alias grep="grep --color=auto --exclude-dir=\\.git"
 
 # curl a blank HTML file into Vim; open stdin in Vim by using the - flag
 alias html="curl -L https://git.io/JTQI3 | vim -"
@@ -102,10 +104,10 @@ else
 	alias rm="rm -i"
 fi
 
-# > An additional neat feature of FZF is that it can show a preview window to 
-# > display the results of a command. For example, we can use `fzf` with `bat` 
-# > to pretty-print the contents of a file, like in the command below. Bat is 
-# > an alternative to `cat` that supports syntax highlighting. The {-1} stands 
+# > An additional neat feature of FZF is that it can show a preview window to
+# > display the results of a command. For example, we can use `fzf` with `bat`
+# > to pretty-print the contents of a file, like in the command below. Bat is
+# > an alternative to `cat` that supports syntax highlighting. The {-1} stands
 # > for the selected file.
 # https://medium.com/@GroundControl/better-git-diffs-with-fzf-89083739a9cb
 if brew list "fzf" &> /dev/null && brew list "bat" &> /dev/null; then
