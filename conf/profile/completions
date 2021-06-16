@@ -10,6 +10,12 @@ if brew list "doctl" &> /dev/null; then
 	source <(doctl completion bash)
 fi
 
+# Enable bash <tab> completion for fzf
+if brew list "fzf" &> /dev/null; then
+	source "$(brew --prefix)/opt/fzf/shell/completion.bash"
+	source "$(brew --prefix)/opt/fzf/shell/key-bindings.bash"
+fi
+
 # Enable bash <tab> completion for z
 if brew list "z" &> /dev/null; then
 	source "$(brew --prefix)/etc/profile.d/z.sh"
