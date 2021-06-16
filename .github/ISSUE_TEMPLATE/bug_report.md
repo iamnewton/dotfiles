@@ -4,18 +4,18 @@ about: Create a report to help us improve
 ---
 
 **Describe the bug**
-_A clear and concise description of what the bug is_
+<!-- A clear and concise description of what the bug is -->
 
-**To Reproduce**
-_Steps to reproduce the behavior_
+**Steps to Reproduce**
+<!-- Steps to reproduce the behavior -->
 
 Or better yet, provide a link to a [minimal reproducible example](https://stackoverflow.com/help/minimal-reproducible-example).
 
 **Expected behavior**
-_A clear and concise description of what you expected to happen_
+<!-- A clear and concise description of what you expected to happen -->
 
-**Screenshots**
-_If applicable, add screenshots to help explain your problem_
+**Screenshots _(optional)_**
+<!-- If applicable, add screenshots to help explain your problem -->
 
-**Additional context**
-_Add any other context about the problem here_
+**Additional context _(optional)_**
+<!-- Add any other context about the problem here -->

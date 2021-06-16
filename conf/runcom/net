@@ -6,7 +6,3 @@ machine api.github.com
 machine raw.githubusercontent.com
 	login <token>
 	password x-oauth-basic
-
-machine api.bitbucket.org
-	login <username>
-	password <password>

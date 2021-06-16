@@ -14,12 +14,8 @@ All files are suffixed with `rc`, are typically non-executable and live in the `
 
 - [.ackrc](http://beyondgrep.com/documentation/)
 - [.bashrc](http://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html)
-- [.csslintrc](https://github.com/CSSLint/csslint/wiki/Command-line-interface#configuration-files)
 - [.curlrc](http://curl.haxx.se/docs/manpage.html)
-- [.gvimrc](http://vimdoc.sourceforge.net/htmldoc/gui.html)
 - [.inputrc](http://www.gnu.org/software/bash/manual/html_node/Readline-Init-File.html)
-- [.jshintrc](http://www.jshint.com/docs/)
-- [.vimrc](http://vim.wikia.com/wiki/Open_vimrc_file)
 - [.wgetrc](https://www.gnu.org/software/wget/manual/html_node/Wgetrc-Commands.html)
 
 [source]: http://www.catb.org/jargon/html/R/rc-file.html
