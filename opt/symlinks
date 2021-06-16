@@ -11,6 +11,7 @@ conf/misc/gpg-agent .gnupg/gpg-agent.conf
 conf/misc/gpg .gnupg/gpg.conf
 conf/misc/tmux .tmux.conf
 conf/misc/svgo .svgo.yml
+conf/profile/profile .bash_profile
 conf/runcom/ack .ackrc
 conf/runcom/bash .bashrc
 conf/runcom/curl .curlrc
