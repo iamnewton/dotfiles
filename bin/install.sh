@@ -162,7 +162,7 @@ git pull --rebase origin main
 
 if [[ ! -f "$HOME/.bash_profile.local" ]]; then
 	print_process "Copying local bash_profile template to $HOME"
-	cp "$INSTALL_DIR/conf/bash/profile.local" "$HOME/.bash_profile.local"
+	cp "$INSTALL_DIR/conf/profile/profile.local" "$HOME/.bash_profile.local"
 fi
 
 # Setup GPG
