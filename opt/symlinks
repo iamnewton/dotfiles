@@ -3,6 +3,9 @@ conf/bash/hushlogin .hushlogin
 conf/bash/lesskey .lesskey
 conf/bash/logout .bash_logout
 conf/git/attributes .gitattributes
+conf/git/config .gitconfig
+conf/git/config.darwin .gitconfig.darwin
+conf/git/config.linux .gitconfig.linux
 conf/git/ignore .gitignore
 conf/git/message .gitmessage
 conf/misc/ctags .ctags
@@ -19,3 +22,4 @@ conf/runcom/input .inputrc
 conf/runcom/mail .mailrc
 conf/runcom/net .netrc
 conf/runcom/wget .wgetrc
+templates .templates

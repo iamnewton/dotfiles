@@ -34,7 +34,7 @@ print_info() {
 	local message=$1
 
 	echo "$(date) INFO: $message" >> $LOG
-	printf "%s Info:%s\\n" "$(tput setaf 6)" "$(tput sgr0) $message"
+	printf "%sInfo:%s\\n" "$(tput setaf 6)" "$(tput sgr0) $message"
 }
 
 # Warning logging
@@ -42,7 +42,7 @@ print_warning() {
 	local message=$1
 
 	echo "$(date) WARNING: $message" >> "$LOG"
-	printf "%s ⚠Warning:%s!\\n" "$(tput setaf 3)" "$(tput sgr0) $message"
+	printf "%s⚠ Warning:%s!\\n" "$(tput setaf 3)" "$(tput sgr0) $message"
 }
 
 # Error logging
@@ -130,49 +130,98 @@ if [[ ! -d "$INSTALL_DIR" ]]; then
 	[[ $? ]] && print_success "$INSTALL_DIR created, repository downloaded and extracted"
 fi
 
-# Change to the dotfiles directory
-cd "$INSTALL_DIR" || exit
+if command -v 'git' &> /dev/null; then
+	# Change to the dotfiles directory
+	cd "$INSTALL_DIR" || exit
 
-# Initialize the git repository if it's missing
-print_process "Initializing git repository"
-git init
+	# Initialize the git repository if it's missing
+	print_process "Initializing git repository"
+	git init
 
-print_process "Adding https://$GITHUB_URL/$USERNAME/$REPO.git as origin"
-git remote add origin "https://$GITHUB_URL/$USERNAME/$REPO.git"
+	print_process "Adding https://$GITHUB_URL/$USERNAME/$REPO.git as origin"
+	git remote add origin "https://$GITHUB_URL/$USERNAME/$REPO.git"
 
-print_process "Downloading changes from origin"
-git fetch origin main
+	print_process "Downloading changes from origin"
+	git fetch origin main
 
-# Reset the index and working tree to the fetched HEAD
-# (submodules are cloned in the subsequent sync step)
-print_process "Resetting index & working tree to fetched HEAD"
-git reset --hard FETCH_HEAD
+	# Reset the index and working tree to the fetched HEAD
+	# (submodules are cloned in the subsequent sync step)
+	print_process "Resetting index & working tree to fetched HEAD"
+	git reset --hard FETCH_HEAD
 
-# Remove any untracked files
-print_process "Removing any untracked files"
-git clean -fd
+	# Remove any untracked files
+	print_process "Removing any untracked files"
+	git clean -fd
 
-[[ $? ]] && print_success "Repository has been initialized"
+	[[ $? ]] && print_success "Repository has been initialized"
 
-# Pull down the latest changes
-print_process "Pulling down latest changes"
-git pull --rebase origin main
+	# Pull down the latest changes
+	print_process "Pulling down latest changes"
+	git pull --rebase origin main
 
-[[ $? ]] && print_success "Repository has been updated"
+	[[ $? ]] && print_success "Repository has been updated"
+fi
 
 if [[ ! -f "$HOME/.bash_profile.local" ]]; then
 	print_process "Copying local bash_profile template to $HOME"
-	cp "$INSTALL_DIR/conf/profile/profile.local" "$HOME/.bash_profile.local"
+	echo '#!/usr/bin/env bash' >> "$HOME/.bash_profile.local"
 fi
 
-# Copy `.gitconfig`.
-# Any global git commands in `~/.bash_profile.local` will be written to
-# `.gitconfig`. This prevents them being committed to the repository.
-print_process "Symlinking global git configuration file"
-ln -fsn "$INSTALL_DIR/conf/git/config"  "$HOME/.gitconfig"
-print_process "Symlinking OS git configuration file"
-ln -fsn "$INSTALL_DIR/conf/git/config.$OS"  "$HOME/.gitconfig.$OS"
-git config --global include.path "$HOME/.gitconfig.$OS"
+# Force remove the git templates directory if it's already there.
+if [ -e "$HOME/.templates" ]; then
+	print_process "Removing $HOME/.templates/ directory"
+	rm -rf "$HOME/.templates"
+fi
+
+# Create the necessary symbolic links between the `.dotfiles` and `HOME`
+# directory. The `bash_profile` sources other files directly from the
+# `.dotfiles` repository.
+if [[ -f "$INSTALL_DIR/opt/symlinks" ]]; then
+	print_process "Symlinking configuration files"
+	symlink "$INSTALL_DIR/opt/symlinks"
+
+	[[ $? ]] && print_success "Symlinked configuration files"
+fi
+
+# Copy `.ssh/config`.
+# This prevents them being committed to the repository.
+print_process "Syncing global ssh configuration file"
+mkdir -p "$HOME/.ssh"
+cp "$INSTALL_DIR/conf/ssh/config"  "$HOME/.ssh/config"
+
+print_process "Sourcing $HOME/.bash_profile"
+# shellcheck source=/dev/null
+source "$HOME/.bash_profile" 2&>/dev/null
+
+if command -v 'git' &> /dev/null; then
+	# Setup git authorship
+	print_process "Setting up Git author"
+	# Git author name
+	print_question "What's your name"
+	read -r USER_GIT_AUTHOR_NAME
+	if [[ -n "$USER_GIT_AUTHOR_NAME" ]]; then
+		GIT_AUTHOR_NAME="$USER_GIT_AUTHOR_NAME"
+		git config --file "$HOME/.gitconfig.local" user.name "$GIT_AUTHOR_NAME"
+
+		[[ $? ]] && print_success "Git username is $(git config user.name)"
+	else
+		print_warning "No Git user name has been set.  Please update manually"
+	fi
+
+	# Git author email
+	print_question "What's your email"
+	read -r USER_GIT_AUTHOR_EMAIL
+	if [[ -n "$USER_GIT_AUTHOR_EMAIL" ]]; then
+		GIT_AUTHOR_EMAIL="$USER_GIT_AUTHOR_EMAIL"
+		git config --file "$HOME/.gitconfig.local" user.email "$GIT_AUTHOR_EMAIL"
+
+		[[ $? ]] && print_success "Git email is $(git config user.email)"
+	else
+		print_warning "No Git user email has been set.  Please update manually"
+	fi
+
+	[[ $? ]] && print_success "Git author is $(git config user.name) <$(git config user.email)>"
+fi
 
 # Setup GPG
 # https://help.github.com/articles/generating-a-new-gpg-key/
@@ -201,63 +250,6 @@ if type -P 'gpg' &> /dev/null; then
 		print_warning "No GPG key has been set.  Please update manually"
 	fi
 fi
-
-# print_process "Symlinking local git configuration file"
-# git config --global include.path "$HOME/.gitconfig.local"
-
-# Force remove the git templates directory if it's already there.
-print_process "Removing $HOME/.templates/ directory"
-if [ -e "$HOME/.templates" ]; then
-	rm -rf "$HOME/.templates"
-fi
-
-# Symlink all necessary git templates
-ln -fsn "$INSTALL_DIR/templates"  "$HOME/.templates"
-
-# Create the necessary symbolic links between the `.dotfiles` and `HOME`
-# directory. The `bash_profile` sources other files directly from the
-# `.dotfiles` repository.
-if [[ -f "$INSTALL_DIR/opt/symlinks" ]]; then
-	print_process "Symlinking configuration files"
-	symlink "$INSTALL_DIR/opt/symlinks"
-fi
-
-[[ $? ]] && print_success "Symlinked configuration files"
-
-# Copy `.ssh/config`.
-# This prevents them being committed to the repository.
-print_process "Syncing global ssh configuration file"
-mkdir -p "$HOME/.ssh"
-cp "$INSTALL_DIR/conf/ssh/config"  "$HOME/.ssh/config"
-
-print_process "Sourcing $HOME/.bash_profile"
-# shellcheck source=/dev/null
-source "$HOME/.bash_profile" 2&>/dev/null
-
-# Setup git authorship
-print_process "Setting up Git author"
-# Git author name
-print_question "What's your name"
-read -r USER_GIT_AUTHOR_NAME
-if [[ -n "$USER_GIT_AUTHOR_NAME" ]]; then
-	GIT_AUTHOR_NAME="$USER_GIT_AUTHOR_NAME"
-	git config --file "$HOME/.gitconfig.local" user.name "$GIT_AUTHOR_NAME"
-else
-	print_warning "No Git user name has been set.  Please update manually"
-fi
-
-# Git author email
-print_question "What's your email"
-read -r USER_GIT_AUTHOR_EMAIL
-if [[ -n "$USER_GIT_AUTHOR_EMAIL" ]]; then
-	GIT_AUTHOR_EMAIL="$USER_GIT_AUTHOR_EMAIL"
-	git config --file "$HOME/.gitconfig.local" user.email "$GIT_AUTHOR_EMAIL"
-else
-	print_warning "No Git user email has been set.  Please update manually"
-fi
-
-# Set the credentials (modifies $HOME/.gitconfig)
-[[ $? ]] && print_success "Git author is $(git config user.name) <$(git config user.email)>"
 
 # Check for brew bash; change to it
 print_process "Changing login shell to Homebrew installed version"

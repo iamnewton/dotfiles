@@ -219,6 +219,12 @@
 [include]
 	path = ~/.gitconfig.local
 
+[includeIf "gitdir:/Users"]
+	path = ~/.gitconfig.darwin
+
+[includeIf "gitdir:/home"]
+	path = ~/.gitconfig.linux
+
 [merge]
 	# Include summaries of merged conflicts in newly created merge commit messages
 	log = true
