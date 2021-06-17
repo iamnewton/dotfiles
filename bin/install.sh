@@ -187,11 +187,7 @@ fi
 # This prevents them being committed to the repository.
 print_process "Syncing global ssh configuration file"
 mkdir -p "$HOME/.ssh"
-cp "$INSTALL_DIR/conf/ssh/config"  "$HOME/.ssh/config"
-
-print_process "Sourcing $HOME/.bash_profile"
-# shellcheck source=/dev/null
-source "$HOME/.bash_profile" 2&>/dev/null
+cp "$INSTALL_DIR/conf/ssh/config.$OS"  "$HOME/.ssh/config"
 
 if command -v 'git' &> /dev/null; then
 	# Setup git authorship
@@ -273,6 +269,10 @@ if [[ "$OS" == "linux" ]]; then
 	sudo chsh -s "$(brew --prefix)/bin/bash" 2>/dev/null
 fi
 
-[[ $? ]] \
-	&& print_success "Changed default shell to Homebrew installed version" \
-	&& print_success "Dotfiles installed.  To upgrade, run dotfiles"
+[[ $? ]] && print_success "Changed default shell to Homebrew installed version"
+
+print_process "Sourcing $HOME/.bash_profile"
+# shellcheck source=/dev/null
+source "$HOME/.bash_profile" 2&>/dev/null
+
+[[ $? ]] && print_success "Dotfiles installed.  To upgrade, run dotfiles"

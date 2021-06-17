@@ -1,0 +1,26 @@
+# Multiplex channels to the same server with a local control file
+# Enable connection sharing
+ControlMaster auto
+ControlPath /tmp/ssh_mux_%h_%p_%r
+# ControlPath /tmp/%r@%h:%p
+
+# Enable persistant connection for 2 hours
+# ControlPersist 2h
+ControlPersist yes
+
+# Forward ssh agent to the remote machine.
+ForwardAgent yes
+
+# Automatically add all common hosts to the host file as they are connected to.
+StrictHostKeyChecking no
+
+# Avoid dropped connections in certain network environments
+TCPKeepAlive=yes
+ServerAliveInterval=15
+ServerAliveCountMax=6
+
+# Use compression (helpful with scp over low-bandwidth connections)
+Compression=yes
+
+Host *
+	AddKeysToAgent yes
