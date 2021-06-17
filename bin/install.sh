@@ -12,6 +12,7 @@ readonly OS="${OS,,}"
 # variables
 GIT_AUTHOR_NAME=""
 GIT_AUTHOR_EMAIL=""
+GITHUB_TOKEN=""
 
 # Question logging
 print_question() {
@@ -188,6 +189,24 @@ fi
 print_process "Syncing global ssh configuration file"
 mkdir -p "$HOME/.ssh"
 cp "$INSTALL_DIR/conf/ssh/config.$OS"  "$HOME/.ssh/config"
+
+if command -v 'curl' &> /dev/null; then
+	# Setup git authorship
+	print_process "Setting up netrc"
+	# Git author name
+	print_question "What's your GitHub personal token? Create a token at <https://github.com/settings/applications#personalaccess-tokens>"
+	read -r USER_GITHUB_TOKEN
+	if [[ -n "$USER_GITHUB_TOKEN" ]]; then
+		GITHUB_TOKEN="$USER_GITHUB_TOKEN"
+
+		printf "machine api.github.com\n\tlogin $GITHUB_TOKEN\n\tpassword x-oauth-basic\n\n' >> $HOME/.netrc"
+		printf "machine raw.githubusercontent.com\n\tlogin $GITHUB_TOKEN\n\tpassword x-oauth-basic' >> $HOME/.netrc"
+
+		[[ $? ]] && print_success "netrc was created succesfully"
+	else
+		print_warning "No GitHub token was created.  Please update manually"
+	fi
+fi
 
 if command -v 'git' &> /dev/null; then
 	# Setup git authorship

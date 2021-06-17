@@ -1,8 +1,0 @@
-# token created at https://github.com/settings/applications#personalaccess-tokens
-machine api.github.com
-	login <token>
-	password x-oauth-basic
-
-machine raw.githubusercontent.com
-	login <token>
-	password x-oauth-basic
