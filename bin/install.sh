@@ -180,6 +180,7 @@ fi
 if [[ -f "$INSTALL_DIR/opt/symlinks" ]]; then
 	print_process "Symlinking configuration files"
 	symlink "$INSTALL_DIR/opt/symlinks"
+	link_it "conf/misc/tmux.$OS .tmux.conf"
 
 	[[ $? ]] && print_success "Symlinked configuration files"
 fi
