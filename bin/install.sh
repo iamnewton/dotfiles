@@ -206,8 +206,8 @@ if command -v 'curl' &> /dev/null; then
 	if [[ -n "$USER_GITHUB_TOKEN" ]]; then
 		GITHUB_TOKEN="$USER_GITHUB_TOKEN"
 
-		printf "machine api.github.com\n\tlogin $GITHUB_TOKEN\n\tpassword x-oauth-basic\n\n' >> $HOME/.netrc"
-		printf "machine raw.githubusercontent.com\n\tlogin $GITHUB_TOKEN\n\tpassword x-oauth-basic' >> $HOME/.netrc"
+		printf "machine api.github.com\\n\\tlogin %s\\n\\tpassword x-oauth-basic\\n\\n" "$GITHUB_TOKEN" >> "$HOME/.netrc"
+		printf "machine raw.githubusercontent.com\\n\\tlogin %s\\n\\tpassword x-oauth-basic" "$GITHUB_TOKEN" >> "$HOME/.netrc"
 
 		[[ $? ]] && print_success "netrc was created succesfully"
 	else
