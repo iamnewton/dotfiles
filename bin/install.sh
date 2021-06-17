@@ -104,7 +104,13 @@ if ! type -P 'brew' &> /dev/null; then
 		print_process "Sourcing Homebrew to PATH"
 		eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 		sudo apt-get install build-essential
+		brew install vim
 	fi
+
+	if [[ "$OS" == "darwin" ]]; then
+		brew install vim --HEAD --with-override-system-vi
+	fi
+
 	brew bundle --file="$INSTALL_DIR/opt/Brewfile"
 
 	[[ $? ]] && print_success "Homebrew installed"
