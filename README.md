@@ -1,15 +1,15 @@
 # dotfiles(1)
 
-Typically software you buy comes with some sort of installer, why not your dotfiles? After manually setting up my dotfiles and installation for years, I decided to take a page from [some](https://github.com/necolas) [other](https://github.com/mathiasbynens) [people's](https://github.com/cowboy) [books](http://dotfiles.github.io) and set up a script that will configure my machine to run [ViM as an IDE](http://blog.sanctum.geek.nz/series/unix-as-ide/).  Along the way, I figured how to get all of the necessary [Homebrew](http://braumeister.org) & [Node](https://www.npmjs.org) packages installed as well as some useful [Ruby gems](http://rubygems.org). Feel free to [poke around](https://github.com/iamnewton/dotfiles/commits/main) the repository, [fork it](https://github.com/iamnewton/dotfiles/fork) to make it your own, [suggest things](https://github.com/iamnewton/dotfiles/issues?labels=feature+request) for me to include, [log a bug](https://github.com/iamnewton/dotfiles/issues/new), or maybe checkout the [features list](#features) to see what's included.
+Typically software you buy comes with some sort of installer, why not your dotfiles? After manually setting up my dotfiles and installation for years, I decided to take a page from [some](https://github.com/necolas) [other](https://github.com/mathiasbynens) [people's](https://github.com/cowboy) [books](http://dotfiles.github.io) and set up a script that will configure my machine to setup my bash profile and install a few core packages.  Feel free to [poke around](https://github.com/iamnewton/dotfiles/commits/main) the repository, [fork it](https://github.com/iamnewton/dotfiles/fork) to make it your own, [suggest things](https://github.com/iamnewton/dotfiles/issues?labels=feature+request) for me to include, [log a bug](https://github.com/iamnewton/dotfiles/issues/new), or maybe checkout the [features list](#features) to see what's included.
 
 **N.B.** This project has a [Code of Conduct](./.github/CODE_OF_CONDUCT.md). By interacting with this repository, organization, and/or community you agree to abide by its terms.
 
 ## Installation
 
-:warning: This will overwrite existing dotfiles in your `$HOME` and `.vim` directories.
+:warning: This will overwrite existing dotfiles in your `$HOME` directory.
 
 ```bash
-$ /bin/bash -c "$(curl -#fL https://raw.githubusercontent.com/iamnewton/dotfiles/main/bin/install.sh)"
+$ /bin/bash -c "$(curl -#fL https://raw.githubusercontent.com/iamnewton/dotfiles/main/bin/dotfiles)"
 ```
 
 ### Requirements
@@ -20,14 +20,6 @@ Ensure that you have the following dependencies installed on your system.  If yo
 * [git](http://git-scm.com)
 
 :exclamation: N.B. If you wish to [fork this project](https://github.com/iamnewton/dotfiles/fork) and maintain your own dotfiles, you **MUST** substitute my username for your own in the above command and the variable (`$USERNAME`) found at the top of the `bin/install.sh` script.
-
-### Uninstall
-
-If you need to uninstall for whatever reason, this script will remove all installed Homebrew formulae, Ruby Gems, Node and its packages, configuration symlinks, ViM and all of its plugins, and the library itself.  However, it won't uninstall Homebrew as I didn't want to make that assumption.
-
-```bash
-$ /bin/bash -c "$(curl -#fL https://raw.githubusercontent.com/iamnewton/dotfiles/main/bin/uninstall.sh)"
-```
 
 ## Features
 
@@ -75,5 +67,3 @@ Inspiration and code was taken from many sources, including (in lexicographical 
 * [@holman](https://github.com/holman) (Zach Holman) https://github.com/holman/dotfiles
 * [@mathiasbynens](https://github.com/mathiasbynens) (Mathias Bynens) https://github.com/mathiasbynens/dotfiles
 * [@necolas](https://github.com/necolas) (Nicolas Gallagher) https://github.com/necolas/dotfiles
-
-[vim-ctags]: http://andrew.stwrt.ca/posts/vim-ctags "Vim and Ctags"
