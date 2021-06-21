@@ -201,7 +201,7 @@ if command -v 'curl' &> /dev/null; then
 	# Setup git authorship
 	print_process "Setting up netrc"
 	# Git author name
-	print_question "What's your GitHub personal token? Create a token at <https://github.com/settings/applications#personalaccess-tokens>"
+	print_question "What's your GitHub personal token? Create a token at <https://$GITHUB_URL/settings/tokens>"
 	read -r USER_GITHUB_TOKEN
 	if [[ -n "$USER_GITHUB_TOKEN" ]]; then
 		GITHUB_TOKEN="$USER_GITHUB_TOKEN"
