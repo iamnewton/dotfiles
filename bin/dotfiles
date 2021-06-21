@@ -208,6 +208,7 @@ if command -v 'curl' &> /dev/null; then
 
 		printf "machine api.github.com\\n\\tlogin %s\\n\\tpassword x-oauth-basic\\n\\n" "$GITHUB_TOKEN" >> "$HOME/.netrc"
 		printf "machine raw.githubusercontent.com\\n\\tlogin %s\\n\\tpassword x-oauth-basic" "$GITHUB_TOKEN" >> "$HOME/.netrc"
+		echo $GITHUB_TOKEN >> "$HOME/.bash_profile.local"
 
 		[[ $? ]] && print_success "netrc was created succesfully"
 	else
