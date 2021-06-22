@@ -245,8 +245,6 @@ if command -v 'git' &> /dev/null; then
 	else
 		print_warning "No Git user email has been set.  Please update manually"
 	fi
-
-	[[ $? ]] && print_success "Git author is $(git config user.name) <$(git config user.email)>"
 fi
 
 # Setup GPG
@@ -297,6 +295,7 @@ fi
 if [[ "$OS" == "linux" ]]; then
 	# Programmatic way to change shell
 	sudo chsh -s "$(brew --prefix)/bin/bash" 2>/dev/null
+	print_info "Verify it was installed correctly based on <https://serverfault.com/a/764578>"
 fi
 
 [[ $? ]] && print_success "Changed default shell to Homebrew installed version"
