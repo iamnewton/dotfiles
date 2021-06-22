@@ -305,3 +305,24 @@ print_process "Sourcing $HOME/.bash_profile"
 source "$HOME/.bash_profile" 2&>/dev/null
 
 [[ $? ]] && print_success "Dotfiles installed. Be sure to source the .bash_profile"
+
+printf "%s##############################%s\\n" "$(tput setaf 6)" "$(tput sgr0)"
+printf "%s#         DEBUG INFO         #%s\\n" "$(tput setaf 6)" "$(tput sgr0)"
+printf "%s##############################%s\\n\\n" "$(tput setaf 6)" "$(tput sgr0)"
+print_info "Homebrew packages:"
+brew list
+print_info "Symlinked files:"
+ls -la "$HOME"
+print_info "local bash profile:"
+cat "$HOME/.bash_profile.local"
+print_info "netrc:"
+cat "$HOME/.netrc"
+print_info "Git author, GPG:"
+git config user.name
+git config user.email
+cat "$HOME/.gitconfig.local"
+print_info "installed shells:"
+echo "$SHELL"
+printf "%s##############################%s\\n" "$(tput setaf 6)" "$(tput sgr0)"
+printf "%s#         DEBUG INFO         #%s\\n" "$(tput setaf 6)" "$(tput sgr0)"
+printf "%s##############################%s\\n" "$(tput setaf 6)" "$(tput sgr0)"
