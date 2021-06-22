@@ -145,6 +145,9 @@ if command -v 'git' &> /dev/null; then
 	print_process "Initializing git repository"
 	git init
 
+	print_process "Setting main as the default branch"
+	git branch -m main
+
 	print_process "Adding https://$GITHUB_URL/$USERNAME/$REPO.git as origin"
 	git remote add origin "https://$GITHUB_URL/$USERNAME/$REPO.git"
 
