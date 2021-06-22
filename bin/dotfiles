@@ -293,9 +293,11 @@ if [[ "$OS" == "darwin" ]]; then
 fi
 
 if [[ "$OS" == "linux" ]]; then
-	# Programmatic way to change shell
+	# Programmatic way to change shell for root
 	sudo chsh -s "$(brew --prefix)/bin/bash" 2>/dev/null
-	print_info "Verify it was installed correctly based on <https://serverfault.com/a/764578>"
+	# Programmatic way to change shell for 'newton' user
+	sudo chsh -s "$(brew --prefix)/bin/bash" newton 2>/dev/null
+	print_warning "Verify it was installed correctly based on <https://serverfault.com/a/764578>"
 fi
 
 [[ $? ]] && print_success "Changed default shell to Homebrew installed version"
@@ -307,7 +309,7 @@ source "$HOME/.bash_profile" 2&>/dev/null
 [[ $? ]] && print_success "Dotfiles installed. Be sure to source the .bash_profile"
 
 printf "%s##############################%s\\n" "$(tput setaf 6)" "$(tput sgr0)"
-printf "%s#         DEBUG INFO         #%s\\n" "$(tput setaf 6)" "$(tput sgr0)"
+printf "%s#        INSTALL INFO        #%s\\n" "$(tput setaf 6)" "$(tput sgr0)"
 printf "%s##############################%s\\n\\n" "$(tput setaf 6)" "$(tput sgr0)"
 print_info "Homebrew packages:"
 brew list
@@ -315,6 +317,7 @@ print_info "Symlinked files:"
 ls -la "$HOME"
 print_info "local bash profile:"
 cat "$HOME/.bash_profile.local"
+printf "\\n"
 print_info "netrc:"
 cat "$HOME/.netrc"
 print_info "Git author, GPG:"
@@ -324,5 +327,5 @@ cat "$HOME/.gitconfig.local"
 print_info "installed shells:"
 echo "$SHELL"
 printf "%s##############################%s\\n" "$(tput setaf 6)" "$(tput sgr0)"
-printf "%s#         DEBUG INFO         #%s\\n" "$(tput setaf 6)" "$(tput sgr0)"
+printf "%s#        INSTALL INFO        #%s\\n" "$(tput setaf 6)" "$(tput sgr0)"
 printf "%s##############################%s\\n" "$(tput setaf 6)" "$(tput sgr0)"
