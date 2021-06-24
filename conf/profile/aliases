@@ -111,7 +111,7 @@ fi
 # > for the selected file.
 # https://medium.com/@GroundControl/better-git-diffs-with-fzf-89083739a9cb
 if brew list "fzf" &> /dev/null && brew list "bat" &> /dev/null; then
-	alias fzf=fzf --preview 'bat {-1} --color=always'
+	alias fzf="fzf --preview 'bat {-1} --color=always'"
 fi
 
 # Update vim plugins from anywhere
