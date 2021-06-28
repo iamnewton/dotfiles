@@ -209,6 +209,7 @@ if command -v 'curl' &> /dev/null; then
 	if [[ -n "$USER_GITHUB_TOKEN" ]]; then
 		GITHUB_TOKEN="$USER_GITHUB_TOKEN"
 
+		printf "machine github.com\\n\\tlogin %s\\n\\tpassword x-oauth-basic\\n\\n" "$GITHUB_TOKEN" >> "$HOME/.netrc"
 		printf "machine api.github.com\\n\\tlogin %s\\n\\tpassword x-oauth-basic\\n\\n" "$GITHUB_TOKEN" >> "$HOME/.netrc"
 		printf "machine raw.githubusercontent.com\\n\\tlogin %s\\n\\tpassword x-oauth-basic" "$GITHUB_TOKEN" >> "$HOME/.netrc"
 		printf "export GITHUB_TOKEN=%s\\n" "$GITHUB_TOKEN" >> "$HOME/.bash_profile.local"
