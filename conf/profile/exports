@@ -73,6 +73,9 @@ export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 # N (node version manager) directory
 export N_PREFIX="$HOME/.n"
 
+# ripgrep configuration path
+RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+
 # GPG Signage
 GPG_TTY=$(tty)
 export GPG_TTY

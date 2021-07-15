@@ -19,5 +19,6 @@ conf/runcom/bash .bashrc
 conf/runcom/curl .curlrc
 conf/runcom/input .inputrc
 conf/runcom/mail .mailrc
+conf/runcom/ripgrep .ripgreprc
 conf/runcom/wget .wgetrc
 templates .templates
