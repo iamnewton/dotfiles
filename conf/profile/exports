@@ -74,7 +74,10 @@ export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 export N_PREFIX="$HOME/.n"
 
 # ripgrep configuration path
-RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+
+# bat theme configuration
+export BAT_THEME="OneHalfDark"
 
 # GPG Signage
 GPG_TTY=$(tty)
