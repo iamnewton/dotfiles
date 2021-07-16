@@ -9,13 +9,14 @@ web:*.{html,css,js}*
 # Using glob patterns to include/exclude files or folders
 --glob=!git/*
 
-# or
---glob
-!git/*
-
 # Set the colors.
---colors=line:none
+--colors=line:fg:yellow
 --colors=line:style:bold
+--colors=path:fg:green
+--colors=path:style:bold
+--colors=match:fg:black
+--colors=match:bg:yellow
+--colors=match:style:nobold
 
 # Because who cares about case!?
 --smart-case

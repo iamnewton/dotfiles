@@ -111,7 +111,7 @@ if ! type -P 'brew' &> /dev/null; then
 		brew install vim --HEAD --with-override-system-vi
 	fi
 
-	brew install bash bash-completion@2 coreutils ctags diff-so-fancy gcc git gpg less node n rsync spaceman-diff ssh-copy-id tmux tree wget
+	brew install bash bash-completion@2 coreutils ctags diff-so-fancy gcc git gpg less node n rsync ripgrep spaceman-diff ssh-copy-id tmux tree wget
 
 	[[ $? ]] && print_success "Homebrew installed"
 fi
