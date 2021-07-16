@@ -27,6 +27,19 @@ fi
 # Concatenate and print content of files (add line numbers)
 if type -P 'bat' &> /dev/null; then
 	alias cat="bat"
+	alias gcat="cat"
+fi
+
+# find/grep contents/files (add line numbers)
+if type -P 'batgrep' &> /dev/null; then
+	alias grep="batgrep"
+	alias ggrep="grep"
+fi
+
+# read manuals in 256 bit color
+if type -P 'batman' &> /dev/null; then
+	alias man="batman"
+	alias gman="man"
 fi
 
 # Copy my public key to the pasteboard
