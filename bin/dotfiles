@@ -81,7 +81,6 @@ link_it() {
 }
 
 # @private
-# @param $program - a function or program to process each item
 # @param $file - path to a file with each item separated on a line
 symlink() {
 	local file=$1
@@ -93,7 +92,7 @@ symlink() {
 	done < "$file"
 }
 
-# Check for Homebrew; install brew
+# Check for Homebrew; install if not
 if ! type -P 'brew' &> /dev/null; then
 	print_process "Installing Homebrew"
 	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -136,6 +135,7 @@ if [[ ! -d "$INSTALL_DIR" ]]; then
 	[[ $? ]] && print_success "$INSTALL_DIR created, repository downloaded and extracted"
 fi
 
+# Check for git, install if not, intialize and pull down repo
 if command -v 'git' &> /dev/null; then
 	# Change to the dotfiles directory
 	cd "$INSTALL_DIR" || exit
@@ -171,6 +171,7 @@ if command -v 'git' &> /dev/null; then
 	[[ $? ]] && print_success "Repository has been updated"
 fi
 
+# check for local bash profile; create if not
 if [[ ! -f "$HOME/.bash_profile.local" ]]; then
 	print_process "Copying local bash_profile template to $HOME"
 	echo '#!/usr/bin/env bash' >> "$HOME/.bash_profile.local"
@@ -180,6 +181,12 @@ fi
 if [ -e "$HOME/.templates" ]; then
 	print_process "Removing $HOME/.templates/ directory"
 	rm -rf "$HOME/.templates"
+fi
+
+# check if gnupg exists, create if not
+# has to come before symlinks in order to work with gpg
+if [[ ! -d "$HOME/.gnupg" ]]; then
+	mkdir -p "$HOME/.gnupg"
 fi
 
 # Create the necessary symbolic links between the `.dotfiles` and `HOME`
@@ -195,10 +202,15 @@ fi
 
 # Copy `.ssh/config`.
 # This prevents them being committed to the repository.
-print_process "Syncing global ssh configuration file"
-mkdir -p "$HOME/.ssh"
-cp "$INSTALL_DIR/conf/ssh/config.$OS"  "$HOME/.ssh/config"
+if [[ ! -d "$HOME/.ssh" ]]; then
+	mkdir -p "$HOME/.ssh"
+fi
+if [[ ! -f "$HOME/.ssh/config" ]]; then
+	print_process "Syncing global ssh configuration file"
+	cp "$INSTALL_DIR/conf/ssh/config.$OS"  "$HOME/.ssh/config"
+fi
 
+# set up netrc, but only if curl exists
 if command -v 'curl' &> /dev/null; then
 	# Setup git authorship
 	print_process "Setting up netrc"
@@ -219,6 +231,7 @@ if command -v 'curl' &> /dev/null; then
 	fi
 fi
 
+# setup git authorship
 if command -v 'git' &> /dev/null; then
 	# Setup git authorship
 	print_process "Setting up Git author"
