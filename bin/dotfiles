@@ -6,7 +6,7 @@ readonly USERNAME="iamnewton"
 readonly REPO="dotfiles"
 readonly LOG="/tmp/$REPO.install.log"
 readonly INSTALL_DIR="$HOME/.$REPO"
-readonly OS="$(tr '[:upper:]' '[:lower:]' <<< "$(uname)")
+readonly OS="$(tr '[:upper:]' '[:lower:]' <<< "$(uname)")"
 
 # variables
 GIT_AUTHOR_NAME=""
