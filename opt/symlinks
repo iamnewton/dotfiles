@@ -1,4 +1,3 @@
-conf/bash/dircolors .dircolors
 conf/bash/hushlogin .hushlogin
 conf/bash/lesskey .lesskey
 conf/bash/logout .bash_logout

@@ -2,3 +2,6 @@
 	# https://help.github.com/articles/set-up-git
 	# linux storage of personal access tokens
 	helper = store
+
+[gpg]
+	program = gpg2

@@ -206,9 +206,6 @@
 [difftool]
 	prompt = false
 
-[gpg]
-    program = gpg2
-
 [help]
 	# suggests commands for spelling mistakes
 	autocorrect = 1

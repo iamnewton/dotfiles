@@ -57,9 +57,6 @@ export LESS_TERMCAP_md="$ORANGE"
 export CLICOLOR=1
 # export LSCOLORS="exfxcxdxbxegedabagacad"
 
-# DIRCOLORS
-eval "$(dircolors -b ~/.dircolors)"
-
 # Don't clear the screen after quitting a manual page
 export MANPAGER="less -X"
 
