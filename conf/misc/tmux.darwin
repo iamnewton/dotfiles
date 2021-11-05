@@ -66,3 +66,5 @@ set -g status-right-length 20
 bind C new-window -a
 
 set -g mouse on
+
+source-file "$HOME/.fig/tmux"

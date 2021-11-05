@@ -18,6 +18,10 @@ test -r "$HOME/.dotfilesrc" && source "$HOME/.dotfilesrc"
 # Add for Linuxbrew
 test -d "/home/linuxbrew/.linuxbrew" && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
+# Fig env variables
+# Please make sure this block is at the start of this file.
+test -s "$HOME/.fig/shell/pre.sh" && source "$HOME/.fig/shell/pre.sh"
+
 load_dotfiles() {
 	declare -a files=(
 		$HOME/.dotfiles/conf/profile/options # Options
@@ -44,6 +48,10 @@ load_dotfiles() {
 
 load_dotfiles
 unset load_dotfiles
+
+# Fig env variables
+# Please make sure this block is at the end of this file.
+test -s "$HOME/.fig/fig.sh" && source "$HOME/.fig/fig.sh"
 
 # list out tmux sessions on startup, don't show error if none
 # https://twitter.com/climagic/status/567658485517930497

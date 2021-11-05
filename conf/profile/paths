@@ -14,7 +14,7 @@ declare -a dirs_to_append=(
 	"$HOME/bin"
 	"$(brew --prefix coreutils)/libexec/gnubin" # Add brew-installed GNU core utilities bin
 	"$(brew --prefix npm)/bin" # Add npm-installed package bin
-	"$N_PREFIX/bin" # n (node version manager)
+	"$HOME/.n/bin" # n (node version manager)
 )
 
 # Prepend directories to PATH
