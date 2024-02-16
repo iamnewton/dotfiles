@@ -178,7 +178,7 @@
 	# use vim as editor
 	editor = vim
 	# pager = !bash -lc '$(brew --prefix git)/share/git-core/contrib/diff-highlight/diff-highlight | strip-diff-leading-symbols | less -+$LESS -FRX' -
-	pager = diff-so-fancy | less --tabs=4 -RFX
+	pager = delta
 	# http://git-scm.com/docs/gitattributes#_end_of_line_conversion
 	# If core.safecrlf is set to "true" or "warn", Git verifies if the
 	# conversion is reversible for the current setting of core.autocrlf.
@@ -194,7 +194,17 @@
 	# https://twitter.com/sindresorhus/status/715593327723343872
 	untrackedCache = true
 
+[delta]
+	hyperlinks = true
+	# set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
+	light = false
+	line-numbers = true
+	# use n and N to move between diff sections
+	navigate = true
+	side-by-side = true
+
 [diff]
+	colorMoved = default
 	tool = vimdiff
 
 [diff "exif"]
@@ -205,6 +215,9 @@
 
 [difftool]
 	prompt = false
+
+[difftool "bat"]
+	cmd = bat --file-width $(tput cols) --style plain --color always \"$LOCAL\" \"$REMOTE\"
 
 [help]
 	# suggests commands for spelling mistakes
@@ -223,7 +236,11 @@
 [includeIf "gitdir:/home"]
 	path = ~/.gitconfig.linux
 
+[interactive]
+	diffFilter = delta --color-only --features=interactive
+
 [merge]
+	conflictstyle = diff3
 	# Include summaries of merged conflicts in newly created merge commit messages
 	log = true
 	tool = vimdiff
