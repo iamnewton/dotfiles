@@ -32,8 +32,8 @@ fi
 
 # find/grep contents/files (add line numbers)
 if type -P 'batgrep' &> /dev/null; then
-	alias grep="batgrep"
-	alias ggrep="grep"
+	alias rg="batgrep"
+	alias grg="rg"
 fi
 
 # read manuals in 256 bit color
@@ -124,7 +124,8 @@ fi
 # > for the selected file.
 # https://medium.com/@GroundControl/better-git-diffs-with-fzf-89083739a9cb
 if brew list "fzf" &> /dev/null && brew list "bat" &> /dev/null; then
-	alias fzf="fzf --preview 'bat {-1} --color=always'"
+	alias search="fzf --preview 'bat {-1} --color=always'"
+	alias gfzf="fzf"
 fi
 
 # Update vim plugins from anywhere
