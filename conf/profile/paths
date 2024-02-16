@@ -4,6 +4,8 @@
 
 # Directories to be prepended to PATH
 declare -a dirs_to_prepend=(
+	"/opt/homebrew/bin"
+	"/opt/homebrew/sbin"
 	"/usr/local/bin" # Ensure that this bin always takes precedence over `/usr/bin`
 	"/usr/local/sbin"
 )
@@ -12,10 +14,10 @@ declare -a dirs_to_prepend=(
 declare -a dirs_to_append=(
 	"/usr/bin"
 	"$HOME/bin"
-	"/opt/homebrew/bin"
 	"$(brew --prefix coreutils)/libexec/gnubin" # Add brew-installed GNU core utilities bin
 	"$(brew --prefix npm)/bin" # Add npm-installed package bin
 	"$HOME/.n/bin" # n (node version manager)
+	"/usr/local/bin/node"
 )
 
 # Prepend directories to PATH

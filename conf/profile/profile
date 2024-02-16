@@ -9,14 +9,11 @@ elif infocmp xterm-256color >/dev/null 2>&1; then
 	export TERM=xterm-256color
 fi
 
-# Up-front dotfiles configuration
-# Not part of `load_dotfiles` because it must be sourced before anything else
-# to be sure that commands like `brew` (when installed in a custom location)
-# are already added to the PATH.
-test -r "$HOME/.dotfilesrc" && source "$HOME/.dotfilesrc"
-
 # Add for Linuxbrew
 test -d "/home/linuxbrew/.linuxbrew" && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+# Add for Homebrew
+test -d "/opt/homebrew" && eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Fig env variables
 # Please make sure this block is at the start of this file.
