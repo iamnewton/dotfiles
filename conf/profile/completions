@@ -5,11 +5,6 @@
 # Brew completion
 [[ -r "/home/linuxbrew/.linuxbrew/etc/profile.d/bash_completion.sh" ]] && source "/home/linuxbrew/.linuxbrew/etc/profile.d/bash_completion.sh"
 
-# Enable bash <tab> completion for Digital Ocean control panel
-if brew list "doctl" &> /dev/null; then
-	source <(doctl completion bash)
-fi
-
 # Enable bash <tab> completion for fx
 if brew list "fx" &> /dev/null; then
 	source <(fx-completion --bash)
