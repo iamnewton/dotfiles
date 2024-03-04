@@ -16,7 +16,7 @@ else
 fi
 
 # Directory listing
-if type -P 'tree' &> /dev/null; then
+if type -P 'tree' &>/dev/null; then
 	alias ll="tree --dirsfirst -aLpughDFiC 1"
 	alias lsd="ll -d"
 else
@@ -25,19 +25,19 @@ else
 fi
 
 # Concatenate and print content of files (add line numbers)
-if type -P 'bat' &> /dev/null; then
+if type -P 'bat' &>/dev/null; then
 	alias cat="bat"
 	alias gcat="cat"
 fi
 
 # find/grep contents/files (add line numbers)
-if type -P 'batgrep' &> /dev/null; then
+if type -P 'batgrep' &>/dev/null; then
 	alias rg="batgrep"
 	alias grg="rg"
 fi
 
 # read manuals in 256 bit color
-if type -P 'batman' &> /dev/null; then
+if type -P 'batman' &>/dev/null; then
 	alias man="batman"
 	alias gman="man"
 fi
@@ -82,7 +82,7 @@ alias html="curl -L https://git.io/JTQI3 | vim -"
 # Pass in a process to find, greps the running processes
 alias process="ps aux | grep"
 
-if type -P 'tmux' &> /dev/null; then
+if type -P 'tmux' &>/dev/null; then
 	alias tmux="tmux -2"
 fi
 
@@ -111,7 +111,7 @@ alias starwars="telnet towel.blinkenlights.nl"
 # recursively. Less intrusive than -i, while still giving protection against
 # most mistakes. (depends on brew coreutils)
 # https://github.com/sindresorhus/guides/blob/master/how-not-to-rm-yourself.md
-if brew list "coreutils" &> /dev/null; then
+if brew list "coreutils" &>/dev/null; then
 	alias rm="rm -I"
 else
 	alias rm="rm -i"
@@ -123,7 +123,7 @@ fi
 # > an alternative to `cat` that supports syntax highlighting. The {-1} stands
 # > for the selected file.
 # https://medium.com/@GroundControl/better-git-diffs-with-fzf-89083739a9cb
-if brew list "fzf" &> /dev/null && brew list "bat" &> /dev/null; then
+if brew list "fzf" &>/dev/null && brew list "bat" &>/dev/null; then
 	alias search="fzf --preview 'bat {-1} --color=always'"
 	alias gfzf="fzf"
 fi

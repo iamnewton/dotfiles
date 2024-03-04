@@ -21,17 +21,17 @@ test -s "$HOME/.fig/shell/pre.sh" && source "$HOME/.fig/shell/pre.sh"
 
 load_dotfiles() {
 	declare -a files=(
-		$HOME/.dotfiles/conf/profile/options # Options
-		$HOME/.dotfiles/conf/profile/exports # Exports
-		$HOME/.dotfiles/conf/profile/aliases # Aliases
-		$HOME/.dotfiles/conf/profile/functions # Functions
-		$HOME/.dotfiles/conf/profile/prompt # Custom bash prompt
-		$HOME/.dotfiles/conf/profile/paths # Path modifications
-		$HOME/.dotfiles/conf/profile/completions # Custom bash completion
-		$HOME/.dircolors # Custom dircolors/LS_COLORS
-		$(brew --prefix)/etc/bash_completion # Bash completion (installed via Homebrew)
-		$HOME/.fzf.bash # fzf
-		$HOME/.bash_profile.local # Local and private settings not under version control (e.g. git credentials)
+		"$HOME/.dotfiles/conf/profile/options" # Options
+		"$HOME/.dotfiles/conf/profile/exports" # Exports
+		"$HOME/.dotfiles/conf/profile/aliases" # Aliases
+		"$HOME/.dotfiles/conf/profile/functions" # Functions
+		"$HOME/.dotfiles/conf/profile/prompt" # Custom bash prompt
+		"$HOME/.dotfiles/conf/profile/paths" # Path modifications
+		"$HOME/.dotfiles/conf/profile/completions" # Custom bash completion
+		"$HOME/.dircolors" # Custom dircolors/LS_COLORS
+		"$(brew --prefix)/etc/bash_completion" # Bash completion (installed via Homebrew)
+		"$HOME/.fzf.bash" # fzf
+		"$HOME/.bash_profile.local" # Local and private settings not under version control (e.g. git credentials)
 	)
 
 	# if these files are readable, source them
