@@ -70,6 +70,9 @@ export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 # N (node version manager) directory
 export N_PREFIX="$HOME/.n"
 
+# PNPM Home path
+export PNPM_HOME="$HOME/Library/pnpm"
+
 # ripgrep configuration path
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 
