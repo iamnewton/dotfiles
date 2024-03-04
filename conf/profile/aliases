@@ -133,3 +133,9 @@ alias vu="vim +PluginInstall +qall"
 
 # reinstall deps
 alias npmplease="rm -rf node_modules/ && rm -f package-lock.json && npm install"
+
+# we're using NVIM now, so make it easier to just type `vim`
+if type -P 'nvim' &>/dev/null; then
+	alias vim="nvim"
+	alias gvim="vim"
+fi
