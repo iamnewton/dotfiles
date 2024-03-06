@@ -6,7 +6,7 @@ readonly USERNAME="iamnewton"
 readonly REPO="dotfiles"
 readonly LOG="/tmp/$REPO.install.log"
 readonly INSTALL_DIR="$HOME/.$REPO"
-OS="$(tr '[:upper:]' '[:lower:]' <<< "$(uname)")"
+OS="$(tr '[:upper:]' '[:lower:]' <<<"$(uname)")"
 readonly OS
 
 # variables
@@ -18,7 +18,7 @@ GITHUB_TOKEN=""
 print_question() {
 	local message=$1
 
-	echo "$(date) QUESTION:  $message" >> "$LOG"
+	echo "$(date) QUESTION:  $message" >>"$LOG"
 	printf "\\n%s===> %s?%s " "$(tput setaf 3)" "$message" "$(tput sgr0)"
 }
 
@@ -26,7 +26,7 @@ print_question() {
 print_process() {
 	local message=$1
 
-	echo "$(date) PROCESSING: $message" >> "$LOG"
+	echo "$(date) PROCESSING: $message" >>"$LOG"
 	printf "%s┃%s %s...\\n" "$(tput setaf 6)" "$(tput sgr0)$(tput setaf 7)" "$message$(tput sgr0)"
 }
 
@@ -34,7 +34,7 @@ print_process() {
 print_info() {
 	local message=$1
 
-	echo "$(date) INFO: $message" >> $LOG
+	echo "$(date) INFO: $message" >>$LOG
 	printf "%sInfo:%s\\n" "$(tput setaf 6)" "$(tput sgr0) $message"
 }
 
@@ -42,7 +42,7 @@ print_info() {
 print_warning() {
 	local message=$1
 
-	echo "$(date) WARNING: $message" >> "$LOG"
+	echo "$(date) WARNING: $message" >>"$LOG"
 	printf "%s⚠ Warning:%s!\\n" "$(tput setaf 3)" "$(tput sgr0) $message"
 }
 
@@ -50,7 +50,7 @@ print_warning() {
 print_error() {
 	local message=$1
 
-	echo "$(date) ERROR: $message" >> "$LOG"
+	echo "$(date) ERROR: $message" >>"$LOG"
 	printf "%s⊘ Error:%s %s. Aborting!\\n" "$(tput setaf 1)" "$(tput sgr0)" "$message"
 }
 
@@ -58,7 +58,7 @@ print_error() {
 print_success() {
 	local message=$1
 
-	echo "$(date) SUCCESS: $message" >> "$LOG"
+	echo "$(date) SUCCESS: $message" >>"$LOG"
 	printf "%s✓ Success:%s\\n" "$(tput setaf 2)" "$(tput sgr0) $message"
 }
 
@@ -86,31 +86,30 @@ link_it() {
 symlink() {
 	local file=$1
 
-	while IFS="" read -r p || [ -n "$p" ]
-	do
+	while IFS="" read -r p || [ -n "$p" ]; do
 		#printf '%s\n' "$p"
 		link_it "$p"
-	done < "$file"
+	done <"$file"
 }
 
 # Check for Homebrew; install if not
-if ! type -P 'brew' &> /dev/null; then
+if ! command -v 'brew' &>/dev/null; then
 	print_process "Installing Homebrew"
 	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 	# If we're on Linux, insert brew into the path temporarily to be able to use later
-	if [[ "$OS" == "linux"  ]]; then
+	if [[ "$OS" == "linux" ]]; then
 		print_process "Sourcing Homebrew to PATH"
 		eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 		sudo apt-get install build-essential
-		brew install vim
+		brew install nvim
 	fi
 
 	if [[ "$OS" == "darwin" ]]; then
-		brew install vim --HEAD --with-override-system-vi
+		brew install nvim
 	fi
 
-	brew install bash bash-completion@2 bat coreutils ctags diff-so-fancy fzf gcc git gpg gron jq less mosh n rsync ripgrep spaceman-diff ssh-copy-id tig tmux tree wget whalebrew z
+	brew install bash bash-completion@2 bat coreutils ctags fzf gcc git gpg gron jq lazygit less mosh n rsync ripgrep spaceman-diff ssh-copy-id tig tmux tree wget whalebrew z
 
 	[[ $? ]] && print_success "Homebrew installed"
 fi
@@ -137,7 +136,7 @@ if [[ ! -d "$INSTALL_DIR" ]]; then
 fi
 
 # Check for git, install if not, intialize and pull down repo
-if command -v 'git' &> /dev/null; then
+if command -v 'git' &>/dev/null; then
 	# Change to the dotfiles directory
 	cd "$INSTALL_DIR" || exit
 
@@ -175,7 +174,7 @@ fi
 # check for local bash profile; create if not
 if [[ ! -f "$HOME/.bash_profile.local" ]]; then
 	print_process "Copying local bash_profile template to $HOME"
-	echo '#!/usr/bin/env bash' >> "$HOME/.bash_profile.local"
+	echo '#!/usr/bin/env bash' >>"$HOME/.bash_profile.local"
 fi
 
 # Force remove the git templates directory if it's already there.
@@ -184,10 +183,15 @@ if [ -e "$HOME/.templates" ]; then
 	rm -rf "$HOME/.templates"
 fi
 
-# check if gnupg exists, create if not
+# check if gnupg directory exists, create if not
 # has to come before symlinks in order to work with gpg
 if [[ ! -d "$HOME/.gnupg" ]]; then
 	mkdir -p "$HOME/.gnupg"
+fi
+
+# check if config directory exists, create if not
+if [[ ! -d "$HOME/.config" ]]; then
+	mkdir -p "$HOME/.config"
 fi
 
 # Create the necessary symbolic links between the `.dotfiles` and `HOME`
@@ -217,7 +221,7 @@ if [[ ! -f "$HOME/.dircolors" ]]; then
 	tar -zxf "/tmp/$LS_REPO.tar.gz" --strip-components 1
 
 	print_process "Copying files"
-	dircolors -b /tmp/$LS_REPO/LS_COLORS > "$HOME/.dircolors"
+	dircolors -b /tmp/$LS_REPO/LS_COLORS >"$HOME/.dircolors"
 
 	print_process "Removing tarball from /tmp directory"
 	rm -rf "/tmp/$LS_REPO.tar.gz"
@@ -232,11 +236,11 @@ if [[ ! -d "$HOME/.ssh" ]]; then
 fi
 if [[ ! -f "$HOME/.ssh/config" ]]; then
 	print_process "Syncing global ssh configuration file"
-	cp "$INSTALL_DIR/conf/ssh/config.$OS"  "$HOME/.ssh/config"
+	cp "$INSTALL_DIR/conf/ssh/config.$OS" "$HOME/.ssh/config"
 fi
 
 # set up netrc, but only if curl exists
-if command -v 'curl' &> /dev/null; then
+if command -v 'curl' &>/dev/null; then
 	# Setup git authorship
 	print_process "Setting up netrc"
 	# Git author name
@@ -249,10 +253,10 @@ if command -v 'curl' &> /dev/null; then
 			printf "machine github.com\\n\\tlogin %s\\n\\tpassword x-oauth-basic\\n\\n" "$GITHUB_TOKEN"
 			printf "machine api.github.com\\n\\tlogin %s\\n\\tpassword x-oauth-basic\\n\\n" "$GITHUB_TOKEN"
 			printf "machine raw.githubusercontent.com\\n\\tlogin %s\\n\\tpassword x-oauth-basic" "$GITHUB_TOKEN"
-		} >> "$HOME/.netrc"
-		printf "export GITHUB_TOKEN=%s\\n" "$GITHUB_TOKEN" >> "$HOME/.bash_profile.local"
+		} >>"$HOME/.netrc"
+		printf "export GITHUB_TOKEN=%s\\n" "$GITHUB_TOKEN" >>"$HOME/.bash_profile.local"
 
-		printf "export GITHUB_TOKEN=%s\\n" "$GITHUB_TOKEN" >> "$HOME/.bash_profile.local"
+		printf "export GITHUB_TOKEN=%s\\n" "$GITHUB_TOKEN" >>"$HOME/.bash_profile.local"
 
 		[[ $? ]] && print_success "netrc was created succesfully"
 	else
@@ -261,7 +265,7 @@ if command -v 'curl' &> /dev/null; then
 fi
 
 # setup git authorship
-if command -v 'git' &> /dev/null; then
+if command -v 'git' &>/dev/null; then
 	# Setup git authorship
 	print_process "Setting up Git author"
 	# Git author name
@@ -291,7 +295,7 @@ fi
 
 # Setup GPG
 # https://help.github.com/articles/generating-a-new-gpg-key/
-if type -P 'gpg' &> /dev/null; then
+if command -v 'gpg' &>/dev/null; then
 	print_process "Generating a GPG key"
 	# generate a new GPG key
 	# then if successful, list out the keys
@@ -346,7 +350,7 @@ fi
 
 print_process "Sourcing $HOME/.bash_profile"
 # shellcheck source=/dev/null
-source "$HOME/.bash_profile" 2&>/dev/null
+source "$HOME/.bash_profile" 2 &>/dev/null
 
 [[ $? ]] && print_success "Dotfiles installed. Be sure to source the .bash_profile"
 
