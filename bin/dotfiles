@@ -109,7 +109,7 @@ if ! command -v 'brew' &>/dev/null; then
 		brew install nvim
 	fi
 
-	brew install bash bash-completion@2 bat coreutils ctags fzf gcc git gpg gron jq lazygit less mosh n rsync ripgrep spaceman-diff ssh-copy-id tig tmux tree wget whalebrew z
+	brew install bash bash-completion@2 bat coreutils ctags fzf gcc git git-delta gpg gron jq lazygit less mosh n rsync ripgrep spaceman-diff ssh-copy-id tig tmux tree wget whalebrew z
 
 	[[ $? ]] && print_success "Homebrew installed"
 fi
