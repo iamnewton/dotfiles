@@ -193,6 +193,7 @@
 	# https://t.co/eA70g9KJnH"
 	# https://twitter.com/sindresorhus/status/715593327723343872
 	untrackedCache = true
+	hooksPath = ~/.config/git/hooks
 
 [delta]
 	hyperlinks = true
