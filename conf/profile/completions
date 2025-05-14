@@ -6,18 +6,18 @@
 [[ -r "/home/linuxbrew/.linuxbrew/etc/profile.d/bash_completion.sh" ]] && source "/home/linuxbrew/.linuxbrew/etc/profile.d/bash_completion.sh"
 
 # Enable bash <tab> completion for fx
-if brew list "fx" &> /dev/null; then
+if brew list "fx" &>/dev/null; then
 	source <(fx-completion --bash)
 fi
 
 # Enable bash <tab> completion for fzf
-if brew list "fzf" &> /dev/null; then
+if brew list "fzf" &>/dev/null; then
 	source "$(brew --prefix)/opt/fzf/shell/completion.bash"
 	source "$(brew --prefix)/opt/fzf/shell/key-bindings.bash"
 fi
 
 # Enable bash <tab> completion for z
-if brew list "z" &> /dev/null; then
+if brew list "z" &>/dev/null; then
 	source "$(brew --prefix)/etc/profile.d/z.sh"
 fi
 

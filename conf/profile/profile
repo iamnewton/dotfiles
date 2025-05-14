@@ -15,28 +15,24 @@ test -d "/home/linuxbrew/.linuxbrew" && eval "$(/home/linuxbrew/.linuxbrew/bin/b
 # Add for Homebrew
 test -d "/opt/homebrew" && eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# Fig env variables
-# Please make sure this block is at the start of this file.
-test -s "$HOME/.fig/shell/pre.sh" && source "$HOME/.fig/shell/pre.sh"
-
 load_dotfiles() {
 	declare -a files=(
-		"$HOME/.dotfiles/conf/profile/options" # Options
-		"$HOME/.dotfiles/conf/profile/exports" # Exports
-		"$HOME/.dotfiles/conf/profile/aliases" # Aliases
-		"$HOME/.dotfiles/conf/profile/functions" # Functions
-		"$HOME/.dotfiles/conf/profile/prompt" # Custom bash prompt
-		"$HOME/.dotfiles/conf/profile/paths" # Path modifications
-		"$HOME/.dotfiles/conf/profile/completions" # Custom bash completion
-		"$HOME/.dircolors" # Custom dircolors/LS_COLORS
-		"$(brew --prefix)/etc/bash_completion" # Bash completion (installed via Homebrew)
-		"$HOME/.fzf.bash" # fzf
-		"$HOME/.bash_profile.local" # Local and private settings not under version control (e.g. git credentials)
+		"$HOME/.dotfiles/conf/profile/options"           # Options
+		"$HOME/.dotfiles/conf/profile/exports"           # Exports
+		"$HOME/.dotfiles/conf/profile/aliases"           # Aliases
+		"$HOME/.dotfiles/conf/profile/functions"         # Functions
+		"$HOME/.dotfiles/conf/profile/prompt"            # Custom bash prompt
+		"$HOME/.dotfiles/conf/profile/paths"             # Path modifications
+		"$HOME/.dotfiles/conf/profile/completions"       # Custom bash completion
+		"$HOME/.dircolors"                               # Custom dircolors/LS_COLORS
+		"$(brew --prefix)/etc/bash_completion"           # Bash completion (installed via Homebrew)
+		"$HOME/.fzf.bash"                                # fzf
+		"$(brew --prefix)/share/forgit/forgit.plugin.sh" # forgit
+		"$HOME/.bash_profile.local"                      # Local and private settings not under version control (e.g. git credentials)
 	)
 
 	# if these files are readable, source them
-	for index in ${!files[*]}
-	do
+	for index in ${!files[*]}; do
 		if [[ -r ${files[$index]} ]]; then
 			source ${files[$index]}
 		fi
@@ -46,10 +42,10 @@ load_dotfiles() {
 load_dotfiles
 unset load_dotfiles
 
-# Fig env variables
-# Please make sure this block is at the end of this file.
-test -s "$HOME/.fig/fig.sh" && source "$HOME/.fig/fig.sh"
-
 # list out tmux sessions on startup, don't show error if none
 # https://twitter.com/climagic/status/567658485517930497
-tmux list-sessions 2> /dev/null
+tmux list-sessions 2>/dev/null
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"

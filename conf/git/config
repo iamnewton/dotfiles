@@ -17,6 +17,9 @@
 	# sign all commits
 	co = commit --gpg-sign
 
+	# add sign-off for commits by default
+	commit = commit -s
+
 	create-branch = !bash -c 'git push origin head:refs/heads/$1 && git fetch origin && git branch --track $1 origin/$1 && cd . && git checkout $1' -
 
 	# @TODO: figure out how this works
@@ -114,6 +117,9 @@
 	# read more at http://gitready.com/advanced/2009/02/11/pull-with-rebase.html
 	# you can override this with '--no-rebase' switch
 	autosetuprebase = always
+	# https://blog.gitbutler.com/how-git-core-devs-configure-git/#listing-branches
+	# sort the list by the most recent commit date
+	sort = -committerdate
 
 [color]
 	# color opts: normal, black, red, green, yellow, blue, magenta, cyan, or white
@@ -148,6 +154,9 @@
 	untracked = red
 	branch = magenta
 	nobranch = red bold
+
+[column]
+	ui = auto
 
 [commit]
 	# put the diffs inside the commit message
@@ -205,7 +214,12 @@
 	side-by-side = true
 
 [diff]
-	colorMoved = default
+	# show code movement in different colors then added and removed lines
+	colorMoved = plain
+	# replace the a/ and b/ in your diff header output with where the diff is coming from, so i/ (index), w/ (working directory) or c/ commit
+	mnemonicPrefix = true
+	# detect if a file has been renamed
+	renames = true
 	tool = vimdiff
 
 [diff "exif"]
@@ -219,6 +233,12 @@
 
 [difftool "bat"]
 	cmd = bat --file-width $(tput cols) --style plain --color always \"$LOCAL\" \"$REMOTE\"
+
+[fetch]
+	# https://blog.gitbutler.com/how-git-core-devs-configure-git/#better-fetching
+	prune = true
+	pruneTags = true
+	all = true
 
 [help]
 	# suggests commands for spelling mistakes
@@ -241,7 +261,7 @@
 	diffFilter = delta --color-only --features=interactive
 
 [merge]
-	conflictstyle = diff3
+	conflictstyle = zdiff3
 	# Include summaries of merged conflicts in newly created merge commit messages
 	log = true
 	tool = vimdiff
@@ -287,18 +307,23 @@
 	rebase = true
 
 [push]
+	# if the branch does not exist and there is no tracking branch setup, it will create one
+	autoSetupRemote = true
 	default = matching
 	# https://github.com/git/git/commit/a8bc269f11b34e60f5fdbd8e831a654dd6b6b67e
 	# push annotated tags that are missing to remote
 	followTags = true
 
 [rebase]
+	autoSquash = true
 	autoStash = true
+	updateRefs = true
 
 # http://git-scm.com/blog/2010/03/08/rerere.html
 # reuse the recorded resolutions
 [rerere]
-	enabled = 1
+	enabled = true
+	autoupdate = true
 
 [status]
 	# always show the full path

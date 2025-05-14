@@ -16,14 +16,13 @@ declare -a dirs_to_append=(
 	"$HOME/bin"
 	"$HOME/Library/pnpm"
 	"$(brew --prefix coreutils)/libexec/gnubin" # Add brew-installed GNU core utilities bin
-	"$(brew --prefix npm)/bin" # Add npm-installed package bin
-	"$HOME/.n/bin" # n (node version manager)
+	"$(brew --prefix npm)/bin"                  # Add npm-installed package bin
+	"$FORGIT_INSTALL_DIR/bin"
 	"/usr/local/bin/node"
 )
 
 # Prepend directories to PATH
-for index in ${!dirs_to_prepend[*]}
-do
+for index in ${!dirs_to_prepend[*]}; do
 	if [ -d "${dirs_to_prepend[$index]}" ]; then
 		# If these directories exist, then prepend them to existing PATH
 		PATH="${dirs_to_prepend[$index]}:$PATH"
@@ -31,8 +30,7 @@ do
 done
 
 # Append directories to PATH
-for index in ${!dirs_to_append[*]}
-do
+for index in ${!dirs_to_append[*]}; do
 	if [ -d "${dirs_to_append[$index]}" ]; then
 		# If these bins exist, then append them to existing PATH
 		PATH="$PATH:${dirs_to_append[$index]}"
