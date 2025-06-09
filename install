@@ -53,6 +53,12 @@ if ! type -P 'brew' &> /dev/null; then
 		eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 	fi
 
+    	if [[ "$(uname -m)" == "arm64" ]]; then
+        	eval "$(/opt/homebrew/bin/brew shellenv)"
+    	else
+        	eval "$(/usr/local/bin/brew shellenv)"
+    	fi
+
 	[[ $? ]] && _success "Homebrew installed"
 fi
 
