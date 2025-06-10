@@ -6,6 +6,7 @@
 declare -a dirs_to_prepend=(
 	"/opt/homebrew/bin"
 	"/opt/homebrew/sbin"
+    "/opt/whalebrew/bin"
 	"/usr/local/bin" # Ensure that this bin always takes precedence over `/usr/bin`
 	"/usr/local/sbin"
 )
