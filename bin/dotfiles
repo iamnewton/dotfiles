@@ -176,7 +176,7 @@ fi
 
 # check if config directory exists, create if not
 if [[ ! -d "$HOME/.config" ]]; then
-	mkdir -p "$HOME/.config"
+	mkdir -p "$HOME/.config/git"
 fi
 
 # check for local bash profile; create if not
