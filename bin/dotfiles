@@ -99,17 +99,20 @@ if ! command -v 'brew' &>/dev/null; then
 
 	# If we're on Linux, insert brew into the path temporarily to be able to use later
 	if [[ "$OS" == "linux" ]]; then
-		print_process "Sourcing Homebrew to PATH"
+		print_process "Sourcing Homebrew to PATH on ${OS}"
 		eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 		sudo apt-get install build-essential
-		brew install nvim
 	fi
 
-	if [[ "$OS" == "darwin" ]]; then
-		brew install nvim
-	fi
+    if [[ "$(uname -m)" == "arm64" ]]; then
+		print_process "Sourcing Homebrew to PATH on Apple Silicon"
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    else
+		print_process "Sourcing Homebrew to PATH on Apple Intel"
+        eval "$(/usr/local/bin/brew shellenv)"
+    fi
 
-	brew install bash bash-completion@2 bat coreutils ctags fzf gcc git git-delta gpg gron jq lazygit less mosh n rsync ripgrep spaceman-diff ssh-copy-id tig tmux tree wget whalebrew z
+	brew install bash bash-completion@2 bat coreutils ctags fzf gcc gh git git-delta gpg gron jq lazygit less mosh n nvim rsync ripgrep spaceman-diff ssh-copy-id tig tmux tree wget whalebrew z
 
 	[[ $? ]] && print_success "Homebrew installed"
 fi
@@ -187,6 +190,15 @@ fi
 # has to come before symlinks in order to work with gpg
 if [[ ! -d "$HOME/.gnupg" ]]; then
 	mkdir -p "$HOME/.gnupg"
+
+	# To fix the " gpg: WARNING: unsafe permissions on homedir '/home/path/to/user/.gnupg' " error
+	# Make sure that the .gnupg directory and its contents is accessibile by your user.
+	# https://gist.github.com/oseme-techguy/bae2e309c084d93b75a9b25f49718f85
+	chown -R $(whoami) "$HOME/.gnupg/"
+
+	# Also correct the permissions and access rights on the directory
+	chmod 600 "$HOME/.gnupg/*"
+	chmod 700 "$HOME/.gnupg"
 fi
 
 # check if config directory exists, create if not
@@ -215,10 +227,10 @@ if [[ ! -f "$HOME/.dircolors" ]]; then
 	# (-f) fail silently
 	# (-L) follow the headers
 	# (-o) output to a file
-	curl -#fLo "/tmp/$LS_REPO.tar.gz" "https://$GITHUB_URL/trapd00r/$LS_REPO/tarball/master"
+	mkdir -p /tmp/$LS_REPO && curl -#fLo "/tmp/$LS_REPO.tar.gz" "https://$GITHUB_URL/trapd00r/$LS_REPO/tarball/master"
 
 	print_process "Extracting files"
-	tar -zxf "/tmp/$LS_REPO.tar.gz" --strip-components 1
+	tar -zxf "/tmp/$LS_REPO.tar.gz" --strip-components 1 -C "/tmp/$LS_REPO"
 
 	print_process "Copying files"
 	dircolors -b /tmp/$LS_REPO/LS_COLORS >"$HOME/.dircolors"
@@ -226,7 +238,7 @@ if [[ ! -f "$HOME/.dircolors" ]]; then
 	print_process "Removing tarball from /tmp directory"
 	rm -rf "/tmp/$LS_REPO.tar.gz"
 
-	[[ $? ]] && print_success "Installed custom LS_COLORS"
+	[[ $? -eq 0 ]] && print_success "Installed custom LS_COLORS"
 fi
 
 # Copy `.ssh/config`.
