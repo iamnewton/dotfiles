@@ -174,6 +174,11 @@ if command -v 'git' &>/dev/null; then
 	[[ $? ]] && print_success "Repository has been updated"
 fi
 
+# check if config directory exists, create if not
+if [[ ! -d "$HOME/.config" ]]; then
+	mkdir -p "$HOME/.config"
+fi
+
 # check for local bash profile; create if not
 if [[ ! -f "$HOME/.bash_profile.local" ]]; then
 	print_process "Copying local bash_profile template to $HOME"
@@ -181,9 +186,15 @@ if [[ ! -f "$HOME/.bash_profile.local" ]]; then
 fi
 
 # Force remove the git templates directory if it's already there.
-if [ -e "$HOME/.templates" ]; then
-	print_process "Removing $HOME/.templates/ directory"
-	rm -rf "$HOME/.templates"
+if [ -e "$HOME/.config/git/templates" ]; then
+	print_process "Removing $HOME/.config/git/templates/ directory"
+	rm -rf "$HOME/.config/git/templates"
+fi
+
+# Force remove the git hooks directory if it's already there.
+if [ -e "$HOME/.config/git/hooks" ]; then
+	print_process "Removing $HOME/.config/git/hooks/ directory"
+	rm -rf "$HOME/.config/git/hooks"
 fi
 
 # check if gnupg directory exists, create if not
@@ -199,11 +210,6 @@ if [[ ! -d "$HOME/.gnupg" ]]; then
 	# Also correct the permissions and access rights on the directory
 	chmod 600 "$HOME/.gnupg/*"
 	chmod 700 "$HOME/.gnupg"
-fi
-
-# check if config directory exists, create if not
-if [[ ! -d "$HOME/.config" ]]; then
-	mkdir -p "$HOME/.config"
 fi
 
 # Create the necessary symbolic links between the `.dotfiles` and `HOME`

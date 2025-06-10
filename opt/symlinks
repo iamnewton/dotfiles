@@ -20,4 +20,5 @@ conf/runcom/input .inputrc
 conf/runcom/mail .mailrc
 conf/runcom/ripgrep .ripgreprc
 conf/runcom/wget .wgetrc
-templates .templates
+templates .config/git/templates
+hooks .config/git/hooks

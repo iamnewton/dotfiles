@@ -246,7 +246,7 @@
 
 [init]
 	defaultBranch = main
-	templatedir = ~/.templates/hooks
+	templatedir = ~/.config/git/templates
 
 [include]
 	path = ~/.gitconfig.local
