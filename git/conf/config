@@ -162,14 +162,14 @@
 	# put the diffs inside the commit message
 	verbose = true
 	# custom commit message template
-	template = ~/.gitmessage
+	template = ~/.config/git/message
 	# set up commit signing: https://help.github.com/articles/signing-commits-using-gpg/
 	gpgsign = true
 
 [core]
 	# Use custom `.gitignore` and `.gitattributes`
-	excludesfile = ~/.gitignore
-	attributesfile = ~/.gitattributes
+	excludesfile = ~/.config/git/ignore
+	attributesfile = ~/.config/git/attributes
 	# http://git-scm.com/docs/gitattributes#_end_of_line_conversion
 	# Other source code management systems normalize all text files in their
 	# repositories, and there are two ways to enable similar automatic
@@ -249,13 +249,13 @@
 	templatedir = ~/.config/git/templates
 
 [include]
-	path = ~/.gitconfig.local
+	path = ~/.config/git/local
 
 [includeIf "gitdir:/Users"]
-	path = ~/.gitconfig.darwin
+	path = ~/.config/git/darwin
 
 [includeIf "gitdir:/home"]
-	path = ~/.gitconfig.linux
+	path = ~/.config/git/linux
 
 [interactive]
 	diffFilter = delta --color-only --features=interactive

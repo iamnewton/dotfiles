@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source "$LOG_LIB"
+
 # constants
 readonly GITHUB_URL="github.com"
 readonly USERNAME="iamnewton"
@@ -13,54 +15,6 @@ readonly OS
 GIT_AUTHOR_NAME=""
 GIT_AUTHOR_EMAIL=""
 GITHUB_TOKEN=""
-
-# Question logging
-print_question() {
-	local message=$1
-
-	echo "$(date) QUESTION:  $message" >>"$LOG"
-	printf "\\n%s===> %s?%s " "$(tput setaf 3)" "$message" "$(tput sgr0)"
-}
-
-# Command/Processing logging
-print_process() {
-	local message=$1
-
-	echo "$(date) PROCESSING: $message" >>"$LOG"
-	printf "%s┃%s %s...\\n" "$(tput setaf 6)" "$(tput sgr0)$(tput setaf 7)" "$message$(tput sgr0)"
-}
-
-# Informational logging
-print_info() {
-	local message=$1
-
-	echo "$(date) INFO: $message" >>$LOG
-	printf "%sInfo:%s\\n" "$(tput setaf 6)" "$(tput sgr0) $message"
-}
-
-# Warning logging
-print_warning() {
-	local message=$1
-
-	echo "$(date) WARNING: $message" >>"$LOG"
-	printf "%s⚠ Warning:%s!\\n" "$(tput setaf 3)" "$(tput sgr0) $message"
-}
-
-# Error logging
-print_error() {
-	local message=$1
-
-	echo "$(date) ERROR: $message" >>"$LOG"
-	printf "%s⊘ Error:%s %s. Aborting!\\n" "$(tput setaf 1)" "$(tput sgr0)" "$message"
-}
-
-# Success logging
-print_success() {
-	local message=$1
-
-	echo "$(date) SUCCESS: $message" >>"$LOG"
-	printf "%s✓ Success:%s\\n" "$(tput setaf 2)" "$(tput sgr0) $message"
-}
 
 # @private
 # @requires logger (local)
@@ -291,7 +245,7 @@ if command -v 'git' &>/dev/null; then
 	read -r USER_GIT_AUTHOR_NAME
 	if [[ -n "$USER_GIT_AUTHOR_NAME" ]]; then
 		GIT_AUTHOR_NAME="$USER_GIT_AUTHOR_NAME"
-		git config --file "$HOME/.gitconfig.local" user.name "$GIT_AUTHOR_NAME"
+		git config --file "$HOME/.config/git/local" user.name "$GIT_AUTHOR_NAME"
 
 		[[ $? ]] && print_success "Git username is $(git config user.name)"
 	else
@@ -303,7 +257,7 @@ if command -v 'git' &>/dev/null; then
 	read -r USER_GIT_AUTHOR_EMAIL
 	if [[ -n "$USER_GIT_AUTHOR_EMAIL" ]]; then
 		GIT_AUTHOR_EMAIL="$USER_GIT_AUTHOR_EMAIL"
-		git config --file "$HOME/.gitconfig.local" user.email "$GIT_AUTHOR_EMAIL"
+		git config --file "$HOME/.config/git/local" user.email "$GIT_AUTHOR_EMAIL"
 
 		[[ $? ]] && print_success "Git email is $(git config user.email)"
 	else
@@ -325,7 +279,7 @@ if command -v 'gpg' &>/dev/null; then
 	if [[ -n "$USER_GIT_GPG_KEY" ]]; then
 		GIT_GPG_KEY="$USER_GIT_GPG_KEY"
 		print_process "Copying GPG key to pasteboard"
-		git config --file "$HOME/.gitconfig.local" user.signingkey "$GIT_GPG_KEY"
+		git config --file "$HOME/.config/git/local" user.signingkey "$GIT_GPG_KEY"
 		if [[ "$OS" == "darwin" ]]; then
 			# only works on MacOS
 			gpg --armor --export "$GIT_GPG_KEY" | pbcopy
