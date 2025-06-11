@@ -135,6 +135,11 @@ if command -v 'git' &>/dev/null; then
 	[[ $? ]] && dotlog::success "Repository has been updated"
 fi
 
+# check if local bin directory exists, create if not
+if [[ ! -d "$HOME/.local/bin" ]]; then
+	mkdir -p "$HOME/.local/bin"
+fi
+
 # check if config directory exists, create if not
 if [[ ! -d "$HOME/.config" ]]; then
 	mkdir -p "$HOME/.config/git"
