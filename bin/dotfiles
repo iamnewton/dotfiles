@@ -100,7 +100,7 @@ if [[ ! -d "$INSTALL_DIR" ]]; then
 fi
 
 # Check for git, install if not, intialize and pull down repo
-if command -v 'git' &>/dev/null; then
+if command -v 'git' &>/dev/null && [[ ! -d "$INSTALL_DIR/.git" ]]; then
 	# Change to the dotfiles directory
 	cd "$INSTALL_DIR" || exit
 
