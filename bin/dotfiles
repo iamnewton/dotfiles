@@ -191,14 +191,11 @@ fi
 # Set up custom dircolors/LS_COLORS
 # https://unix.stackexchange.com/a/94306
 # https://github.com/trapd00r/LS_COLORS
-if [[ ! -f "$HOME/.dircolors" ]]; then
+if [[ ! -f "$HOME/.local/dircolors" ]]; then
 	readonly LS_REPO="LS_COLORS"
 	dotlog::process "Downloading LS_COLORS to /tmp directory"
-	# (-#) shows the progress bar as # sign
-	# (-f) fail silently
-	# (-L) follow the headers
-	# (-o) output to a file
-	mkdir -p /tmp/$LS_REPO && curl -#fLo "/tmp/$LS_REPO.tar.gz" "https://$GITHUB_URL/trapd00r/$LS_REPO/tarball/master"
+	mkdir -p /tmp/$LS_REPO
+	curl -#fLo "/tmp/$LS_REPO.tar.gz" "https://$GITHUB_URL/trapd00r/$LS_REPO/tarball/master"
 
 	dotlog::process "Extracting files"
 	tar -zxf "/tmp/$LS_REPO.tar.gz" --strip-components 1 -C "/tmp/$LS_REPO"
