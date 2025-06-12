@@ -174,7 +174,6 @@ if [[ ! -d "$HOME/.gnupg" ]]; then
 	chown -R $(whoami) "$HOME/.gnupg/"
 
 	# Also correct the permissions and access rights on the directory
-	chmod 600 "$HOME/.gnupg/*"
 	chmod 700 "$HOME/.gnupg"
 fi
 
@@ -300,6 +299,9 @@ if command -v 'gpg' &>/dev/null; then
 			gpg --armor --export "$GIT_GPG_KEY"
 			dotlog::process "Open Github settings <https://$GITHUB_URL/settings/keys>; create a new GPG key and paste in the pasteboard"
 		fi
+
+		# set up the permissions on the file contents inside gnupg
+		chmod 600 "$HOME/.gnupg/*"
 	else
 		dotlog::warning "No GPG key has been set.  Please update manually"
 	fi
