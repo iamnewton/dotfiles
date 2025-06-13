@@ -80,48 +80,50 @@ main() {
   # Cleanup old git templates/hooks
   rm -rf "$HOME/.config/git/templates" "$HOME/.config/git/hooks"
 
-  declare -A symlinks=(
-    [conf/bash/aliases]=.config/bash/aliases
-    [conf/bash/completions]=.config/bash/completions
-    [conf/bash/exports]=.config/bash/exports
-    [conf/bash/functions]=.config/bash/functions
-    [conf/bash/options]=.config/bash/options
-    [conf/bash/paths]=.config/bash/paths
-    [conf/bash/prompt]=.config/bash/prompt
-    [conf/git/hooks]=.config/git/hooks
-    [conf/git/templates]=.config/git/templates
-    [conf/git/attributes]=.config/git/attributes
-    [conf/git/darwin]=.config/git/darwin
-    [conf/git/ignore]=.config/git/ignore
-    [conf/git/linux]=.config/git/linux
-    [conf/git/message]=.config/git/message
-    [conf/gnupg/gpg]=.gnupg/gpg.conf
-    [conf/gnupg/gpg-agent]=.gnupg/gpg-agent.conf
-    [conf/misc/ctags]=.ctags
-    [conf/misc/editor]=.editorconfig
-    [conf/misc/hushlogin]=.hushlogin
-    [conf/misc/lesskey]=.lesskey
-    [conf/misc/logout]=.bash_logout
-    [conf/runcom/ack]=.ackrc
-    [conf/runcom/bash]=.bashrc
-    [conf/runcom/curl]=.curlrc
-    [conf/runcom/input]=.inputrc
-    [conf/runcom/mail]=.mailrc
-    [conf/runcom/ripgrep]=.ripgreprc
-    [conf/runcom/wget]=.wgetrc
-    [conf/bash_profile]=.bash_profile
-    [conf/gitconfig]=.gitconfig
-  )
+# List of source-destination pairs
+symlinks="
+conf/bash/aliases .config/bash/aliases
+conf/bash/completions .config/bash/completions
+conf/bash/exports .config/bash/exports
+conf/bash/functions .config/bash/functions
+conf/bash/options .config/bash/options
+conf/bash/paths .config/bash/paths
+conf/bash/prompt .config/bash/prompt
+conf/git/hooks .config/git/hooks
+conf/git/templates .config/git/templates
+conf/git/attributes .config/git/attributes
+conf/git/darwin .config/git/darwin
+conf/git/ignore .config/git/ignore
+conf/git/linux .config/git/linux
+conf/git/message .config/git/message
+conf/gnupg/gpg .gnupg/gpg.conf
+conf/gnupg/gpg-agent .gnupg/gpg-agent.conf
+conf/misc/ctags .ctags
+conf/misc/editor .editorconfig
+conf/misc/hushlogin .hushlogin
+conf/misc/lesskey .lesskey
+conf/misc/logout .bash_logout
+conf/runcom/ack .ackrc
+conf/runcom/bash .bashrc
+conf/runcom/curl .curlrc
+conf/runcom/input .inputrc
+conf/runcom/mail .mailrc
+conf/runcom/ripgrep .ripgreprc
+conf/runcom/wget .wgetrc
+conf/bash_profile .bash_profile
+conf/gitconfig .gitconfig
+"
 
-  for src in "${!symlinks[@]}"; do
-    dst="$HOME/${symlinks[$src]}"
+  # Loop through each pair
+  while read -r src dst; do
+    dst="$HOME/$dst"
     mkdir -p "$(dirname "$dst")"
     if [[ -e "$INSTALL_DIR/$src" ]]; then
       ln -sf "$INSTALL_DIR/$src" "$dst"
     else
       log "⚠️ Skipping missing source file: $src"
     fi
-  done
+  done <<< "$symlinks"
 
   if [[ ! -L "$HOME/.tmux.conf" || "$(readlink "$HOME/.tmux.conf")" != "$INSTALL_DIR/conf/tmux/config.$OS" ]]; then
     ln -sfn $INSTALL_DIR/conf/tmux/config.$OS $HOME/.tmux.conf
@@ -201,17 +203,7 @@ EOF
   fi
 
   # Final reporting
-  log "Dotfiles installed. Sourcing .bash_profile..."
-  source "$HOME/.bash_profile" || true
-
-  log "Install Summary:"
-  brew list
-  ls -la "$HOME"
-  cat "$HOME/.bash_profile.local"
-  [[ -f "$HOME/.netrc" ]] && cat "$HOME/.netrc"
-  log "Final Git config:"
-  git config --file "$HOME/.config/git/local" --list
-  echo "Current shell: $SHELL"
+  log "Dotfiles installed. Open a new terminal session"
 }
 
 main "$@"
