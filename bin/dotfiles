@@ -7,8 +7,7 @@ main() {
   readonly USERNAME="iamnewton"
   readonly REPO="dotfiles"
   readonly INSTALL_DIR="$HOME/.$REPO"
-  OS="$(uname | tr '[:upper:]' '[:lower:]')"
-  readonly OS
+  readonly OS="$(uname | tr '[:upper:]' '[:lower:]')"
 
   # Variables (scoped to main)
   local GIT_AUTHOR_NAME=""
