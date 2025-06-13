@@ -1,360 +1,218 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# fallback in case LOG_LIB isn't already set
-DOTLOG="${DOTLOG:-$HOME/.dotfiles/bin/dotlog}"
+main() {
+  # Constants
+  readonly GITHUB_URL="github.com"
+  readonly USERNAME="iamnewton"
+  readonly REPO="dotfiles"
+  readonly INSTALL_DIR="$HOME/.$REPO"
+  OS="$(uname | tr '[:upper:]' '[:lower:]')"
+  readonly OS
 
-if [[ -f "$DOTLOG" ]]; then
-  source "$DOTLOG"
-else
-  echo "⚠️  DOTLOG not found at $DOTLOG. Continuing without logging functions."
-fi
+  # Variables (scoped to main)
+  local GIT_AUTHOR_NAME=""
+  local GIT_AUTHOR_EMAIL=""
+  local GITHUB_TOKEN=""
 
-# constants
-readonly GITHUB_URL="github.com"
-readonly USERNAME="iamnewton"
-readonly REPO="dotfiles"
-readonly INSTALL_DIR="$HOME/.$REPO"
-OS="$(tr '[:upper:]' '[:lower:]' <<<"$(uname)")"
-readonly OS
+  # Function to log messages
+  log() {
+    echo -e "\033[1;34m[INFO]\033[0m $1"
+  }
 
-# variables
-GIT_AUTHOR_NAME=""
-GIT_AUTHOR_EMAIL=""
-GITHUB_TOKEN=""
+  error() {
+    echo -e "\033[1;31m[ERROR]\033[0m $1" >&2
+    exit 1
+  }
 
-# @private
-# @requires logger (local)
-# @param $file - path to file where symlinks are listed out
-link_it() {
-	local file=$1
-	# split input on space, and return 2nd part (the symbolic link desired)
-	local symlink=($file)
+  # Ensure Homebrew is installed
+  if ! command -v brew &>/dev/null; then
+    log "Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || error "Homebrew installation failed."
 
-	# Test whether a symbolic link already exists
-	dotlog::process "Checking if ${symlink[1]} is symlinked"
-	if [[ ! -L "$HOME/${symlink[1]}" ]]; then
-		# create an array of line items
-		dotlog::process "Symlinking ${symlink[0]}"
-		ln -sfn "$INSTALL_DIR/${symlink[0]}" "$HOME/${symlink[1]}"
-	else
-		dotlog::info "$HOME/${symlink[1]} is already symlinked. Skipping."
-	fi
-}
+    local brew_paths=(
+      "/opt/homebrew/bin/brew"
+      "/usr/local/bin/brew"
+      "/home/linuxbrew/.linuxbrew/bin/brew"
+    )
 
-# @private
-# @param $file - path to a file with each item separated on a line
-symlink() {
-	local file=$1
+    for path in "${brew_paths[@]}"; do
+      if [[ -x "$path" ]]; then
+        eval "$($path shellenv)"
+        break
+      fi
+    done
 
-	while IFS="" read -r p || [ -n "$p" ]; do
-		#printf '%s\n' "$p"
-		link_it "$p"
-	done <"$file"
-}
+    command -v brew &>/dev/null || error "Homebrew installed but not found in expected paths."
+  else
+    eval "$(brew shellenv)"
+  fi
 
-# Check for Homebrew; install if not
-if ! command -v 'brew' &>/dev/null; then
-	dotlog::process "Installing Homebrew"
-	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  # Install packages
+  log "Installing packages via Homebrew..."
+  brew install \
+    bash bash-completion@2 bat coreutils ctags fzf gcc gh git git-delta \
+    gpg gron jq lazygit less mosh n nvim rsync ripgrep spaceman-diff \
+    ssh-copy-id tig tmux tree wget whalebrew z
 
-	# If we're on Linux, insert brew into the path temporarily to be able to use later
-	if [[ "$OS" == "linux" ]]; then
-		dotlog::process "Sourcing Homebrew to PATH on ${OS}"
-		eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-		sudo apt-get install build-essential
-	fi
+  # Clone or extract dotfiles
+  if [[ ! -d "$INSTALL_DIR" ]]; then
+    log "Cloning dotfiles repository..."
+    mkdir -p "$INSTALL_DIR"
+    curl -#fLo "/tmp/$REPO.tar.gz" "https://$GITHUB_URL/$USERNAME/$REPO/tarball/main" || error "Failed to download dotfiles tarball."
+    tar -zxf "/tmp/$REPO.tar.gz" --strip-components 1 -C "$INSTALL_DIR" || error "Failed to extract dotfiles."
+    rm -f "/tmp/$REPO.tar.gz"
+  fi
 
-    if [[ "$(uname -m)" == "arm64" ]]; then
-	dotlog::process "Sourcing Homebrew to PATH on Apple Silicon"
-        eval "$(/opt/homebrew/bin/brew shellenv)"
+  if command -v git &>/dev/null && [[ ! -d "$INSTALL_DIR/.git" ]]; then
+    pushd "$INSTALL_DIR" > /dev/null || error "Could not cd to $INSTALL_DIR"
+
+    git init
+    git branch -m main
+    git remote add origin "https://$GITHUB_URL/$USERNAME/$REPO.git"
+    git fetch origin main || { echo "❌ Git fetch failed." >&2; popd; exit 1; }
+    git reset --hard FETCH_HEAD || { echo "❌ Git reset failed." >&2; popd; exit 1; }
+    git clean -fd || echo "⚠️ Git clean had warnings."
+    git pull --rebase origin main || { echo "❌ Git pull failed." >&2; popd; exit 1; }
+
+    popd > /dev/null
+  fi
+
+  # Create necessary directories
+  mkdir -p "$HOME/.gnupg"
+  chmod 700 "$HOME/.gnupg"
+  chown -R "$(whoami)" "$HOME/.gnupg"
+
+  # Ensure local bash profile exists and sources .bash_profile.local
+  [[ -f "$HOME/.bash_profile.local" ]] || echo '#!/usr/bin/env bash' > "$HOME/.bash_profile.local"
+  grep -qF ".bash_profile.local" "$HOME/.bash_profile" 2>/dev/null || echo '[[ -f ~/.bash_profile.local ]] && source ~/.bash_profile.local' >> "$HOME/.bash_profile"
+
+  # Cleanup old git templates/hooks
+  rm -rf "$HOME/.config/git/templates" "$HOME/.config/git/hooks"
+
+  declare -A LINKS=(
+    [conf/bash/aliases]=.config/bash/aliases
+    [conf/bash/completions]=.config/bash/completions
+    [conf/bash/exports]=.config/bash/exports
+    [conf/bash/functions]=.config/bash/functions
+    [conf/bash/options]=.config/bash/options
+    [conf/bash/paths]=.config/bash/paths
+    [conf/bash/prompt]=.config/bash/prompt
+    [conf/git/hooks]=.config/git/hooks
+    [conf/git/templates]=.config/git/templates
+    [conf/git/attributes]=.config/git/attributes
+    [conf/git/darwin]=.config/git/darwin
+    [conf/git/ignore]=.config/git/ignore
+    [conf/git/linux]=.config/git/linux
+    [conf/git/message]=.config/git/message
+    [conf/gnupg/gpg]=.gnupg/gpg.conf
+    [conf/gnupg/gpg-agent]=.gnupg/gpg-agent.conf
+    [conf/misc/ctags]=.ctags
+    [conf/misc/editor]=.editorconfig
+    [conf/misc/hushlogin]=.hushlogin
+    [conf/misc/lesskey]=.lesskey
+    [conf/misc/logout]=.bash_logout
+    [conf/runcom/ack]=.ackrc
+    [conf/runcom/bash]=.bashrc
+    [conf/runcom/curl]=.curlrc
+    [conf/runcom/input]=.inputrc
+    [conf/runcom/mail]=.mailrc
+    [conf/runcom/ripgrep]=.ripgreprc
+    [conf/runcom/wget]=.wgetrc
+    [conf/bash_profile]=.bash_profile
+    [conf/gitconfig]=.gitconfig
+  )
+
+  for src in "${!LINKS[@]}"; do
+    dst="$HOME/${LINKS[$src]}"
+    mkdir -p "$(dirname "$dst")"
+    if [[ -e "$src" ]]; then
+      ln -sf "$(realpath "$src")" "$dst"
     else
-	dotlog::process "Sourcing Homebrew to PATH on Apple Intel"
-        eval "$(/usr/local/bin/brew shellenv)"
+      log "⚠️ Skipping missing source file: $src"
     fi
+  done
 
-	brew install bash bash-completion@2 bat coreutils ctags fzf gcc gh git git-delta gpg gron jq lazygit less mosh n nvim rsync ripgrep spaceman-diff ssh-copy-id tig tmux tree wget whalebrew z
+  if [[ ! -L "$HOME/.tmux.conf" || "$(readlink "$HOME/.tmux.conf")" != "$INSTALL_DIR/conf/tmux/config.$OS" ]]; then
+    ln -sfn $INSTALL_DIR/conf/tmux/config.$OS $HOME/.tmux.conf
+  fi
 
-	[[ $? ]] && dotlog::success "Homebrew installed"
-fi
+  # Setup dircolors
+  if [[ ! -f "$HOME/.dircolors" ]]; then
+    readonly LS_REPO="LS_COLORS"
+    mkdir -p "/tmp/$LS_REPO"
+    curl -#fLo "/tmp/$LS_REPO.tar.gz" "https://$GITHUB_URL/trapd00r/$LS_REPO/tarball/master"
+    tar -zxf "/tmp/$LS_REPO.tar.gz" --strip-components 1 -C "/tmp/$LS_REPO"
+    dircolors -b "/tmp/$LS_REPO/LS_COLORS" > "$HOME/.dircolors"
+    rm -rf "/tmp/$LS_REPO"*
+  fi
 
-# If missing, download and extract the dotfiles repository
-if [[ ! -d "$INSTALL_DIR" ]]; then
-	dotlog::process "Creating directory at $INSTALL_DIR and setting permissions"
-	mkdir -p "$INSTALL_DIR"
+  # Copy SSH config if needed
+  [[ -d "$HOME/.ssh" ]] || mkdir -p "$HOME/.ssh"
+  [[ -f "$HOME/.ssh/config" ]] || cp "$INSTALL_DIR/conf/ssh/config.$OS" "$HOME/.ssh/config"
 
-	dotlog::process "Downloading repository to /tmp directory"
-	# (-#) shows the progress bar as # sign
-	# (-f) fail silently
-	# (-L) follow the headers
-	# (-o) output to a file
-	curl -#fLo "/tmp/$REPO.tar.gz" "https://$GITHUB_URL/$USERNAME/$REPO/tarball/main"
+  # Prompt GitHub token setup
+  if command -v curl &>/dev/null; then
+    read -rp "What's your GitHub personal token? Create a token at <https://$GITHUB_URL/settings/tokens> " GITHUB_TOKEN
+    if [[ -n "$GITHUB_TOKEN" ]]; then
+      grep -q "machine github.com" "$HOME/.netrc" 2>/dev/null || {
+        cat <<EOF >> "$HOME/.netrc"
+machine github.com
+	login $GITHUB_TOKEN
+	password x-oauth-basic
 
-	dotlog::process "Extracting files to $INSTALL_DIR"
-	tar -zxf "/tmp/$REPO.tar.gz" --strip-components 1 -C "$INSTALL_DIR"
+machine api.github.com
+	login $GITHUB_TOKEN
+	password x-oauth-basic
 
-	dotlog::process "Removing tarball from /tmp directory"
-	rm -rf "/tmp/$REPO.tar.gz"
+machine raw.githubusercontent.com
+	login $GITHUB_TOKEN
+	password x-oauth-basic
+EOF
+      }
+      echo "export GITHUB_TOKEN=$GITHUB_TOKEN" >> "$HOME/.bash_profile.local"
+    fi
+  fi
 
-	[[ $? ]] && dotlog::success "$INSTALL_DIR created, repository downloaded and extracted"
-fi
+  # Git author info
+  if command -v git &>/dev/null; then
+    read -rp "Enter your Git name: " GIT_AUTHOR_NAME
+    git config --file "$HOME/.config/git/local" user.name "$GIT_AUTHOR_NAME"
+    read -rp "Enter your Git email: " GIT_AUTHOR_EMAIL
+    git config --file "$HOME/.config/git/local" user.email "$GIT_AUTHOR_EMAIL"
+  fi
 
-# Check for git, install if not, intialize and pull down repo
-if command -v 'git' &>/dev/null && [[ ! -d "$INSTALL_DIR/.git" ]]; then
-	# Change to the dotfiles directory
-	cd "$INSTALL_DIR" || exit
+  # GPG Key setup
+  if command -v gpg &>/dev/null; then
+    gpg --gen-key
+    gpg --list-secret-keys --keyid-format LONG
+    read -rp "Which GPG key would you like to copy? (choose the code on the 'sec' line after the first slash) " GIT_GPG_KEY
+    git config --file "$HOME/.config/git/local" user.signingkey "$GIT_GPG_KEY"
+    gpg --armor --export "$GIT_GPG_KEY" | pbcopy
+    log "GPG key copied to clipboard. Add to GitHub."
+    chmod 600 "$HOME/.gnupg/"*
+  fi
 
-	# Initialize the git repository if it's missing
-	dotlog::process "Initializing git repository"
-	git init
+  # Change login shell
+  if [[ "$OS" == "darwin" ]]; then
+    echo "$(brew --prefix)/bin/bash" | pbcopy
+    sudo vim + -c 'startinsert' -c ':r !pbpaste' -c ':xa' /etc/shells
+  elif [[ "$OS" == "linux" ]]; then
+    sudo chsh -s "$(brew --prefix)/bin/bash" "$USER"
+  fi
 
-	dotlog::process "Setting main as the default branch"
-	git branch -m main
+  # Final reporting
+  log "Dotfiles installed. Sourcing .bash_profile..."
+  source "$HOME/.bash_profile" || true
 
-	dotlog::process "Adding https://$GITHUB_URL/$USERNAME/$REPO.git as origin"
-	git remote add origin "https://$GITHUB_URL/$USERNAME/$REPO.git"
+  log "Install Summary:"
+  brew list
+  ls -la "$HOME"
+  cat "$HOME/.bash_profile.local"
+  [[ -f "$HOME/.netrc" ]] && cat "$HOME/.netrc"
+  log "Final Git config:"
+  git config --file "$HOME/.config/git/local" --list
+  echo "Current shell: $SHELL"
+}
 
-	dotlog::process "Downloading changes from origin"
-	git fetch origin main
-
-	# Reset the index and working tree to the fetched HEAD
-	# (submodules are cloned in the subsequent sync step)
-	dotlog::process "Resetting index & working tree to fetched HEAD"
-	git reset --hard FETCH_HEAD
-
-	# Remove any untracked files
-	dotlog::process "Removing any untracked files"
-	git clean -fd
-
-	[[ $? ]] && dotlog::success "Repository has been initialized"
-
-	# Pull down the latest changes
-	dotlog::process "Pulling down latest changes"
-	git pull --rebase origin main
-
-	[[ $? ]] && dotlog::success "Repository has been updated"
-fi
-
-# check if local bin directory exists, create if not
-if [[ ! -d "$HOME/.local/bin" ]]; then
-	mkdir -p "$HOME/.local/bin"
-fi
-
-# check if config directory exists, create if not
-if [[ ! -d "$HOME/.config" ]]; then
-	mkdir -p "$HOME/.config/git"
-fi
-
-# check for local bash profile; create if not
-if [[ ! -f "$HOME/.bash_profile.local" ]]; then
-	dotlog::process "Copying local bash_profile template to $HOME"
-	echo '#!/usr/bin/env bash' >>"$HOME/.bash_profile.local"
-fi
-
-# Force remove the git templates directory if it's already there.
-if [ -e "$HOME/.config/git/templates" ]; then
-	dotlog::process "Removing $HOME/.config/git/templates/ directory"
-	rm -rf "$HOME/.config/git/templates"
-fi
-
-# Force remove the git hooks directory if it's already there.
-if [ -e "$HOME/.config/git/hooks" ]; then
-	dotlog::process "Removing $HOME/.config/git/hooks/ directory"
-	rm -rf "$HOME/.config/git/hooks"
-fi
-
-# check if gnupg directory exists, create if not
-# has to come before symlinks in order to work with gpg
-if [[ ! -d "$HOME/.gnupg" ]]; then
-	mkdir -p "$HOME/.gnupg"
-
-	# To fix the " gpg: WARNING: unsafe permissions on homedir '/home/path/to/user/.gnupg' " error
-	# Make sure that the .gnupg directory and its contents is accessibile by your user.
-	# https://gist.github.com/oseme-techguy/bae2e309c084d93b75a9b25f49718f85
-	chown -R $(whoami) "$HOME/.gnupg/"
-
-	# Also correct the permissions and access rights on the directory
-	chmod 700 "$HOME/.gnupg"
-fi
-
-# Create the necessary symbolic links between the `.dotfiles` and `HOME`
-# directory. The `bash_profile` sources other files directly from the
-# `.dotfiles` repository.
-if [[ -f "$INSTALL_DIR/opt/symlinks" ]]; then
-	dotlog::process "Symlinking configuration files"
-	symlink "$INSTALL_DIR/opt/symlinks"
-	link_it "conf/misc/tmux.$OS .tmux.conf"
-
-	[[ $? ]] && dotlog::success "Symlinked configuration files"
-fi
-
-# Set up custom dircolors/LS_COLORS
-# https://unix.stackexchange.com/a/94306
-# https://github.com/trapd00r/LS_COLORS
-if [[ ! -f "$HOME/.local/dircolors" ]]; then
-	readonly LS_REPO="LS_COLORS"
-	dotlog::process "Downloading LS_COLORS to /tmp directory"
-	mkdir -p /tmp/$LS_REPO
-	curl -#fLo "/tmp/$LS_REPO.tar.gz" "https://$GITHUB_URL/trapd00r/$LS_REPO/tarball/master"
-
-	dotlog::process "Extracting files"
-	tar -zxf "/tmp/$LS_REPO.tar.gz" --strip-components 1 -C "/tmp/$LS_REPO"
-
-	dotlog::process "Copying files"
-	dircolors -b /tmp/$LS_REPO/LS_COLORS >"$HOME/.dircolors"
-
-	dotlog::process "Removing tarball from /tmp directory"
-	rm -rf "/tmp/$LS_REPO.tar.gz"
-
-	[[ $? -eq 0 ]] && dotlog::success "Installed custom LS_COLORS"
-fi
-
-# Copy `.ssh/config`.
-# This prevents them being committed to the repository.
-if [[ ! -d "$HOME/.ssh" ]]; then
-	mkdir -p "$HOME/.ssh"
-fi
-if [[ ! -f "$HOME/.ssh/config" ]]; then
-	dotlog::process "Syncing global ssh configuration file"
-	cp "$INSTALL_DIR/conf/ssh/config.$OS" "$HOME/.ssh/config"
-fi
-
-# set up netrc, but only if curl exists
-if command -v 'curl' &>/dev/null; then
-	# Setup git authorship
-	dotlog::process "Setting up netrc"
-	# Git author name
-	dotlog::question "What's your GitHub personal token? Create a token at <https://$GITHUB_URL/settings/tokens>"
-	read -r USER_GITHUB_TOKEN
-	if [[ -n "$USER_GITHUB_TOKEN" ]]; then
-		GITHUB_TOKEN="$USER_GITHUB_TOKEN"
-
-		{
-			printf "machine github.com\\n\\tlogin %s\\n\\tpassword x-oauth-basic\\n\\n" "$GITHUB_TOKEN"
-			printf "machine api.github.com\\n\\tlogin %s\\n\\tpassword x-oauth-basic\\n\\n" "$GITHUB_TOKEN"
-			printf "machine raw.githubusercontent.com\\n\\tlogin %s\\n\\tpassword x-oauth-basic" "$GITHUB_TOKEN"
-		} >>"$HOME/.netrc"
-		printf "export GITHUB_TOKEN=%s\\n" "$GITHUB_TOKEN" >>"$HOME/.bash_profile.local"
-
-		printf "export GITHUB_TOKEN=%s\\n" "$GITHUB_TOKEN" >>"$HOME/.bash_profile.local"
-
-		[[ $? ]] && dotlog::success "netrc was created succesfully"
-	else
-		dotlog::warning "No GitHub token was created.  Please update manually"
-	fi
-fi
-
-# setup git authorship
-if command -v 'git' &>/dev/null; then
-	# Setup git authorship
-	dotlog::process "Setting up Git author"
-	# Git author name
-	dotlog::question "What's your name"
-	read -r USER_GIT_AUTHOR_NAME
-	if [[ -n "$USER_GIT_AUTHOR_NAME" ]]; then
-		GIT_AUTHOR_NAME="$USER_GIT_AUTHOR_NAME"
-		git config --file "$HOME/.config/git/local" user.name "$GIT_AUTHOR_NAME"
-
-		[[ $? ]] && dotlog::success "Git username is $(git config user.name)"
-	else
-		dotlog::warning "No Git user name has been set.  Please update manually"
-	fi
-
-	# Git author email
-	dotlog::question "What's your email"
-	read -r USER_GIT_AUTHOR_EMAIL
-	if [[ -n "$USER_GIT_AUTHOR_EMAIL" ]]; then
-		GIT_AUTHOR_EMAIL="$USER_GIT_AUTHOR_EMAIL"
-		git config --file "$HOME/.config/git/local" user.email "$GIT_AUTHOR_EMAIL"
-
-		[[ $? ]] && dotlog::success "Git email is $(git config user.email)"
-	else
-		dotlog::warning "No Git user email has been set.  Please update manually"
-	fi
-fi
-
-# Setup GPG
-# https://help.github.com/articles/generating-a-new-gpg-key/
-if command -v 'gpg' &>/dev/null; then
-	dotlog::process "Generating a GPG key"
-	# generate a new GPG key
-	# then if successful, list out the keys
-	gpg --gen-key && gpg --list-secret-keys --keyid-format LONG
-
-	dotlog::question "Which GPG key would you like to copy? (choose the code on the 'sec' line after the first slash)"
-	read -r USER_GIT_GPG_KEY
-
-	if [[ -n "$USER_GIT_GPG_KEY" ]]; then
-		GIT_GPG_KEY="$USER_GIT_GPG_KEY"
-		dotlog::process "Copying GPG key to pasteboard"
-		git config --file "$HOME/.config/git/local" user.signingkey "$GIT_GPG_KEY"
-		if [[ "$OS" == "darwin" ]]; then
-			# only works on MacOS
-			gpg --armor --export "$GIT_GPG_KEY" | pbcopy
-			open "https://$GITHUB_URL/settings/keys"
-		else
-			gpg --armor --export "$GIT_GPG_KEY"
-			dotlog::process "Open Github settings <https://$GITHUB_URL/settings/keys>; create a new GPG key and paste in the pasteboard"
-		fi
-
-		# set up the permissions on the file contents inside gnupg
-		chmod 600 "$HOME/.gnupg/*"
-	else
-		dotlog::warning "No GPG key has been set.  Please update manually"
-	fi
-fi
-
-# Check for brew bash; change to it
-dotlog::process "Changing login shell to Homebrew installed version"
-
-# Mac OS X directory service command line utility
-# sudo dscl . -change /Users/$USER UserShell /bin/bash /usr/local/bin/bash
-if [[ "$OS" == "darwin" ]]; then
-	echo "$(brew --prefix)/bin/bash" | pbcopy
-	dotlog::process "Copied brew's /bin/bash to pasteboard"
-
-	dotlog::process "Opening ViM to update /etc/shells with brew's /bin/bash"
-	# `vim +` runs vim and puts you at the last line of the file
-	# -c allows you to run commands and you can have up to 10
-	# process reads => open /etc/shells in ViM, go to the last line, put
-	# in Insert mode, paste in from the pasteboard, close and save all
-	sudo vim + -c 'startinsert' -c ':r !pbpaste' -c ':xa' /etc/shells
-fi
-
-if [[ "$OS" == "linux" ]]; then
-	# Programmatic way to change shell for root
-	sudo chsh -s "$(brew --prefix)/bin/bash" 2>/dev/null
-	# Programmatic way to change shell for 'newton' user
-	sudo chsh -s "$(brew --prefix)/bin/bash" newton 2>/dev/null
-	dotlog::warning "Verify it was installed correctly based on <https://serverfault.com/a/764578>"
-fi
-
-[[ $? ]] && dotlog::success "Changed default shell to Homebrew installed version"
-
-dotlog::process "Sourcing $HOME/.bash_profile"
-# shellcheck source=/dev/null
-source "$HOME/.bash_profile" 2 &>/dev/null
-
-[[ $? ]] && dotlog::success "Dotfiles installed. Be sure to source the .bash_profile"
-
-printf "%s##############################%s\\n" "$(tput setaf 6)" "$(tput sgr0)"
-printf "%s#        INSTALL INFO        #%s\\n" "$(tput setaf 6)" "$(tput sgr0)"
-printf "%s##############################%s\\n\\n" "$(tput setaf 6)" "$(tput sgr0)"
-dotlog::info "Homebrew packages:"
-brew list
-dotlog::info "Symlinked files:"
-ls -la "$HOME"
-dotlog::info "local bash profile:"
-cat "$HOME/.bash_profile.local"
-printf "\\n"
-dotlog::info "netrc:"
-cat "$HOME/.netrc"
-dotlog::info "Git author, GPG:"
-git config user.name
-git config user.email
-cat "$HOME/.gitconfig.local"
-dotlog::info "installed shells:"
-echo "$SHELL"
-printf "%s##############################%s\\n" "$(tput setaf 6)" "$(tput sgr0)"
-printf "%s#        INSTALL INFO        #%s\\n" "$(tput setaf 6)" "$(tput sgr0)"
-printf "%s##############################%s\\n" "$(tput setaf 6)" "$(tput sgr0)"
+main "$@"

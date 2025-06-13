@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+HOOK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+"$HOOK_DIR/ctags" >/dev/null 2>&1 &

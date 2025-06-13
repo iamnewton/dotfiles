@@ -1,23 +1,11 @@
 #!/usr/bin/env bash
 
-# Make code directory default location
-export CODE_DIRECTORY="${HOME}/code"
-
-# Make dotfiles default location
-export DOTFILES_DIRECTORY="$HOME/.dotfiles"
-
 # Make vim the default editor
 export EDITOR="vim"
 
 # Make vim the default editor for git
 export GIT_EDITOR="vim"
 
-# Automatically install overcommit hooks
-# disabling this in favor of husky and lack of stability
-# in the project
-# export GIT_TEMPLATE_DIR="$(overcommit --template-dir)"
-
-# Automatically install overcommit hooks
 # @TODO: automate this folder creation in dotfiles install
 export GOPATH="$(brew --prefix)/lib/go"
 

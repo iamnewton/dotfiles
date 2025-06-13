@@ -17,13 +17,14 @@ test -d "/opt/homebrew" && eval "$(/opt/homebrew/bin/brew shellenv)"
 
 load_dotfiles() {
 	declare -a files=(
-		"$HOME/.dotfiles/conf/profile/options"           # Options
-		"$HOME/.dotfiles/conf/profile/exports"           # Exports
-		"$HOME/.dotfiles/conf/profile/aliases"           # Aliases
-		"$HOME/.dotfiles/conf/profile/functions"         # Functions
-		"$HOME/.dotfiles/conf/profile/prompt"            # Custom bash prompt
-		"$HOME/.dotfiles/conf/profile/paths"             # Path modifications
-		"$HOME/.dotfiles/conf/profile/completions"       # Custom bash completion
+		"$HOME/.config/bash/options"           # Options
+		"$HOME/.config/bash/exports"           # Exports
+		"$HOME/.config/bash/aliases"           # Aliases
+		"$HOME/.config/bash/functions"         # Functions
+		"$HOME/.config/bash/prompt"            # Custom bash prompt
+		"$HOME/.config/bash/paths"             # Path modifications
+		"$HOME/.config/bash/completions"       # Custom bash completion
+
 		"$HOME/.dircolors"                               # Custom dircolors/LS_COLORS
 		"$(brew --prefix)/etc/bash_completion"           # Bash completion (installed via Homebrew)
 		"$HOME/.fzf.bash"                                # fzf
@@ -45,7 +46,3 @@ unset load_dotfiles
 # list out tmux sessions on startup, don't show error if none
 # https://twitter.com/climagic/status/567658485517930497
 tmux list-sessions 2>/dev/null
-
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"

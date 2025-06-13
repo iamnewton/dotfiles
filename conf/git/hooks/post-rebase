@@ -2,6 +2,6 @@
 
 case "$1" in
 	rebase)
-		exec .git/hooks/post-merge
-	;;
+		exec "$(dirname "$0")/post-merge"
+		;;
 esac
