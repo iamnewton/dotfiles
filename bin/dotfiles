@@ -126,8 +126,8 @@ main() {
   for src in "${!LINKS[@]}"; do
     dst="$HOME/${LINKS[$src]}"
     mkdir -p "$(dirname "$dst")"
-    if [[ -e "$src" ]]; then
-      ln -sf "$(realpath "$src")" "$dst"
+    if [[ -e "$INSTALL_DIR/$src" ]]; then
+      ln -sf "$INSTALL_DIR/$src" "$dst"
     else
       log "⚠️ Skipping missing source file: $src"
     fi
