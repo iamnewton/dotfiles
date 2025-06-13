@@ -6,7 +6,7 @@ main() {
   readonly GITHUB_URL="github.com"
   readonly USERNAME="iamnewton"
   readonly REPO="dotfiles"
-  readonly INSTALL_DIR="$HOME/.$REPO"
+  readonly INSTALL_DIR="$HOME/.local/lib/$REPO"
   readonly OS="$(uname | tr '[:upper:]' '[:lower:]')"
 
   # Variables (scoped to main)
@@ -77,19 +77,10 @@ main() {
     popd > /dev/null
   fi
 
-  # Create necessary directories
-  mkdir -p "$HOME/.gnupg"
-  chmod 700 "$HOME/.gnupg"
-  chown -R "$(whoami)" "$HOME/.gnupg"
-
-  # Ensure local bash profile exists and sources .bash_profile.local
-  [[ -f "$HOME/.bash_profile.local" ]] || echo '#!/usr/bin/env bash' > "$HOME/.bash_profile.local"
-  grep -qF ".bash_profile.local" "$HOME/.bash_profile" 2>/dev/null || echo '[[ -f ~/.bash_profile.local ]] && source ~/.bash_profile.local' >> "$HOME/.bash_profile"
-
   # Cleanup old git templates/hooks
   rm -rf "$HOME/.config/git/templates" "$HOME/.config/git/hooks"
 
-  declare -A LINKS=(
+  declare -A symlinks=(
     [conf/bash/aliases]=.config/bash/aliases
     [conf/bash/completions]=.config/bash/completions
     [conf/bash/exports]=.config/bash/exports
@@ -122,8 +113,8 @@ main() {
     [conf/gitconfig]=.gitconfig
   )
 
-  for src in "${!LINKS[@]}"; do
-    dst="$HOME/${LINKS[$src]}"
+  for src in "${!symlinks[@]}"; do
+    dst="$HOME/${symlinks[$src]}"
     mkdir -p "$(dirname "$dst")"
     if [[ -e "$INSTALL_DIR/$src" ]]; then
       ln -sf "$INSTALL_DIR/$src" "$dst"
@@ -135,6 +126,15 @@ main() {
   if [[ ! -L "$HOME/.tmux.conf" || "$(readlink "$HOME/.tmux.conf")" != "$INSTALL_DIR/conf/tmux/config.$OS" ]]; then
     ln -sfn $INSTALL_DIR/conf/tmux/config.$OS $HOME/.tmux.conf
   fi
+
+  # Create necessary directories
+  chmod 700 "$HOME/.gnupg"
+  chown -R "$(whoami)" "$HOME/.gnupg"
+
+  # Ensure local bash profile exists and sources .bash_profile.local
+  [[ -f "$HOME/.bash_profile.local" ]] || echo '#!/usr/bin/env bash' > "$HOME/.bash_profile.local"
+  grep -qF ".bash_profile.local" "$HOME/.bash_profile" 2>/dev/null || echo '[[ -f ~/.bash_profile.local ]] && source ~/.bash_profile.local' >> "$HOME/.bash_profile"
+
 
   # Setup dircolors
   if [[ ! -f "$HOME/.dircolors" ]]; then
