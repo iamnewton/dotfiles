@@ -12,20 +12,23 @@ fi
 # Add for Linuxbrew
 test -d "/home/linuxbrew/.linuxbrew" && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
+if command -v dircolors &>/dev/null && [[ -f $HOME/.config/dircolors ]]; then
+	eval "$(dircolors -b $HOME/.config/dircolors)"
+fi
+
 # Add for Homebrew
 test -d "/opt/homebrew" && eval "$(/opt/homebrew/bin/brew shellenv)"
 
 load_dotfiles() {
 	declare -a files=(
-		"$HOME/.config/bash/options"           # Options
-		"$HOME/.config/bash/exports"           # Exports
-		"$HOME/.config/bash/aliases"           # Aliases
-		"$HOME/.config/bash/functions"         # Functions
-		"$HOME/.config/bash/prompt"            # Custom bash prompt
-		"$HOME/.config/bash/paths"             # Path modifications
-		"$HOME/.config/bash/completions"       # Custom bash completion
-
-		"$HOME/.dircolors"                               # Custom dircolors/LS_COLORS
+		"$HOME/.config/bash/options"                     # Options
+		"$HOME/.config/bash/exports"                     # Exports
+		"$HOME/.config/bash/aliases"                     # Aliases
+		"$HOME/.config/bash/functions"                   # Functions
+		"$HOME/.config/bash/prompt"                      # Custom bash prompt
+		"$HOME/.config/bash/paths"                       # Path modifications
+		"$HOME/.config/bash/completions"                 # Custom bash completion
+		"$HOME/.config/bash/logout"                      # Logout commands
 		"$(brew --prefix)/etc/bash_completion"           # Bash completion (installed via Homebrew)
 		"$HOME/.fzf.bash"                                # fzf
 		"$(brew --prefix)/share/forgit/forgit.plugin.sh" # forgit

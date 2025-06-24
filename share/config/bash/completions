@@ -3,7 +3,9 @@
 # common <tab> completions
 
 # Brew completion
-[[ -r "/home/linuxbrew/.linuxbrew/etc/profile.d/bash_completion.sh" ]] && source "/home/linuxbrew/.linuxbrew/etc/profile.d/bash_completion.sh"
+if [[ -r "/home/linuxbrew/.linuxbrew/etc/profile.d/bash_completion.sh" ]]; then
+	source "/home/linuxbrew/.linuxbrew/etc/profile.d/bash_completion.sh"
+fi
 
 # Enable bash <tab> completion for fx
 if brew list "fx" &>/dev/null; then

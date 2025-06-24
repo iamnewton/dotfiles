@@ -1,209 +1,35 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-main() {
-  # Constants
-  readonly GITHUB_URL="github.com"
-  readonly USERNAME="iamnewton"
-  readonly REPO="dotfiles"
-  readonly INSTALL_DIR="$HOME/.local/lib/$REPO"
-  readonly OS="$(uname | tr '[:upper:]' '[:lower:]')"
+# Colors
+RED="\033[1;31m"
+GREEN="\033[1;32m"
+BLUE="\033[1;34m"
+RESET="\033[0m"
+LOG_PREFIX="[${BLUE}dotfiles${RESET}]"
 
-  # Variables (scoped to main)
-  local GIT_AUTHOR_NAME=""
-  local GIT_AUTHOR_EMAIL=""
-  local GITHUB_TOKEN=""
-
-  # Function to log messages
-  log() {
-    echo -e "\033[1;34m[INFO]\033[0m $1"
-  }
-
-  error() {
-    echo -e "\033[1;31m[ERROR]\033[0m $1" >&2
-    exit 1
-  }
-
-  # Ensure Homebrew is installed
-  if ! command -v brew &>/dev/null; then
-    log "Installing Homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || error "Homebrew installation failed."
-
-    local brew_paths=(
-      "/opt/homebrew/bin/brew"
-      "/usr/local/bin/brew"
-      "/home/linuxbrew/.linuxbrew/bin/brew"
-    )
-
-    for path in "${brew_paths[@]}"; do
-      if [[ -x "$path" ]]; then
-        eval "$($path shellenv)"
-        break
-      fi
-    done
-
-    command -v brew &>/dev/null || error "Homebrew installed but not found in expected paths."
-  else
-    eval "$(brew shellenv)"
-  fi
-
-  # Install packages
-  log "Installing packages via Homebrew..."
-  brew install \
-    bash bash-completion@2 bat coreutils ctags fzf gcc gh git git-delta \
-    gpg gron jq lazygit less mosh n nvim rsync ripgrep spaceman-diff \
-    ssh-copy-id tig tmux tree wget whalebrew z
-
-  # Clone or extract dotfiles
-  if [[ ! -d "$INSTALL_DIR" ]]; then
-    log "Cloning dotfiles repository..."
-    mkdir -p "$INSTALL_DIR"
-    curl -#fLo "/tmp/$REPO.tar.gz" "https://$GITHUB_URL/$USERNAME/$REPO/tarball/main" || error "Failed to download dotfiles tarball."
-    tar -zxf "/tmp/$REPO.tar.gz" --strip-components 1 -C "$INSTALL_DIR" || error "Failed to extract dotfiles."
-    rm -f "/tmp/$REPO.tar.gz"
-  fi
-
-  if command -v git &>/dev/null && [[ ! -d "$INSTALL_DIR/.git" ]]; then
-    pushd "$INSTALL_DIR" > /dev/null || error "Could not cd to $INSTALL_DIR"
-
-    git init
-    git branch -m main
-    git remote add origin "https://$GITHUB_URL/$USERNAME/$REPO.git"
-    git fetch origin main || { echo "❌ Git fetch failed." >&2; popd; exit 1; }
-    git reset --hard FETCH_HEAD || { echo "❌ Git reset failed." >&2; popd; exit 1; }
-    git clean -fd || echo "⚠️ Git clean had warnings."
-    git pull --rebase origin main || { echo "❌ Git pull failed." >&2; popd; exit 1; }
-
-    popd > /dev/null
-  fi
-
-  # Cleanup old git templates/hooks
-  rm -rf "$HOME/.config/git/templates" "$HOME/.config/git/hooks"
-
-# List of source-destination pairs
-symlinks="
-conf/bash/aliases .config/bash/aliases
-conf/bash/completions .config/bash/completions
-conf/bash/exports .config/bash/exports
-conf/bash/functions .config/bash/functions
-conf/bash/options .config/bash/options
-conf/bash/paths .config/bash/paths
-conf/bash/prompt .config/bash/prompt
-conf/git/hooks .config/git/hooks
-conf/git/templates .config/git/templates
-conf/git/attributes .config/git/attributes
-conf/git/darwin .config/git/darwin
-conf/git/ignore .config/git/ignore
-conf/git/linux .config/git/linux
-conf/git/message .config/git/message
-conf/gnupg/gpg .gnupg/gpg.conf
-conf/gnupg/gpg-agent .gnupg/gpg-agent.conf
-conf/misc/ctags .ctags
-conf/misc/editor .editorconfig
-conf/misc/hushlogin .hushlogin
-conf/misc/lesskey .lesskey
-conf/misc/logout .bash_logout
-conf/runcom/ack .ackrc
-conf/runcom/bash .bashrc
-conf/runcom/curl .curlrc
-conf/runcom/input .inputrc
-conf/runcom/mail .mailrc
-conf/runcom/ripgrep .ripgreprc
-conf/runcom/wget .wgetrc
-conf/bash_profile .bash_profile
-conf/gitconfig .gitconfig
-"
-
-  # Loop through each pair
-  while read -r src dst; do
-    dst="$HOME/$dst"
-    mkdir -p "$(dirname "$dst")"
-    if [[ -e "$INSTALL_DIR/$src" ]]; then
-      ln -sf "$INSTALL_DIR/$src" "$dst"
-    else
-      log "⚠️ Skipping missing source file: $src"
-    fi
-  done <<< "$symlinks"
-
-  if [[ ! -L "$HOME/.tmux.conf" || "$(readlink "$HOME/.tmux.conf")" != "$INSTALL_DIR/conf/tmux/config.$OS" ]]; then
-    ln -sfn $INSTALL_DIR/conf/tmux/config.$OS $HOME/.tmux.conf
-  fi
-
-  # Create necessary directories
-  chmod 700 "$HOME/.gnupg"
-  chown -R "$(whoami)" "$HOME/.gnupg"
-
-  # Ensure local bash profile exists and sources .bash_profile.local
-  [[ -f "$HOME/.bash_profile.local" ]] || echo '#!/usr/bin/env bash' > "$HOME/.bash_profile.local"
-  grep -qF ".bash_profile.local" "$HOME/.bash_profile" 2>/dev/null || echo '[[ -f ~/.bash_profile.local ]] && source ~/.bash_profile.local' >> "$HOME/.bash_profile"
-
-
-  # Setup dircolors
-  if [[ ! -f "$HOME/.dircolors" ]]; then
-    readonly LS_REPO="LS_COLORS"
-    mkdir -p "/tmp/$LS_REPO"
-    curl -#fLo "/tmp/$LS_REPO.tar.gz" "https://$GITHUB_URL/trapd00r/$LS_REPO/tarball/master"
-    tar -zxf "/tmp/$LS_REPO.tar.gz" --strip-components 1 -C "/tmp/$LS_REPO"
-    dircolors -b "/tmp/$LS_REPO/LS_COLORS" > "$HOME/.dircolors"
-    rm -rf "/tmp/$LS_REPO"*
-  fi
-
-  # Copy SSH config if needed
-  [[ -d "$HOME/.ssh" ]] || mkdir -p "$HOME/.ssh"
-  [[ -f "$HOME/.ssh/config" ]] || cp "$INSTALL_DIR/conf/ssh/config.$OS" "$HOME/.ssh/config"
-
-  # Prompt GitHub token setup
-  if command -v curl &>/dev/null; then
-    read -rp "What's your GitHub personal token? Create a token at <https://$GITHUB_URL/settings/tokens> " GITHUB_TOKEN
-    if [[ -n "$GITHUB_TOKEN" ]]; then
-      grep -q "machine github.com" "$HOME/.netrc" 2>/dev/null || {
-        cat <<EOF >> "$HOME/.netrc"
-machine github.com
-	login $GITHUB_TOKEN
-	password x-oauth-basic
-
-machine api.github.com
-	login $GITHUB_TOKEN
-	password x-oauth-basic
-
-machine raw.githubusercontent.com
-	login $GITHUB_TOKEN
-	password x-oauth-basic
-EOF
-      }
-      echo "export GITHUB_TOKEN=$GITHUB_TOKEN" >> "$HOME/.bash_profile.local"
-    fi
-  fi
-
-  # Git author info
-  if command -v git &>/dev/null; then
-    read -rp "Enter your Git name: " GIT_AUTHOR_NAME
-    git config --file "$HOME/.config/git/local" user.name "$GIT_AUTHOR_NAME"
-    read -rp "Enter your Git email: " GIT_AUTHOR_EMAIL
-    git config --file "$HOME/.config/git/local" user.email "$GIT_AUTHOR_EMAIL"
-  fi
-
-  # GPG Key setup
-  if command -v gpg &>/dev/null; then
-    gpg --gen-key
-    gpg --list-secret-keys --keyid-format LONG
-    read -rp "Which GPG key would you like to copy? (choose the code on the 'sec' line after the first slash) " GIT_GPG_KEY
-    git config --file "$HOME/.config/git/local" user.signingkey "$GIT_GPG_KEY"
-    gpg --armor --export "$GIT_GPG_KEY" | pbcopy
-    log "GPG key copied to clipboard. Add to GitHub."
-    chmod 600 "$HOME/.gnupg/"*
-  fi
-
-  # Change login shell
-  if [[ "$OS" == "darwin" ]]; then
-    echo "$(brew --prefix)/bin/bash" | pbcopy
-    sudo vim + -c 'startinsert' -c ':r !pbpaste' -c ':xa' /etc/shells
-  elif [[ "$OS" == "linux" ]]; then
-    sudo chsh -s "$(brew --prefix)/bin/bash" "$USER"
-  fi
-
-  # Final reporting
-  log "Dotfiles installed. Open a new terminal session"
+log() {
+	echo -e "${LOG_PREFIX}: ${BLUE}$1${RESET}"
 }
 
-main "$@"
+error() {
+	echo -e "${LOG_PREFIX}: ❌ ${RED}$1${RESET}" >&2
+}
+
+main() {
+	if ! command -v nvim &>/dev/null; then
+		error "NeoVim not found. Install it via Homebrew: brew install nvim"
+		exit 1
+	fi
+
+	if [[ -z "${DOTFILES_DIR:-}" ]]; then
+		error "DOTFILES_DIR is not set. Please export it before running."
+		exit 1
+	fi
+
+	log "📁 Opening dotfiles in nvim at: $DOTFILES_DIR"
+	cd "$DOTFILES_DIR"
+	nvim
+}
+
+main

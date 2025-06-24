@@ -6,7 +6,7 @@
 declare -a dirs_to_prepend=(
 	"/opt/homebrew/bin"
 	"/opt/homebrew/sbin"
-    "/opt/whalebrew/bin"
+	"/opt/whalebrew/bin"
 	"/usr/local/bin" # Ensure that this bin always takes precedence over `/usr/bin`
 	"/usr/local/sbin"
 )
@@ -15,7 +15,6 @@ declare -a dirs_to_prepend=(
 declare -a dirs_to_append=(
 	"/usr/bin"
 	"$HOME/bin"
-	"$HOME/Library/pnpm"
 	"$HOME/.local/bin"
 	"$(brew --prefix coreutils)/libexec/gnubin" # Add brew-installed GNU core utilities bin
 	"$(brew --prefix npm)/bin"                  # Add npm-installed package bin

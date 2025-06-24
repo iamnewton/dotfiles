@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# Custom configuration for ACK
+export ACKRC="$HOME/.config/ackrc"
+
+# Custom configuration for CURL
+export CURL_HOME="$HOME/.config/curlrc"
+
 # Make vim the default editor
 export EDITOR="vim"
 
@@ -9,13 +15,12 @@ export GIT_EDITOR="vim"
 # @TODO: automate this folder creation in dotfiles install
 export GOPATH="$(brew --prefix)/lib/go"
 
+# Custom configuration for GPG
+export GNUPGHOME="$HOME/.config/gnupg"
+
 # Always enable colored `grep` output
 # Noted in terminal that this option is deprecated
 # export GREP_OPTIONS="--color=auto"
-
-# Increase the maximum number of commands to remember
-# (default is 500)
-export HISTSIZE=500000
 
 # Entries beginning with space aren't added into history, and duplicate
 # entries will be erased (leaving the most recent entry).
@@ -28,18 +33,26 @@ export HISTFILESIZE=100000
 # Make some commands not show up in history
 export HISTIGNORE="ls:ls *:cd:cd -:pwd;exit:date:* --help"
 
+# Increase the maximum number of commands to remember
+# (default is 500)
+export HISTSIZE=500000
+
 # Set the format for the history file
 export HISTTIMEFORMAT="%h/%d/%y-%H:%M:%S "
+
+# Custom configuration for Input
+export INPUTRC="$HOME/.config/readline/inputrc"
 
 # Prefer US English and use UTF-8
 export LANG="en_US"
 export LC_ALL="en_US.UTF-8"
 
 # Linuxbrew library path
-LD_LIBRARY_PATH="$(brew --prefix)/lib"
+export LD_LIBRARY_PATH="$(brew --prefix)/lib"
 
 # Highlight section titles in manual pages
 export LESS_TERMCAP_md="$ORANGE"
+export LESSKEY="$HOME/.config/lesskey"
 
 # Add colors format to the LS command output
 export CLICOLOR=1
@@ -48,24 +61,23 @@ export CLICOLOR=1
 # Don't clear the screen after quitting a manual page
 export MANPAGER="less -X"
 
-# Make new shells get the history lines from all previous
-# shells instead of the default "last window closed" history
-export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
-
 # NVM directory (choosing n over nvm)
 # export NVM_DIR=$HOME/.nvm
 
 # N (node version manager) directory
 export N_PREFIX="$HOME/.n"
 
-# PNPM Home path
-export PNPM_HOME="$HOME/Library/pnpm"
+# shells instead of the default "last window closed" history
+export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
 # ripgrep configuration path
-export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+export RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"
 
 # bat theme configuration
 export BAT_THEME="OneHalfDark"
+
+# wget configuration path
+export WGETRC="$HOME/.config/wgetrc"
 
 # GPG Signage
 GPG_TTY=$(tty)
@@ -73,3 +85,4 @@ export GPG_TTY
 
 # Enable terraform logging to Standard Output (stdout)
 export TF_LOG=1
+

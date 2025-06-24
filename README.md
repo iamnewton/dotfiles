@@ -9,7 +9,7 @@ Typically software you buy comes with some sort of installer, why not your dotfi
 :warning: This will overwrite existing dotfiles in your `$HOME` directory.
 
 ```bash
-$ /bin/bash -c "$(curl -#fL https://raw.githubusercontent.com/iamnewton/dotfiles/main/bin/dotfiles)"
+$ /bin/bash -c "$(curl -#fL https://raw.githubusercontent.com/iamnewton/dotfiles/main/bin/install)"
 ```
 
 ### Requirements

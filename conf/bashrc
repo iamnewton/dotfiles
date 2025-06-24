@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# shellcheck source=../profile/profile
+test -r "$PS1" && source ~/.bash_profile
