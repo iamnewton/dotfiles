@@ -6,15 +6,18 @@ set -euo pipefail
 # Helps avoid accidentally creating insecure or overly permissive files
 umask 022
 
+readonly DOCKER_IMAGE="dotfiles-test"
+readonly DOCKERFILE="test/Dockerfile"
+
 # ANSI color codes
-PURPLE="\033[1;35m"
+CYAN="\033[1;36m"
 RED="\033[1;31m"
 GREEN="\033[1;32m"
 YELLOW="\033[1;33m"
 BLUE="\033[1;34m"
 DIM_WHITE="\033[2;37m"
 RESET="\033[0m"
-LOG_PREFIX="[${PURPLE}${REPO}${RESET}]"
+LOG_PREFIX="${CYAN}[docker]${RESET}"
 
 # Logging
 error() { echo -e "${LOG_PREFIX}: ❌ ${RED}$1${RESET}" >&2; }
@@ -23,20 +26,11 @@ info() { echo -e "${LOG_PREFIX}: ℹ️ ${BLUE}$1${RESET}"; }
 success() { echo -e "${LOG_PREFIX}: ✅ ${GREEN}$1${RESET}"; }
 warn() { echo -e "${LOG_PREFIX}: ⚠️ ${YELLOW}$1${RESET}"; }
 
-main() {
-	if ! command -v nvim &>/dev/null; then
-		warn "NeoVim not found. Installing it via Homebrew"
-		brew install nvim
-	fi
+log "🛠 Building $DOCKER_IMAGE from $DOCKERFILE"
+docker build -f "$DOCKERFILE" -t "$DOCKER_IMAGE" .
 
-	if [[ -z "${DOTFILES_DIR:-}" ]]; then
-		error "DOTFILES_DIR is not set. Please export it before running."
-		exit 1
-	fi
-
-	log "📁 Opening dotfiles in nvim at: $DOTFILES_DIR"
-	cd "$DOTFILES_DIR"
-	nvim
-}
-
-main
+log "⚓Running install script inside container..."
+docker run --rm -it \
+	--name dotfiles-test \
+	"$DOCKER_IMAGE" \
+	-c "cd dotfiles && ./bin/install"

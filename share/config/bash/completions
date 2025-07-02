@@ -12,6 +12,10 @@ if brew list "fx" &>/dev/null; then
 	source <(fx-completion --bash)
 fi
 
+if brew list "fzf" &>/dev/null; then
+	source <(fzf --bash)
+fi
+
 # Enable bash <tab> completion for fzf
 if brew list "fzf" &>/dev/null; then
 	source "$(brew --prefix)/opt/fzf/shell/completion.bash"

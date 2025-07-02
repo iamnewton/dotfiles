@@ -12,6 +12,9 @@ export EDITOR="vim"
 # Make vim the default editor for git
 export GIT_EDITOR="vim"
 
+# Custom configuration for Gitmoji Fuzzy Hook
+export GITMOJI_FUZZY_HOOK_ROOT="$HOME/.local/bin/gitmoji-fuzzy-hook"
+
 # @TODO: automate this folder creation in dotfiles install
 export GOPATH="$(brew --prefix)/lib/go"
 

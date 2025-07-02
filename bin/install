@@ -11,10 +11,9 @@ readonly USERNAME="iamnewton"
 readonly REPO="dotfiles"
 readonly INSTALL_DIR="$HOME/.local/lib/$REPO"
 
-readonly GITHUB_URL="github.com"
-readonly GIT_AUTHOR_NAME="Newton"
 readonly GIT_AUTHOR_EMAIL="5769156+iamnewton@users.noreply.github.com"
 readonly GIT_CONFIG_FILE="$HOME/.config/git/local"
+readonly OS="$(uname | tr '[:upper:]' '[:lower:]')"
 
 # ANSI color codes
 PURPLE="\033[1;35m"
@@ -22,152 +21,210 @@ RED="\033[1;31m"
 GREEN="\033[1;32m"
 YELLOW="\033[1;33m"
 BLUE="\033[1;34m"
+DIM_WHITE="\033[2;37m"
 RESET="\033[0m"
-LOG_PREFIX="[${PURPLE}${REPO}${RESET}]"
+LOG_PREFIX="${PURPLE}[${REPO}]${RESET}"
 
-# Logging functions
-error() {
-	echo -e "${LOG_PREFIX}: ❌ ${RED}$1${RESET}" >&2
-}
+# Logging
+error() { echo -e "${LOG_PREFIX}: ❌ ${RED}$1${RESET}" >&2; }
+log() { echo -e "${LOG_PREFIX}: ${DIM_WHITE}$1${RESET}"; }
+info() { echo -e "${LOG_PREFIX}: ℹ️ ${BLUE}$1${RESET}"; }
+success() { echo -e "${LOG_PREFIX}: ✅ ${GREEN}$1${RESET}"; }
+warn() { echo -e "${LOG_PREFIX}: ⚠️ ${YELLOW}$1${RESET}"; }
 
-log() {
-	echo -e "${LOG_PREFIX}: ${BLUE}$1${RESET}"
-}
-
-success() {
-	echo -e "${LOG_PREFIX}: ✅ ${GREEN}$1${RESET}"
-}
-
-warn() {
-	echo -e "${LOG_PREFIX}: ⚠️  ${YELLOW}$1${RESET}"
-}
-
+# Install Homebrew if missing and activate its shell environment
 install_homebrew() {
-	log "🔧 Installing Homebrew and packages..."
-	local brew_paths
-	brew_paths=(
-		"/opt/homebrew/bin/brew"
-		"/usr/local/bin/brew"
-		"/home/linuxbrew/.linuxbrew/bin/brew"
-	)
+	log "🔎 Checking for Homebrew..."
 
-	if ! command -v brew &>/dev/null; then
-		log "🔧 Homebrew not found — attempting installation"
+	if ! command -v brew >/dev/null 2>&1; then
+		log "🍺  Installing Homebrew..."
 
 		if ! /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
 			error "Homebrew installation failed"
-			return 1
+			return 74 # I/O error: failed to fetch or run install script (EX_IOERR)
 		fi
 
-		# Try to locate brew and source its shellenv
-		for path in "${brew_paths[@]}"; do
+		# Find the installed brew binary
+		local brew_bin
+		for path in /opt/homebrew/bin/brew /usr/local/bin/brew /home/linuxbrew/.linuxbrew/bin/brew; do
 			if [[ -x "$path" ]]; then
-				log "🔗 Sourcing Homebrew environment from: $path"
-				eval "$("$path" shellenv)"
+				brew_bin="$path"
 				break
 			fi
 		done
 
-		# Re-check if brew is available after install
-		if ! command -v brew &>/dev/null; then
-			error "Homebrew installed, but binary not found in expected paths"
-			return 1
+		if [[ -z "${brew_bin:-}" ]]; then
+			error "Failed to find installed brew binary"
+			return 70 # EX_SOFTWARE
 		fi
-	else
-		log "Homebrew already installed"
-		eval "$(brew shellenv)"
+
+		# Shellenv activation
+		eval "$("$brew_bin" shellenv)" || {
+			error "Failed to configure Homebrew environment"
+			return 70
+		}
+
+		success "Homebrew installed and configured"
+		return 0
 	fi
 
-	# Defensive check again before installing
-	if ! command -v brew &>/dev/null; then
-		error "brew command not available — aborting package install"
-		return 1
+	if ! eval "$(brew shellenv)"; then
+		error "Failed to configure Homebrew environment"
+		return 70 # Internal shell eval/config error (EX_SOFTWARE)
 	fi
 
-	log "📦 Installing Homebrew packages"
-	brew install \
-		bash bash-completion@2 bat coreutils ctags fzf gcc gh git git-delta \
-		gnupg gron jq lazygit less mosh n nvim rsync ripgrep spaceman-diff \
-		ssh-copy-id tig tmux tree wget whalebrew z
-	success "Homebrew packages installed"
+	info "Homebrew is already installed"
+
+	return 0
 }
 
+# Download dotfiles repo and extract it to the install directory
+extract_repo() {
+	log "🔎 Checking for $INSTALL_DIR..."
+
+	if [[ -d "$INSTALL_DIR" && -n "$(ls -A "$INSTALL_DIR")" ]]; then
+		info "$INSTALL_DIR already exists and is not empty. Skipping extraction"
+		success "Using previously extracted dotfiles"
+		return 0
+	fi
+
+	mkdir -p "$INSTALL_DIR" || {
+		error "Failed to create directory: $INSTALL_DIR"
+		return 73 # Can't create directory (EX_CANTCREAT)
+	}
+
+	log "📥 Downloading $REPO into install dir: $INSTALL_DIR"
+	if ! curl -fsSL "https://github.com/$USERNAME/$REPO/tarball/main" | tar -xz --strip-components=1 -C "$INSTALL_DIR"; then
+		error "Failed to extract $REPO to $INSTALL_DIR"
+		return 74 # I/O error from curl or tar (EX_IOERR)
+	fi
+
+	success "Extracted $REPO to $INSTALL_DIR"
+	return 0
+}
+
+# Clone or reinitialize the dotfiles repository in the install directory
 clone_repo() {
-	log "📥 Cloning and setting up dotfiles repository..."
-	local tmp_tar
-	tmp_tar="$(mktemp "/tmp/$REPO.XXXXXX.tar.gz")"
-	local repo_url="https://$GITHUB_URL/$USERNAME/$REPO"
+	log "🔎 Checking if $INSTALL_DIR is already initialized and up-to-date"
 
 	if [[ ! -d "$INSTALL_DIR" ]]; then
-		log "📥 Cloning ${REPO} repository from $repo_url"
 		mkdir -p "$INSTALL_DIR" || {
 			error "Failed to create directory: $INSTALL_DIR"
-			return 1
+			return 73 # Can't create directory (EX_CANTCREAT)
 		}
-
-		if ! curl -#fLo "$tmp_tar" "$repo_url/tarball/main"; then
-			error "Failed to download tarball from $repo_url"
-			return 1
-		fi
-
-		if ! tar -zxf "$tmp_tar" --strip-components 1 -C "$INSTALL_DIR"; then
-			error "Failed to extract ${REPO} tarball to $INSTALL_DIR"
-			return 1
-		fi
-
-		rm -f "$tmp_tar"
-		success "${REPO} extracted to $INSTALL_DIR"
-	else
-		log "📁 ${REPO} directory already exists: $INSTALL_DIR"
 	fi
 
-	if command -v git &>/dev/null && [[ ! -d "$INSTALL_DIR/.git" ]]; then
-		log "🔧 Initializing Git repository in $INSTALL_DIR"
-		pushd "$INSTALL_DIR" >/dev/null || {
-			error "Could not enter directory: $INSTALL_DIR"
-			return 1
-		}
+	if ! pushd "$INSTALL_DIR" >/dev/null; then
+		error "Failed to enter directory: $INSTALL_DIR"
+		return 73 # Can't create directory (EX_CANTCREAT)
+	fi
 
-		git init
-		git branch -m main
-		git remote add origin "$repo_url.git"
+	# If repo already initialized, check if it's clean and up-to-date
+	log "📦 Checking if $INSTALL_DIR is clean..."
+	if [[ -d .git ]]; then
+		local remote_url branch
+		remote_url="$(git remote get-url origin 2>/dev/null || true)"
+		branch="$(git symbolic-ref --short HEAD 2>/dev/null || echo '')"
 
-		if ! git fetch origin main; then
-			error "Git fetch failed from $repo_url"
-			return 1
+		if git diff --quiet && git diff --cached --quiet && [[ "$remote_url" == "$repo_url" ]] && [[ "$branch" =~ ^(main|master)$ ]]; then
+			info "Dotfiles repo already cloned, clean, and on $branch"
+			popd >/dev/null
+			return 0
 		fi
 
-		if ! git reset --hard FETCH_HEAD; then
-			error "Git reset failed"
-			return 1
+		if [[ -n "$(git status --porcelain)" ]]; then
+			warn "⚠️ Uncommitted changes detected: stashing them before reset"
+			git stash push -u -m "dotfiles-auto-stash-before-reset" || warn "Stash failed"
+			info "Your previous changes were stashed. Use \`git stash list\` to review or \`git stash pop\` to restore."
 		fi
-
-		git clean -fd || warn "Git clean produced warnings"
-		git pull --rebase origin main || {
-			error "Git pull --rebase failed"
-			return 1
+	else
+		log "🔧 Initializing new Git repository"
+		git init --initial-branch=main || {
+			error "Failed to initialize git repository"
+			popd >/dev/null
+			return 70 # Software error: symlink failed (EX_SOFTWARE)
 		}
 
+		log "🔧 Setting default branch to main"
+		git branch -m main || {
+			error "Failed to rename default branch to main"
+			popd >/dev/null
+			return 70 # Software error: symlink failed (EX_SOFTWARE)
+		}
+	fi
+
+	local repo_url
+	repo_url="https://github.com/${USERNAME}/${REPO}.git"
+	log "🔗 Adding remote origin: $repo_url"
+	if ! git remote | grep -q "^origin$"; then
+		git remote add origin "$repo_url" || {
+			error "Failed to add remote origin"
+			popd >/dev/null
+			return 70 # Software error: symlink failed (EX_SOFTWARE)
+		}
+	else
+		info "🔗 Remote origin already exists"
+	fi
+
+	log "📥 Fetching origin/main"
+	if ! git fetch origin main; then
+		error "Failed to fetch from origin"
 		popd >/dev/null
-		success "Git repo setup complete"
-	else
-		log "Git already initialized or unavailable — skipping Git setup"
+		return 74 # I/O error: failed to fetch or run install script (EX_IOERR)
 	fi
+
+	log "🧹 Resetting index and working tree to origin/main"
+	if ! git reset --hard FETCH_HEAD; then
+		error "Failed to reset to FETCH_HEAD"
+		popd >/dev/null
+		return 70 # Software error: symlink failed (EX_SOFTWARE)
+	fi
+
+	log "🧽 Cleaning untracked files"
+	git clean -fd || warn "Git clean produced warnings"
+
+	success "Repository has been initialized and reset to origin/main"
+
+	log "📤 Pulling latest changes (rebase)"
+	if ! git pull --rebase origin main; then
+		error "Failed to pull latest changes"
+		popd >/dev/null
+		return 70 # Software error: symlink failed (EX_SOFTWARE)
+	fi
+
+	log "🔄 Updating submodules"
+	if ! git submodule update --recursive --init --quiet; then
+		error "Failed to update submodules"
+		popd >/dev/null
+		return 70 # Software error: symlink failed (EX_SOFTWARE)
+	fi
+
+	popd >/dev/null
+	success "Repository is up to date"
+	return 0
 }
 
+# Symlink the main repo binary
 symlink_binary() {
-	log "🔗 Setting up binary symlink..."
-	local filepath="$INSTALL_DIR/bin/${REPO}"
-	local target="$HOME/.local/bin/$REPO"
+	local filepath target
+	filepath="$INSTALL_DIR/bin/${REPO}"
+	target="$HOME/.local/bin/$REPO"
+	log "🔎 Checking for symlink to $HOME/.local/bin/$REPO"
+
+	if [[ "$(readlink "$target")" == "$filepath" ]]; then
+		info "Symlink already exists: $target → $filepath"
+		success "Using existing binary"
+		return 0
+	fi
 
 	if [[ ! -x "$filepath" ]]; then
-		warn "Binary not found or not executable: $filepath"
-		return 1
+		error "Binary not found or not executable: $filepath"
+		return 66 # Input file missing or not executable (EX_NOINPUT)
 	fi
 
 	mkdir -p "$(dirname "$target")" || {
-		error "Failed to create directory: $target"
-		return 1
+		error "Failed to create directory: $(dirname "$target")"
+		return 73 # Can't create directory (EX_CANTCREAT)
 	}
 
 	log "🔗 Linking $filepath → $target"
@@ -175,93 +232,100 @@ symlink_binary() {
 		success "Linked $filepath → $target"
 	else
 		error "Failed to link from $filepath to $target"
-		return 1
+		return 70 # Software error: symlink failed (EX_SOFTWARE)
 	fi
+
+	return 0
 }
 
-# Symlink everything in the conf directory as a dotfile
-# All of these files are meant to be at the room/HOME directory
-# so when naming them, name appropriately
+# Symlink files from conf/ into dot-prefixed files in $HOME
 symlink_dotconfigs() {
-	log "🔗 Symlinking dotconfig files to home directory..."
-	local source_dir="${INSTALL_DIR}/conf"
+	log "🔎 Checking for dotconfig symlinks"
 
+	local source_dir
+	source_dir="${INSTALL_DIR}/conf"
 	if [[ ! -d "$source_dir" ]]; then
 		error "Directory not found: $source_dir"
-		return 1
+		return 66 # Source directory not found (EX_NOINPUT)
 	fi
 
+	log "🔗 Symlinking dotconfig files to HOME directory..."
+	local count=0
 	for filepath in "$source_dir"/*; do
-		[[ -f "$filepath" ]] || continue # Skip non-files (like subdirs)
+		[[ -f "$filepath" ]] || continue
 
-		local filename
+		local filename target
 		filename="$(basename "$filepath")"
-		local target="$HOME/.$filename"
+		target="$HOME/.$filename"
 
 		log "🔗 Linking $filepath → $target"
 		if ln -sfn "$filepath" "$target"; then
 			success "Linked $filepath → $target"
+			((count++))
 		else
 			error "Failed to link from $filepath to $target"
-			return 1
+			return 70 # Symlink failed (EX_SOFTWARE)
 		fi
 	done
-}
 
-# Symlink all OS specific files.
-# Anything in these directories should be named darwin or linux,
-# based on the output of the `uname` command
-symlink_os_files() {
-	log "🔗 Linking OS-specific configuration files..."
-	local base_dir="${INSTALL_DIR}/lib"
-	local os
-	os="$(uname | tr '[:upper:]' '[:lower:]')" # 'darwin' or 'linux'
-
-	if [[ ! -d "$base_dir" ]]; then
-		error "Directory does not exist: $base_dir"
-		return 1
+	if [[ "$count" -eq 0 ]]; then
+		warn "No dotfiles were linked from $source_dir"
+	else
+		success "Linked $count dotfile(s) from $source_dir"
 	fi
 
-	log "🔍 Linking OS-specific configs for: $os"
+	return 0
+}
 
-	# Find matching OS-specific config files (e.g., lib/tmux/darwin)
-	find "$base_dir" -type f -name "$os" | while read -r filepath; do
+# Symlink OS-specific config files based on `uname`
+symlink_os_files() {
+	log "🔎 Checking symlinks for OS-specific configuration files..."
+
+	local base_dir
+	base_dir="${INSTALL_DIR}/lib"
+	if [[ ! -d "$base_dir" ]]; then
+		error "Directory does not exist: $base_dir"
+		return 66 # Directory not found (EX_NOINPUT)
+	fi
+
+	log "🔍 Linking OS-specific configs for: $OS"
+	local -a files
+	mapfile -t files < <(find "$base_dir" -type f -name "$OS")
+
+	if [[ ${#files[@]} -eq 0 ]]; then
+		info "No OS-specific files found for: $OS"
+		return 0
+	fi
+
+	local processed=0
+	for filepath in "${files[@]}"; do
 		local relative_dir target_filename target
+		relative_dir="${filepath#$base_dir/}"
+		target_filename="$(basename "$(dirname "$relative_dir")")"
 
-		relative_dir="${filepath#$base_dir/}"                      # e.g., ssh/darwin
-		target_filename="$(basename "$(dirname "$relative_dir")")" # e.g., ssh
 		case "$target_filename" in
 		ssh)
 			target="$HOME/.ssh/config"
 			log "🔗 Copying $filepath → $target"
 			mkdir -p "$(dirname "$target")" || {
-				error "Failed to create directory: $target"
+				error "Failed to create directory: $(dirname "$target")"
+				continue
 			}
 			if cp "$filepath" "$target"; then
 				success "Copied $filepath → $target"
+				((processed++))
 			else
 				error "Failed to copy from $filepath to $target"
-				return 1
 			fi
 			;;
-		tmux)
-			target="$HOME/.tmux.conf"
+		tmux | git)
+			target="$HOME/.${target_filename}conf"
 			log "🔗 Linking $filepath → $target"
 			if ln -sfn "$filepath" "$target"; then
 				success "Linked $filepath → $target"
+				((processed++))
 			else
 				error "Failed to link from $filepath to $target"
-				return 1
-			fi
-			;;
-		git)
-			target_path="$HOME/.gitconfig"
-			log "🔗 Linking $filepath → $target_path"
-			if ln -sfn "$filepath" "$target"; then
-				success "Linked $filepath → $target"
-			else
-				error "Failed to link from $filepath to $target"
-				return 1
 			fi
 			;;
 		*)
@@ -270,72 +334,472 @@ symlink_os_files() {
 			;;
 		esac
 	done
+
+	success "Linked OS-specific configs for: $OS"
+	return 0
 }
 
-setup_ls_colors() {
-	log "🔗 Linking OS-specific configuration files..."
-	if [[ ! -f "$HOME/.config/dircolors" ]]; then
-		if ! command -v dircolors &>/dev/null; then
-			error "'dircolors' not found. Install coreutils via Homebrew."
-			return 1
-		fi
+# Symlink app configs from share/config into ~/.config/
+symlink_configs() {
+	log "🔎 Checking app config symlinks to ~/.config..."
 
-		readonly LS_REPO="LS_COLORS"
-		local TMP_DIR
-		TMP_DIR="$(mktemp -d "/tmp/${LS_REPO}.XXXXXX")"
-		local tmp_tar
-		tmp_tar="$(mktemp "/tmp/${LS_REPO}.XXXXXX.tar.gz")"
-		local repo_url="https://github.com/trapd00r/$LS_REPO"
+	local source_dir target_dir
+	source_dir="$INSTALL_DIR/share/config"
+	if [[ ! -d "$source_dir" ]]; then
+		error "Source config directory does not exist: $source_dir"
+		return 66 # Directory not found (EX_NOINPUT)
+	fi
 
-		log "Installing dircolors from $LS_REPO"
+	target_dir="$HOME/.config"
+	mkdir -p "$target_dir" || {
+		error "Failed to create directory: $target_dir"
+		return 73 # Can't create directory (EX_CANTCREAT)
+	}
 
-		if ! curl -#fLo "$tmp_tar" "$repo_url/tarball/master"; then
-			error "Failed to download tarball from $repo_url"
-			return 1
-		fi
+	local count=0
+	for item in "$source_dir"/*; do
+		[[ -e "$item" ]] || continue
+		local name target
+		name="$(basename "$item")"
+		target="$target_dir/$name"
 
-		if ! tar -zxf "$tmp_tar" --strip-components 1 -C "$TMP_DIR"; then
-			error "Failed to extract ${LS_REPO} tarball to $TMP_DIR"
-			return 1
-		fi
-
-		if [[ -f "$TMP_DIR/LS_COLORS" ]]; then
-			dircolors -b "$TMP_DIR/${LS_REPO}" >"$HOME/.config/dircolors"
-			success "Installed ${LS_REPO} to $HOME/.config/dircolors"
+		log "🔗 Linking $name → $target"
+		if ln -sfn "$item" "$target"; then
+			success "Linked $name → $target"
+			((count++))
 		else
-			error "${LS_REPO} file not found in extracted tarball."
-			return 1
+			error "Failed to link from $item to $target"
+		fi
+	done
+
+	if [[ "$count" -eq 0 ]]; then
+		warn "No configs were linked from $source_dir"
+	else
+		success "Linked $count config(s) into ~/.config/"
+	fi
+
+	return 0
+}
+
+# Create a local bash profile file and set DOTFILES_DIR if not present
+create_bash_profile_local() {
+	log "🔎 Checking if .bash_profile.local exists..."
+
+	local profile_file="$HOME/.bash_profile"
+	local local_profile_file="$HOME/.bash_profile.local"
+	local export_line="export DOTFILES_DIR=\"$INSTALL_DIR\""
+
+	# Ensure the .bash_profile.local file exists
+	if [[ ! -f "$local_profile_file" ]]; then
+		log "🛠️ Creating .bash_profile.local..."
+		echo '#!/usr/bin/env bash' >"$local_profile_file"
+		success "Created $local_profile_file"
+	else
+		info "$local_profile_file already exists"
+	fi
+
+	# Ensure it's sourced in .bash_profile
+	if [[ -f "$profile_file" ]]; then
+		if ! grep -qF "$local_profile_file" "$profile_file"; then
+			echo "[[ -f $local_profile_file ]] && source $local_profile_file" >>"$profile_file"
+			success "Added source line to $profile_file"
+		else
+			info "$profile_file already sources $local_profile_file"
+		fi
+	else
+		warn "$profile_file not found — skipping source line injection"
+	fi
+
+	# Add DOTFILES_DIR if not already present
+	if ! grep -E "^export DOTFILES_DIR=" "$local_profile_file" >/dev/null 2>&1; then
+		echo "$export_line" >>"$local_profile_file"
+		success "Added DOTFILES_DIR to $local_profile_file"
+	else
+		info "DOTFILES_DIR already defined in $local_profile_file"
+	fi
+
+	return 0
+}
+
+# Install packages via Brewfile
+install_homebrew_packages() {
+	log "🍺 Installing Homebrew packages from Brewfile..."
+
+	if ! command -v brew >/dev/null 2>&1; then
+		warn "Homebrew not found. Attempting to reinstall Homebrew"
+
+		if ! install_homebrew; then
+			error "Failed to install Homebrew"
+			return 74 # I/O error: failed to fetch or run install script (EX_IOERR)
 		fi
 
-		rm -rf "$TMP_DIR" "$tmp_tar"
-	else
-		log "${LS_REPO} already installed."
+		success "Installed Homebrew"
 	fi
+
+	local brewfile_path
+	brewfile_path="$INSTALL_DIR/lib/homebrew/Brewfile"
+	if [[ ! -f "$brewfile_path" ]]; then
+		error "No Brewfile found in repo: $brewfile_path"
+		return 66 # Input file not found (EX_NOINPUT)
+	fi
+
+	if ! brew bundle --file="$brewfile_path"; then
+		error "Failed to install packages via Brewfile"
+		return 70 # Software error: symlink failed (EX_SOFTWARE)
+	fi
+
+	success "Installed all Homebrew packages"
+	return 0
 }
 
-setup_bash_profile_local() {
-	log "🛠️ Setting up .bash_profile.local..."
-	[[ -f "$HOME/.bash_profile.local" ]] || echo '#!/usr/bin/env bash' >"$HOME/.bash_profile.local"
-	grep -qF ".bash_profile.local" "$HOME/.bash_profile" 2>/dev/null ||
-		echo '[[ -f ~/.bash_profile.local ]] && source ~/.bash_profile.local' >>"$HOME/.bash_profile"
-	success "Setup .bash_profile.local and sourced from .bash_profile"
+# Install or update Whalebrew Docker-based CLIs
+install_whalebrew_packages() {
+	log "🐳 Installing/updating Whalebrew packages..."
 
-	# Add DOTFILES_DIR if not present
-	if ! grep -q "DOTFILES_DIR=" "$HOME/.bash_profile.local"; then
-		echo "export DOTFILES_DIR=\"$INSTALL_DIR\"" >>"$HOME/.bash_profile.local"
-		success "DOTFILES_DIR added to .bash_profile.local"
-	else
-		log "DOTFILES_DIR already defined in .bash_profile.local"
+	if ! command -v whalebrew >/dev/null 2>&1; then
+		warn "whalebrew not found. Attempting to install via Homebrew"
+
+		if ! install_homebrew || ! brew install whalebrew; then
+			error "Failed to install whalebrew"
+			return 74 # I/O error: failed to fetch or run install script (EX_IOERR)
+		fi
+
+		success "Installed whalebrew"
 	fi
+
+	local images
+	images=(whalebrew/ffmpeg whalebrew/httpie whalebrew/speedtest whalebrew/youtube-dl)
+	for image in "${images[@]}"; do
+		local name
+		name=$(basename "$image")
+
+		if whalebrew list | grep -q "^$name$"; then
+			info "🔄 Reinstalling $name..."
+			whalebrew uninstall "$name"
+		fi
+
+		if whalebrew install "$image"; then
+			success "Installed $name"
+		else
+			warn "Failed to install $name"
+		fi
+	done
+
+	success "Whalebrew packages installed or updated"
+	return 0
 }
 
+# Install or update global npm packages
+install_npm_packages() {
+	log "📦 Installing global npm packages..."
+
+	if ! command -v npm >/dev/null 2>&1 || ! command -v node >/dev/null 2>&1; then
+		warn "npm not found. Attempting to install via Homebrew"
+
+		if ! install_homebrew || ! brew install node; then
+			error "Failed to install Node.js (npm)"
+			return 74 # I/O error: failed to fetch or run install script (EX_IOERR)
+		fi
+
+		success "Installed Node.js (npm)"
+	fi
+
+	local packages
+	packages=(fkill-cli fx-completion is-up tldr trash vtop)
+	for pkg in "${packages[@]}"; do
+		if npm list -g --depth=0 "$pkg" >/dev/null 2>&1; then
+			info "🔄 Updating $pkg..."
+			npm update --global --quiet "$pkg" || warn "Failed to update $pkg"
+		else
+			log "➕ Installing $pkg..."
+			npm install --global --quiet "$pkg" || warn "Failed to install $pkg"
+		fi
+	done
+
+	success "All npm packages installed or updated"
+	return 0
+}
+
+# Prompt to install macOS App Store apps via mas and Brewfile.macos
+install_macos_apps() {
+	log "🔎 Checking if on MacOS for app installation..."
+
+	if [[ "$OS" != "darwin" ]]; then
+		info "🖥 Not on macOS, skipping macOS app install"
+		return 0
+	fi
+
+	read -r -p "🍏 Install macOS apps too? (y/n) " -n 1
+	echo
+	if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
+		info "⏭ Skipping macOS app installation"
+		return 0
+	fi
+
+	if ! command -v brew >/dev/null 2>&1; then
+		warn "Homebrew not found. Installing..."
+		if ! install_homebrew || ! brew install mas; then
+			error "Failed to install Homebrew for macOS app install"
+			return 69 # Service unavailable (EX_UNAVAILABLE)
+		fi
+	fi
+
+	local brewfile_macos_path
+	brewfile_macos_path="$INSTALL_DIR/lib/homebrew/Brewfile.macos"
+	if [[ ! -f "$brewfile_macos_path" ]]; then
+		error "Brewfile.macos not found at: $brewfile_macos_path"
+		return 66 # Input file not found (EX_NOINPUT)
+	fi
+
+	log "📥 Installing macOS apps from Brewfile.macos..."
+	if brew bundle --file="$brewfile_macos_path"; then
+		success "Installed macOS apps from Brewfile.macos"
+	else
+		error "Failed to install apps from Brewfile.macos"
+		return 70 # Software error: symlink failed (EX_SOFTWARE)
+	fi
+
+	return 0
+}
+
+# Install custom TTF font included in the repo
+install_fonts() {
+	log "🔎 Checking for font files..."
+
+	local font_dir font_name target
+	font_dir="$INSTALL_DIR/lib/fonts"
+	font_name="InputMonoCondensed Nerd Font.ttf"
+
+	if [[ ! -f "$font_dir/$font_name" ]]; then
+		error "Font file not found: $font_dir/$font_name"
+		return 66 # Input file missing (EX_NOINPUT)
+	fi
+
+	if [[ "$OS" == "darwin" ]]; then
+		target="$HOME/Library/Fonts"
+	elif [[ "$OS" == "linux" ]]; then
+		target="$HOME/.local/share/fonts"
+	else
+		warn "🖥 Unsupported OS for font installation"
+		return 0
+	fi
+
+	log "🖋 Installing font to $target..."
+	mkdir -p "$target" || {
+		error "Failed to create font directory: $target"
+		return 73 # Can't create directory (EX_CANTCREAT)
+	}
+
+	cp "$font_dir/$font_name" "$target" || {
+		error "Failed to copy font to $target"
+		return 74 # I/O error downloading or extracting (EX_IOERR)
+	}
+
+	if [[ "$OS" == "linux" ]]; then
+		fc-cache -f "$target"
+	fi
+
+	success "Font '$font_name' installed"
+	return 0
+}
+
+# Set up dircolors config (LS_COLORS)
+install_ls_colors() {
+	log "🔎 Checking if dircolors is setup"
+
+	if [[ -f "$HOME/.config/dircolors" ]]; then
+		info "📁 LS_COLORS already installed."
+		return 0
+	fi
+
+	if ! command -v dircolors &>/dev/null; then
+		warn "dircolors not found. Attempting to install via Homebrew"
+
+		if ! install_homebrew || ! brew install coreutils; then
+			error "Failed to install Homebrew"
+			return 74 # I/O error: failed to fetch or run install script (EX_IOERR)
+		fi
+
+		success "Installed dircolors via coreutils via Homebrew"
+	fi
+
+	local tmp_dir repo_url
+	tmp_dir="$(mktemp -d "/tmp/LS_COLORS.XXXXXX")"
+	repo_url="https://github.com/trapd00r/LS_COLORS"
+
+	log "🌈 Installing dircolors from LS_COLORS"
+	if ! curl -sL "$repo_url/tarball/master" | tar -xz --strip-components=1 -C "$tmp_dir"; then
+		error "Failed to download or extract tarball from $repo_url"
+		rm -rf "$tmp_dir"
+		return 74 # I/O error downloading or extracting (EX_IOERR)
+	fi
+
+	if [[ -f "$tmp_dir/LS_COLORS" ]]; then
+		dircolors -b "$tmp_dir/LS_COLORS" >"$HOME/.config/dircolors"
+		success "Installed LS_COLORS to $HOME/.config/dircolors"
+	else
+		error "LS_COLORS file not found in extracted tarball."
+		rm -rf "$tmp_dir"
+		return 66 # Input file missing (EX_NOINPUT)
+	fi
+
+	rm -rf "$tmp_dir"
+	return 0
+}
+
+# Install Genmoji (https://github.com/segersniels/genmoji)
+install_genmoji() {
+	log "🔎 Checking if Genmoji is installed..."
+
+	local install_url install_target install_repo bash_profile_local_file
+	install_repo="genmoji"
+	install_url="https://raw.githubusercontent.com/segersniels/${install_repo}/master/scripts/install.sh"
+	install_dir="$HOME/.local/lib/$install_repo"
+	install_target="$HOME/.local/bin"
+	bash_profile_local_file="$HOME/.bash_profile.local"
+
+	# Check if already installed
+	if command -v genmoji >/dev/null 2>&1; then
+		info "Genmoji is already installed at: $(command -v genmoji)"
+		return 0
+	else
+		mkdir -p "$install_dir" || {
+			error "Failed to create target directory: $install_dir"
+			return 73 # Can't create directory (EX_CANTCREAT)
+		}
+
+		log "🎭 Installing Genmoji to: $install_dir"
+		if curl -fsSL "$install_url" | bash -s "$install_dir"; then
+			success "Genmoji installed to $install_dir"
+		else
+			error "Failed to install Genmoji"
+			return 70 # Software error: symlink failed (EX_SOFTWARE)
+		fi
+
+		log "🔗 Linking $install_dir → $install_target/$install_repo"
+		if ln -sfn "$install_dir" "$install_target/$install_repo"; then
+			success "Linked $install_dir → $install_target/$install_repo"
+		else
+			error "Failed to link $install_dir to $install_target/$install_repo"
+			return 70 # Software error: symlink failed (EX_SOFTWARE)
+		fi
+	fi
+
+	# Prompt for OpenAI API key
+	read -rp "🔑 Enter your OpenAI API key (skip if already set; check Passwords app): " OPENAI_API_KEY_INPUT
+
+	# Only export if a value was entered
+	if [[ -n "$OPENAI_API_KEY_INPUT" ]]; then
+		export OPENAI_API_KEY="$OPENAI_API_KEY_INPUT"
+
+		# Add to bash_profile.local if not already present
+		if grep -q "OPENAI_API_KEY=" "$bash_profile_local_file" 2>/dev/null; then
+			warn "OPENAI_API_KEY already set in $bash_profile_local_file"
+		else
+			echo "export OPENAI_API_KEY=\"$OPENAI_API_KEY\"" >>"$bash_profile_local_file"
+			success "Added OPENAI_API_KEY to $bash_profile_local_file"
+		fi
+	else
+		warn "No API key entered; skipping environment variable setup"
+	fi
+
+	# Confirm install
+	if command -v genmoji >/dev/null 2>&1; then
+		success "Genmoji is now available as: $(command -v genmoji)"
+	else
+		warn "Genmoji script installed, but not found in \$PATH"
+		info "You may need to add '$install_dir' to your PATH manually."
+	fi
+
+	return 0
+}
+
+# Install Gitmoji Fuzzy Git commit hook
+install_gitmoji_fuzzy_hook() {
+	log "🎉 Checking if gitmoji-fuzzy-hook is installed..."
+
+	local filepath hooks_dir hook_path install_repo install_dir repo_url target templates_dir
+	install_repo="gitmoji-fuzzy-hook"
+	install_dir="$HOME/.local/lib/$install_repo"
+	repo_url="https://gitlab.com/raabf/$install_repo.git"
+
+	# Clone or update the repo
+	if [[ ! -d "$install_dir/.git" ]]; then
+		mkdir -p "$install_dir" || {
+			error "Failed to create directory: $install_dir"
+			return 73 # Can't create directory (EX_CANTCREAT)
+		}
+		git clone "$repo_url" "$install_dir" || {
+			error "Failed to clone $repo_url"
+			return 74 # I/O error from curl or tar (EX_IOERR)
+		}
+		success "Cloned $install_repo into $install_dir"
+	else
+		info "Updating existing $install_repo repo..."
+		git -C "$install_dir" pull --quiet || warn "Could not update $install_repo"
+	fi
+
+	target="$HOME/.local/bin/$install_repo"
+	mkdir -p "$(dirname "$target")" || {
+		error "Failed to create directory: $(dirname "$target")"
+		return 73 # Can't create directory (EX_CANTCREAT)
+	}
+
+	log "🔗 Linking $install_dir → $target"
+	if ln -sfn "$install_dir" "$target"; then
+		success "Linked $install_dir → $target"
+	else
+		error "Failed to link from $install_dir to $target"
+		return 70 # Software error: symlink failed (EX_SOFTWARE)
+	fi
+
+	# Install hook to both locations
+	hooks_dir="$HOME/.config/git/hooks"
+	templates_dir="$HOME/.config/git/templates/hooks"
+	for dir in "$templates_dir" "$hooks_dir"; do
+		mkdir -p "$dir" || {
+			error "Failed to create hook directory: $dir"
+			return 73 # Can't create directory (EX_CANTCREAT)
+		}
+		hook_path="$dir/prepare-commit-msg"
+		if gitmoji-fuzzy-hook-init >"$hook_path"; then
+			chmod +x "$hook_path"
+			success "Installed $install_repo to $hook_path"
+		else
+			error "Failed to generate prepare-commit-msg in $dir"
+			return 70 # Software error: symlink failed (EX_SOFTWARE)
+		fi
+	done
+
+	success "gitmoji-fuzzy-hook installed and configured for Git hooks and templates"
+	return 0
+}
+
+# Prompt user for GitHub token and write to .netrc and local bash profile
 setup_github_token() {
+	log "🔎 Checking for GitHub token..."
+
+	if [[ -n "${GITHUB_TOKEN:-}" ]]; then
+		info "GITHUB_TOKEN is already set in environment"
+		return 0
+	fi
+
 	log "🔐 Configuring GitHub token..."
-	if command -v curl &>/dev/null; then
-		read -rp "What's your GitHub personal token? " GITHUB_TOKEN
-		if [[ -n "$GITHUB_TOKEN" ]]; then
-			grep -q "machine github.com" "$HOME/.netrc" 2>/dev/null || {
-				cat <<EOF >>"$HOME/.netrc"
+	read -rp "🔑 Enter your GitHub personal access token (leave blank to skip): " token_input
+	if [[ -z "$token_input" ]]; then
+		warn "No token entered, skipping GitHub token setup"
+		return 0
+	fi
+
+	export GITHUB_TOKEN="$token_input"
+	local netrc_path profile_local
+	netrc_path="$HOME/.netrc"
+	profile_local="$HOME/.bash_profile.local"
+
+	# Update .netrc
+	if ! grep -q "machine github.com" "$netrc_path" 2>/dev/null; then
+		log "📝 Writing GitHub credentials to $netrc_path"
+		cat <<EOF >>"$netrc_path"
 machine github.com
   login $GITHUB_TOKEN
   password x-oauth-basic
@@ -348,154 +812,202 @@ machine raw.githubusercontent.com
   login $GITHUB_TOKEN
   password x-oauth-basic
 EOF
-			}
-			echo "export GITHUB_TOKEN=$GITHUB_TOKEN" >>"$HOME/.bash_profile.local"
-			success "Configured GitHub token in .netrc and .bash_profile.local"
-		fi
+		chmod 600 "$netrc_path"
+		success "Added GitHub token to $netrc_path"
+	else
+		warn "$netrc_path already contains GitHub credentials"
 	fi
+
+	# Add export to .bash_profile.local
+	if grep -q "GITHUB_TOKEN=" "$profile_local" 2>/dev/null; then
+		warn "GITHUB_TOKEN already set in $profile_local"
+	else
+		echo "export GITHUB_TOKEN=\"$GITHUB_TOKEN\"" >>"$profile_local"
+		success "Added GITHUB_TOKEN to $profile_local"
+	fi
+
+	return 0
 }
 
+# Set up Git user.name and user.email from prompt if unset
 setup_git_author() {
-	log "👤 Setting up Git author name and email..."
-	if command -v git &>/dev/null; then
-		local current_name current_email
-		current_name=$(git config --file "$GIT_CONFIG_FILE" user.name 2>/dev/null || echo "")
-		current_email=$(git config --file "$GIT_CONFIG_FILE" user.email 2>/dev/null || echo "")
+	log "🔎 Checking if Git author name and email are setup..."
 
-		if [[ -z "$current_name" ]]; then
-			read -rp "Enter Git name [default: $GIT_AUTHOR_NAME]: " input_name
-			git config --file "$GIT_CONFIG_FILE" user.name "${input_name:-$GIT_AUTHOR_NAME}"
-			success "Git name set to: ${input_name:-$GIT_AUTHOR_NAME}"
-		else
-			log "Git name already set to: $current_name"
-		fi
-
-		if [[ -z "$current_email" ]]; then
-			read -rp "Enter Git email [default: $GIT_AUTHOR_EMAIL]: " input_email
-			git config --file "$GIT_CONFIG_FILE" user.email "${input_email:-$GIT_AUTHOR_EMAIL}"
-			success "Git email set to: ${input_email:-$GIT_AUTHOR_EMAIL}"
-		else
-			log "Git email already set to: $current_email"
-		fi
+	if ! command -v git >/dev/null 2>&1; then
+		error "Git is not installed. Skipping Git author setup"
+		return 69 # git unavailable (EX_UNAVAILABLE)
 	fi
+
+	log "👤 Setting up Git author name and email"
+	local current_name current_email input_name input_email
+	current_name=$(git config --file "$GIT_CONFIG_FILE" user.name 2>/dev/null || echo "")
+	current_email=$(git config --file "$GIT_CONFIG_FILE" user.email 2>/dev/null || echo "")
+
+	if [[ -z "$current_name" ]]; then
+		read -rp "Enter Git name [default: $GIT_AUTHOR_NAME]: " input_name
+		input_name="${input_name:-$GIT_AUTHOR_NAME}"
+		git config --file "$GIT_CONFIG_FILE" user.name "$input_name"
+		success "Git name set to: ${input_name:-$GIT_AUTHOR_NAME}"
+	else
+		info "Git name already set to: $current_name"
+	fi
+
+	if [[ -z "$current_email" ]]; then
+		read -rp "Enter Git email [default: $GIT_AUTHOR_EMAIL]: " input_email
+		input_email="${input_email:-$GIT_AUTHOR_EMAIL}"
+		git config --file "$GIT_CONFIG_FILE" user.email "$input_email"
+		success "Git email set to: ${input_email:-$GIT_AUTHOR_EMAIL}"
+	else
+		info "Git email already set to: $current_email"
+	fi
+
+	return 0
 }
 
+# Generate and configure a GPG key for Git commit signing
 setup_gpg_key() {
-	log "🔑 Generating and configuring GPG key..."
-	if command -v gpg &>/dev/null; then
-		# Ensure GNUPGHOME is set, fallback to ~/.config/gnupg if not
-		export GNUPGHOME="${GNUPGHOME:-$HOME/.config/gnupg}"
+	log "🔎 Checking for GPG installation..."
 
-		mkdir -p "$GNUPGHOME" || {
-			error "Failed to create directory: $GNUPGHOME"
-			return 1
-		}
+	if ! command -v gpg &>/dev/null; then
+		warn "GPG not found. Attempting to install via Homebrew..."
 
-		log "Generating GPG key (this may open interactive prompts)"
-		gpg --gen-key
-		gpg --list-secret-keys --keyid-format LONG
-
-		read -rp "Enter GPG key ID: " GIT_GPG_KEY
-		if [[ -z "$GIT_GPG_KEY" ]]; then
-			error "No GPG key ID provided. Aborting."
-			return 1
+		if ! install_homebrew || ! brew install gnupg; then
+			error "Homebrew installation failed during GPG setup"
+			return 69 # homebrew unavailable (EX_UNAVAILABLE)
 		fi
 
-		git config --file "$GIT_CONFIG_FILE" user.signingkey "$GIT_GPG_KEY"
-		log "Configured Git to sign with: $GIT_GPG_KEY"
-		gpg --armor --export "$GIT_GPG_KEY"
-		success "GPG key exported. Add to GitHub → https://github.com/settings/keys"
-
-		# Secure permissions
-		chmod 700 "$GNUPGHOME"
-		find "$GNUPGHOME" -type f -exec chmod 600 {} \;
-		success "GPG directory permissions secured."
+		success "Installed GPG"
 	fi
+
+	export GNUPGHOME="${GNUPGHOME:-$HOME/.config/gnupg}"
+	mkdir -p "$GNUPGHOME" || {
+		error "Failed to create directory: $GNUPGHOME"
+		return 73 # Can't create directory (EX_CANTCREAT)
+	}
+
+	log "🔒 Securing GPG directory permissions..."
+	chmod 700 "$GNUPGHOME"
+	find "$GNUPGHOME" -type f -exec chmod 600 {} \;
+
+	log "🔑 Generating and configuring GPG key..."
+	local gpg_key
+	gpg_key=$(gpg --list-secret-keys --keyid-format LONG 2>/dev/null | awk '/sec/{print $2}' | awk -F'/' '{print $2}' | head -n1)
+
+	if [[ -z "$gpg_key" ]]; then
+		log "🔧 No GPG key found — generating one now (interactive)..."
+		gpg --gen-key || {
+			error "GPG key generation failed"
+			return 70
+		}
+		gpg_key=$(gpg --list-secret-keys --keyid-format LONG | awk '/sec/{print $2}' | awk -F'/' '{print $2}' | head -n1)
+	fi
+
+	if [[ -z "$gpg_key" ]]; then
+		error "Failed to find or generate GPG key"
+		return 67 # Missing user input (EX_NOUSER)
+	fi
+
+	log "🔗 Setting Git signing key to: $gpg_key"
+	git config --file "$GIT_CONFIG_FILE" user.signingkey "$gpg_key"
+
+	local tmp_export_file
+	tmp_export_file="$(mktemp "/tmp/gpg-key-${gpg_key}.XXXXXX.asc")"
+	if gpg --armor --export "$gpg_key" >"$tmp_export_file"; then
+		info "📄 GPG public key exported to: $tmp_export_file"
+		log "🔗 Add this GPG key to GitHub: https://github.com/settings/keys"
+	else
+		error "Failed to export GPG key."
+		return 74 # Export failed (EX_IOERR)
+	fi
+
+	success "GPG setup and directory permissions secured."
+
+	return 0
 }
 
+# Change the login shell to Homebrew Bash if needed
 change_login_shell() {
-	log "🐚 Changing login shell to Homebrew Bash..."
-	local os new_shell
-	os="$(uname | tr '[:upper:]' '[:lower:]')"
-	new_shell="$(brew --prefix)/bin/bash"
+	log "🔎 Checking login shell..."
 
+	local new_shell
+	new_shell="$(brew --prefix)/bin/bash"
 	if [[ "$SHELL" == "$new_shell" ]]; then
-		log "Login shell already set to: $new_shell"
+		info "Login shell already set to: $new_shell"
 		return 0
 	fi
 
-	if [[ "$os" == "darwin" ]]; then
-		if ! command -v sudo >/dev/null; then
-			error "'sudo' is required but not installed"
-			warn "Manually add $new_shell to /etc/shells and set it with 'chsh -s $new_shell'"
-			return 1
-		fi
-
-		echo "$new_shell" | pbcopy
-		if ! sudo vim + -c 'startinsert' -c ':r !pbpaste' -c ':xa' /etc/shells; then
-			error "Failed to add $new_shell to /etc/shells"
-			warn "Manually add $new_shell to /etc/shells and set it with 'chsh -s $new_shell'"
-			return 1
-		fi
-	elif [[ "$os" == "linux" ]]; then
-		if ! sudo chsh -s "$new_shell" "$USER"; then
-			error "Failed to change login shell to $new_shell"
-			warn "Run 'chsh -s $new_shell' manually to change your login shell"
-			return 1
-		fi
+	if [[ ! -x "$new_shell" ]]; then
+		error "Target shell does not exist: $new_shell"
+		return 66 # EX_NOINPUT
 	fi
 
-	success "Login shell changed to Homebrew Bash"
-}
+	if ! grep -Fxq "$new_shell" /etc/shells; then
+		log "📋 Adding $new_shell to /etc/shells"
 
-symlink_configs() {
-	log "🔗 Symlinking app config directories to ~/.config..."
-	local source_dir="$INSTALL_DIR/share/config"
-	local target_dir="$HOME/.config"
-
-	if [[ ! -d "$source_dir" ]]; then
-		error "Source config directory does not exist: $source_dir"
-		return 1
-	fi
-
-	mkdir -p "$target_dir" || {
-		error "Failed to create directory: $target_dir"
-		return 1
-	}
-
-	# Iterate only over first-level items (files and directories)
-	for item in "$source_dir"/*; do
-		local name
-		name="$(basename "$item")"
-		local target="$target_dir/$name"
-
-		log "🔗 Linking $name → $HOME/.config/$name"
-		if ln -sfn "$item" "$target"; then
-			success "Linked $name → $HOME/.config/$name"
+		if [[ "$OS" == "darwin" && -x "$(command -v sudo)" ]]; then
+			if ! echo "$new_shell" | sudo tee -a /etc/shells >/dev/null; then
+				error "Failed to add $new_shell to /etc/shells"
+				return 71 # EX_OSERR
+			fi
+		elif [[ "$OS" == "linux" && -x "$(command -v sudo)" ]]; then
+			if ! echo "$new_shell" | sudo tee -a /etc/shells >/dev/null; then
+				error "Failed to add $new_shell to /etc/shells"
+				return 71 # EX_OSERR
+			fi
 		else
-			error "Failed to link from $name to $target"
-			return 1
+			error "Cannot modify /etc/shells without sudo privileges"
+			return 69 # EX_UNAVAILABLE
 		fi
-	done
+	fi
+
+	log "🐚 Changing login shell to: $new_shell"
+	if sudo chsh -s "$new_shell" "$USER"; then
+		success "Login shell changed to: $new_shell"
+	else
+		error "Failed to change login shell"
+		return 71 # EX_OSERR
+	fi
+
+	return 0
 }
 
 main() {
 	local start_time end_time
-	start_time=$(date +%s)
-	trap 'end_time=$(date +%s); log "⏱️ Setup completed in $((end_time - start_time)) seconds"' EXIT
+	trap 'start_time=$(date +%s); end_time=$(date +%s); log "⏱️ Setup completed in $((end_time - start_time)) seconds"' EXIT
 
-	install_homebrew
-	clone_repo
-	symlink_binary
-	symlink_dotconfigs
-	symlink_os_files
-	setup_ls_colors
-	setup_bash_profile_local
-	setup_github_token
-	setup_git_author
-	setup_gpg_key
-	change_login_shell
-	symlink_configs
+	log "🚀 Starting dotfiles installation..."
+
+	# ---- Install & Setup Repo ----
+	install_homebrew || return $?
+	extract_repo || return $?
+	clone_repo || return $?
+	symlink_binary || return $?
+	install_homebrew_packages || return $?
+	install_whalebrew_packages || return $?
+	install_npm_packages || return $?
+	install_macos_apps || log "🍏 MacOS app installs skipped"
+	install_fonts || return $?
+	install_ls_colors || return $?
+	install_genmoji || {
+		error "Genmoji install failed"
+		return $?
+	}
+	install_gitmoji_fuzzy_hook || return $?
+
+	# ---- Setup Configurations ----
+	symlink_dotconfigs || return $?
+	symlink_os_files || return $?
+	symlink_configs || return $?
+	create_bash_profile_local || return $?
+
+	# ---- Configure Tools ----
+	setup_fzf_keybindings || return $?
+	setup_github_token || log "🔐 GitHub token setup skipped"
+	setup_git_author || return $?
+	setup_gpg_key || return $?
+
+	# ---- Shell Setup ----
+	change_login_shell || return $?
 
 	success "${REPO} installed. Open a new terminal session"
 }
