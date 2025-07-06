@@ -28,7 +28,6 @@ load_dotfiles() {
 		"$HOME/.config/bash/prompt"                      # Custom bash prompt
 		"$HOME/.config/bash/paths"                       # Path modifications
 		"$HOME/.config/bash/completions"                 # Custom bash completion
-		"$HOME/.config/bash/logout"                      # Logout commands
 		"$(brew --prefix)/etc/bash_completion"           # Bash completion (installed via Homebrew)
 		"$HOME/.fzf.bash"                                # fzf
 		"$(brew --prefix)/share/forgit/forgit.plugin.sh" # forgit

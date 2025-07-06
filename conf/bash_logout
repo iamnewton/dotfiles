@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Clear the terminal screen on logout
+if [ "$SHLVL" = 1 ]; then
+	if command -v clear_console >/dev/null 2>&1; then
+		clear_console -q
+	else
+		clear
+	fi
+fi

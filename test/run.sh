@@ -6,8 +6,10 @@ set -euo pipefail
 # Helps avoid accidentally creating insecure or overly permissive files
 umask 022
 
-readonly DOCKER_IMAGE="dotfiles-test"
+readonly DEBUG="${DEBUG:-false}" # set DEBUG=true to see full output
 readonly DOCKERFILE="test/Dockerfile"
+readonly IMAGE_NAME="dotfiles-test"
+readonly CONTAINER_NAME="dotfiles-test"
 
 # ANSI color codes
 CYAN="\033[1;36m"
@@ -26,11 +28,16 @@ info() { echo -e "${LOG_PREFIX}: ℹ️ ${BLUE}$1${RESET}"; }
 success() { echo -e "${LOG_PREFIX}: ✅ ${GREEN}$1${RESET}"; }
 warn() { echo -e "${LOG_PREFIX}: ⚠️ ${YELLOW}$1${RESET}"; }
 
-log "🛠 Building $DOCKER_IMAGE from $DOCKERFILE"
-docker build -f "$DOCKERFILE" -t "$DOCKER_IMAGE" .
+log "🛠 Building $IMAGE_NAME from $DOCKERFILE"
+if [[ "$DEBUG" == "true" ]]; then
+	docker build -f "$DOCKERFILE" -t "$IMAGE_NAME" .
+else
+	docker build -f "$DOCKERFILE" -t "$IMAGE_NAME" . &>/dev/null
+fi
 
 log "⚓Running install script inside container..."
-docker run --rm -it \
-	--name dotfiles-test \
-	"$DOCKER_IMAGE" \
-	-c "cd dotfiles && ./bin/install"
+# docker run --rm -it --name "$CONTAINER_NAME" "$IMAGE_NAME" -c "cd dotfiles && ./bin/install" -e DOTFILES_NONINTERACTIVE=1
+# debug version
+# docker run -it --name "$CONTAINER_NAME" -e DOTFILES_NONINTERACTIVE=1 "$IMAGE_NAME" /bin/bash -c "cd dotfiles && ./bin/install || exec bash"
+# mounted version
+docker run -it --name "$CONTAINER_NAME" -e DOTFILES_NONINTERACTIVE=1 -v "$PWD":/home/tester/dotfiles "$IMAGE_NAME"
