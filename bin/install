@@ -696,6 +696,16 @@ install_homebrew_packages() {
 install_whalebrew_packages() {
 	log "🔎 Checking if Whalebrew is supported..."
 
+	if [[ -n "${CI:-}" ]]; then
+		info "Running in CI environment. Skipping Whalebrew."
+		return 0
+	fi
+
+	if ! command -v docker >/dev/null && ! command -v podman >/dev/null; then
+		warn "Neither Docker nor Podman is available. Skipping Whalebrew."
+		return 0
+	fi
+
 	if [[ "$OS" != "darwin" ]]; then
 		warn "Whalebrew is only supported on macOS. Skipping installation on: $OS"
 		return 0
@@ -776,9 +786,11 @@ install_macos_apps() {
 		return 0
 	fi
 
-	read -r -p "🖥 Install macOS apps too? (y/n) " -n 1
-	echo
-	if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
+	prompt_for install_macos_apps_reply "🖥 Install macOS apps too? (y/n)"
+	# Use the env var value if already set
+	install_macos_apps_reply="${install_macos_apps_reply:-${DOTFILES_MACOS_APPS:-n}}"
+
+	if [[ ! "$install_macos_apps_reply" =~ ^[Yy]$ ]]; then
 		info "You answered no. Skipping macOS app installation"
 		return 0
 	fi
@@ -1058,7 +1070,7 @@ setup_fzf_keybindings() {
 	fi
 
 	log "🔧 Running fzf install script (no rc updates)"
-	if "$install_script" --key-bindings --completion --no-update-rc; then
+	if run_quietly "$install_script" --key-bindings --completion --no-update-rc; then
 		success "FZF keybindings and completion installed"
 	else
 		error "FZF install script failed to run successfully"
@@ -1078,6 +1090,7 @@ setup_github_token() {
 	fi
 
 	log "🔐 Configuring GitHub token"
+	local token_input=""
 	prompt_for token_input "🔑 Enter your GitHub personal access token"
 
 	if [[ -z "$token_input" ]]; then
