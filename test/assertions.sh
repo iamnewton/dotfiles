@@ -50,14 +50,14 @@ run_assertions() {
 	# GPG directory permissions
 	GNUPGHOME="${GNUPGHOME:-$HOME/.config/gnupg}"
 	# Follow symlink to actual target
-	real_gnupghome=$(readlink -f "$GNUPGHOME")
+	real_gnupghome=$(readlink -f "$GNUPGHOME" 2>/dev/null || echo "$GNUPGHOME")
 
 	if [[ -d "$real_gnupghome" ]]; then
 		# Get permission as octal string
 		perms=$(stat -c '%a' "$real_gnupghome" 2>/dev/null || stat -f '%Lp' "$real_gnupghome")
 
 		# Convert string to base-8 number for bitwise operations in bash arithmetic
-		perm_num=$((10#$perms))
+		perm_num=$((8#$perms))
 		# Check if group and others have permissions (bits 0o77)
 		if (((perm_num & 077) == 0)); then
 			print_pass "GPG directory is secured (permissions $perms)"
