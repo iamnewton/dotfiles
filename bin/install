@@ -1253,6 +1253,7 @@ generate_gpg_key() {
 	# Create GPG config directory
 	export GNUPGHOME="${GNUPGHOME:-$HOME/.config/gnupg}"
 	mkdir -p "$GNUPGHOME"
+	[[ "${DEBUG:-false}" == "true" ]] && find "$GNUPGHOME"
 
 	local gpg_batch
 	gpg_batch=$(mktemp)
@@ -1281,8 +1282,9 @@ EOF
 	rm -f "$gpg_batch"
 
 	# Display generated key info
-	local key_id
-	key_id=$(run_quietly gpg --list-secret-keys --with-colons "$GIT_AUTHOR_EMAIL" | awk -F: '/^sec/ { print $5 }' | head -n1)
+	local key_output key_id
+	key_output=$(gpg --list-secret-keys --with-colons "$GIT_AUTHOR_EMAIL" 2>/dev/null)
+	key_id=$(echo "$key_output" | awk -F: '/^sec/ { print $5 }' | head -n1)
 
 	if [[ -n "$key_id" ]]; then
 		info "🔑 GPG Key ID: $key_id"
@@ -1290,6 +1292,7 @@ EOF
 		success "GPG signing key configured for Git"
 	else
 		warn "GPG key generated but could not extract key ID"
+		[[ "${DEBUG:-false}" == "true" ]] && echo "$key_output"
 	fi
 
 	return 0
