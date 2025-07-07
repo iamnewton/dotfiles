@@ -1,0 +1,41 @@
+name: Test
+
+on:
+  push:
+    paths:
+      - 'bin/install'
+      - '.github/workflows/test.yml'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.os }}
+    timeout-minutes: 15
+
+    steps:
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🛠 Install system dependencies (Linux only)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl git bash sudo unzip coreutils gnupg2
+
+      - name: 🔐 Configure dummy Git user
+        run: |
+          git config --global user.name "Test User"
+          git config --global user.email "test@example.com"
+
+      - name: ▶️ Run dotfiles install script
+        run: |
+          chmod +x bin/install
+          ./bin/install || true
+
+      - name: ✅ Run post-install assertions
+        run: bash test/assertions.sh
