@@ -81,8 +81,8 @@ print_stats() {
 	echo
 
 	echo "💾 Disk Usage:"
-	echo "    /:           $(df -h / | awk 'NR==2 { printf "%s used, %s free\n", $3, $4 }')"
-	echo "    ~:           $(df -h "$HOME" | awk 'NR==2 { printf "%s used, %s free\n", $3, $4 }')"
+	echo "    Root:        $(df -h / | awk 'NR==2 { printf "%s used, %s free\n", $3, $4 }')"
+	echo "    Home:        $(df -h "$HOME" | awk 'NR==2 { printf "%s used, %s free\n", $3, $4 }')"
 	echo
 
 	echo "🌐 Network:"
@@ -1351,6 +1351,7 @@ main() {
 
 	# print out the banner, no matter what happens on setup
 	print_banner
+	# print out computer stats that are useful
 	print_stats
 
 	# Set up logging first — before any log messages
