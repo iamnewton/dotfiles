@@ -786,6 +786,7 @@ install_macos_apps() {
 		return 0
 	fi
 
+	local install_macos_apps_reply=""
 	prompt_for install_macos_apps_reply "🖥 Install macOS apps too? (y/n)"
 	# Use the env var value if already set
 	install_macos_apps_reply="${install_macos_apps_reply:-${DOTFILES_MACOS_APPS:-n}}"
@@ -874,9 +875,16 @@ install_ls_colors() {
 	if ! command -v dircolors &>/dev/null; then
 		warn "dircolors not found. Attempting to install via Homebrew"
 
-		if ! install_homebrew || ! brew install coreutils; then
+		if ! install_homebrew || ! run_quietly brew install coreutils; then
 			error "Failed to install Homebrew"
 			return 74 # I/O error: failed to fetch or run install script (EX_IOERR)
+		fi
+
+		# Try to add the coreutils gnubin path
+		local coreutils_path="$(brew --prefix)/opt/coreutils/libexec/gnubin"
+		if [[ -x "$coreutils_path/dircolors" ]]; then
+			export PATH="$coreutils_path:$PATH"
+			info "Added $coreutils_path to PATH"
 		fi
 
 		success "Installed dircolors via coreutils via Homebrew"
@@ -933,7 +941,7 @@ install_genmoji() {
 		}
 
 		log "📥 Downloading Genmoji"
-		if curl -fsSL --netrc-optional "$install_url" | bash -s "$install_dir"; then
+		if run_quietly curl -fsSL --netrc-optional "$install_url" | bash -s "$install_dir"; then
 			success "Genmoji downloaded to $install_dir"
 		else
 			error "Failed to install Genmoji"
@@ -951,6 +959,7 @@ install_genmoji() {
 	fi
 
 	# Prompt for OpenAI API key
+	local openai_api_key_input=""
 	prompt_for openai_api_key_input "🔑 Enter your OpenAI API key (check Passwords app)"
 
 	# Only export if a value was entered
@@ -1323,7 +1332,7 @@ change_login_shell() {
 	fi
 
 	log "🐚 Changing login shell to: $new_shell"
-	if sudo chsh -s "$new_shell" "${USER:-$(id -un)}"; then
+	if run_quietly sudo chsh -s "$new_shell" "${USER:-$(id -un)}"; then
 		success "Login shell changed to: $new_shell"
 	else
 		error "Failed to change login shell"
