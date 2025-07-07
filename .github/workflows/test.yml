@@ -40,4 +40,6 @@ jobs:
           ./bin/install || true
 
       - name: ✅ Run post-install assertions
+        env:
+          GNUPGHOME: "${{ github.workspace }}/.gnupg"
         run: bash test/assertions.sh

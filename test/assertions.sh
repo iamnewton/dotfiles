@@ -49,9 +49,12 @@ run_assertions() {
 
 	# GPG directory permissions
 	GNUPGHOME="${GNUPGHOME:-$HOME/.config/gnupg}"
-	if [[ -d "$GNUPGHOME" ]]; then
+	# Follow symlink to actual target
+	real_gnupghome=$(readlink -f "$GNUPGHOME")
+
+	if [[ -d "$real_gnupghome" ]]; then
 		# Get permission as octal string
-		perms=$(stat -c '%a' "$GNUPGHOME" 2>/dev/null || stat -f '%Lp' "$GNUPGHOME")
+		perms=$(stat -c '%a' "$real_gnupghome" 2>/dev/null || stat -f '%Lp' "$real_gnupghome")
 
 		# Convert string to base-8 number for bitwise operations in bash arithmetic
 		perm_num=$((10#$perms))
@@ -62,7 +65,7 @@ run_assertions() {
 			print_fail "GPG directory permissions are $perms, expected 700 (no group/other perms)"
 		fi
 	else
-		print_skip "GPG directory not found at $GNUPGHOME"
+		print_skip "GPG directory not found at $real_gnupghome"
 	fi
 
 	# Font install check (assuming a font file installed to ~/.local/share/fonts)
