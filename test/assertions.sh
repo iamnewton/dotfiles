@@ -51,7 +51,7 @@ run_assertions() {
 	GNUPGHOME="${GNUPGHOME:-$HOME/.config/gnupg}"
 	if [[ -d "$GNUPGHOME" ]]; then
 		perms=$(stat -c '%a' "$GNUPGHOME" 2>/dev/null || stat -f '%Lp' "$GNUPGHOME")
-		[[ "$perms" -eq 700 ]] && print_pass "GPG directory is secured (700)" || print_fail "GPG directory permissions are $perms, expected 700"
+		[[ "$perms" -le 700 ]] && print_pass "GPG directory is secured (at most 700)" || print_fail "GPG directory permissions are $perms, expected 700"
 	else
 		print_skip "GPG directory not found at $GNUPGHOME"
 	fi

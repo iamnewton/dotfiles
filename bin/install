@@ -1253,6 +1253,7 @@ generate_gpg_key() {
 	# Create GPG config directory
 	export GNUPGHOME="${GNUPGHOME:-$HOME/.config/gnupg}"
 	mkdir -p "$GNUPGHOME"
+	chmod 700 "$GNUPGHOME"
 	[[ "${DEBUG:-false}" == "true" ]] && find "$GNUPGHOME"
 
 	local gpg_batch
