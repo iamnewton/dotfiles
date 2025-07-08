@@ -46,13 +46,13 @@ assert_symlink() {
 	local expected_target="${2:-}"
 
 	# Check if path is a symlink
-	it "$path is a symlink" test -L "$path"
+	it "\t$path is a symlink" test -L "$path"
 
 	# If expected target provided, check symlink points correctly
 	if test -n "$expected_target"; then
 		local actual_target
 		actual_target=$(readlink "$path")
-		it "$path points to $expected_target" test "$actual_target" = "$expected_target"
+		it "\t$path points to $expected_target" test "$actual_target" = "$expected_target"
 	fi
 }
 

@@ -17,7 +17,7 @@ run_assertions() {
 	# check for homebrew installation
 	assert_cmd brew
 	# Check install directory exists
-	assert_file "$INSTALL_DIR"
+	assert_dir "$INSTALL_DIR"
 	# Check install directory is git initialized
 	assert_dir "$INSTALL_DIR/.git"
 	# Check binary is executable
