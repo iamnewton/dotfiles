@@ -844,7 +844,7 @@ install_fonts() {
 		return 0
 	fi
 
-	log "🖋  Installing font to $target..."
+	log "🖋 Installing font to $target..."
 	mkdir -p "$target" || {
 		error "Failed to create font directory: $target"
 		return 73 # Can't create directory (EX_CANTCREAT)
@@ -1174,7 +1174,7 @@ setup_git_author() {
 	fi
 
 	if [[ -z "$current_email" ]]; then
-		prompt_for input_email "✉️  Enter Git email [default: $GIT_AUTHOR_EMAIL]"
+		prompt_for input_email "✉️ Enter Git email [default: $GIT_AUTHOR_EMAIL]"
 		input_email="${input_email:-$GIT_AUTHOR_EMAIL}"
 		git config --file "$GIT_CONFIG_FILE" user.email "$input_email"
 		success "Git email set to: $input_email"

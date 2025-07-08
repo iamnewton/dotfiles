@@ -87,15 +87,20 @@ run_assertions() {
 		print_skip "Font directory $FONT_DIR not found"
 	fi
 
-	# Check OPENAI_API_KEY is exported in .bash_profile.local
-	if [[ -f "$HOME/.bash_profile.local" ]]; then
-		if grep -q "^export OPENAI_API_KEY=" "$HOME/.bash_profile.local"; then
-			print_pass "OPENAI_API_KEY is set in .bash_profile.local"
+	# Only run if genmoji is available
+	if command -v genmoji &>/dev/null; then
+		# Check OPENAI_API_KEY is exported in .bash_profile.local
+		if [[ -f "$HOME/.bash_profile.local" ]]; then
+			if grep -q "^export OPENAI_API_KEY=" "$HOME/.bash_profile.local"; then
+				print_pass "OPENAI_API_KEY is set in .bash_profile.local"
+			else
+				print_fail "OPENAI_API_KEY is not set in .bash_profile.local"
+			fi
 		else
-			print_fail "OPENAI_API_KEY is not set in .bash_profile.local"
+			print_fail ".bash_profile.local is missing"
 		fi
 	else
-		print_fail ".bash_profile.local is missing"
+		print_skip "genmoji not available; skipping OPENAI_API_KEY test"
 	fi
 
 	# Check git hook for genmoji or gitmoji
