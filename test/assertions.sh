@@ -5,6 +5,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/helpers.sh"
 
+readonly OS="$(uname | tr '[:upper:]' '[:lower:]')"
 readonly REPO="dotfiles"
 readonly INSTALL_DIR="$HOME/.local/lib/$REPO"
 readonly DOTFILES_BIN="$HOME/.local/bin/$REPO"
