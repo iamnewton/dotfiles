@@ -34,6 +34,7 @@ jobs:
           GIT_AUTHOR_NAME: "Test User"
           GIT_AUTHOR_EMAIL: "test@example.com"
           GNUPGHOME: "${{ github.workspace }}/.gnupg"
+          OPENAI_API_KEY: "mock-openai-key"
           DEBUG: "true"
         run: |
           chmod +x bin/install

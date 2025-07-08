@@ -68,10 +68,16 @@ run_assertions() {
 		print_skip "GPG directory not found at $real_gnupghome"
 	fi
 
-	# Font install check (assuming a font file installed to ~/.local/share/fonts)
-	FONT_DIR="$HOME/.local/share/fonts"
+	# Font install check
+	if [[ "$OSTYPE" == darwin* ]]; then
+		FONT_DIR="$HOME/Library/Fonts"
+	else
+		FONT_DIR="$HOME/.local/share/fonts"
+	fi
+
 	if [[ -d "$FONT_DIR" ]]; then
-		font_files_count=$(find "$FONT_DIR" -type f -iname '*.ttf' -o -iname '*.otf' | wc -l)
+		# use parentheses around `-o` clauses to ensure `find` groups them correctly
+		font_files_count=$(find "$FONT_DIR" \( -iname '*.ttf' -o -iname '*.otf' \) -type f | wc -l)
 		if ((font_files_count > 0)); then
 			print_pass "Fonts installed in $FONT_DIR ($font_files_count files)"
 		else
