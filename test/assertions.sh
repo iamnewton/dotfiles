@@ -1,44 +1,58 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-print_pass() { echo -e "✅ $1"; }
-print_fail() {
-	echo -e "❌ $1"
-	exit 1
-}
-print_skip() { echo -e "⏭️  $1"; }
+# Import test helpers
+source "./helpers.sh"
 
-assert_cmd() {
-	command -v "$1" >/dev/null 2>&1 && print_pass "$1 is installed" || print_fail "$1 is missing"
-}
+readonly REPO="dotfiles"
+readonly INSTALL_DIR="$HOME/.local/lib/$REPO"
+readonly DOTFILES_BIN="$HOME/.local/bin/$REPO"
 
 run_assertions() {
 	echo "🧪 Running dotfiles post-install assertions..."
 
-	# dotfiles binary symlink
-	if [[ -x "$HOME/.local/bin/dotfiles" ]]; then
-		print_pass "dotfiles binary is symlinked and executable"
-	else
-		print_fail "dotfiles binary not found or not executable at $HOME/.local/bin/dotfiles"
-	fi
+	describe "$REPO setup"
+	# check for homebrew installation
+	assert_cmd brew
+	# Check install directory exists
+	assert_file "$INSTALL_DIR"
+	# Check install directory is git initialized
+	assert_dir "$INSTALL_DIR/.git"
+	# Check binary is executable
+	assert_symlink "$DOTFILES_BIN" "$INSTALL_DIR/bin/${REPO}"
 
-	# Homebrew check (macOS only)
-	if [[ "$(uname -s)" == "Darwin" ]]; then
-		command -v brew >/dev/null && print_pass "Homebrew is installed" || print_fail "Homebrew is not installed"
-	else
-		print_skip "Homebrew check skipped (non-macOS)"
-	fi
+	describe "Configuration setup"
+	# Check dotconfig symlinks
+	for filepath in "$INSTALL_DIR/conf"/*; do
+		[[ -f "$filepath" ]] || continue
+		local filename target
+		filename="$(basename "$filepath")"
+		target="$HOME/.$filename"
+		assert_symlink "$target" "$filepath"
+	done
+	# Check OS file symlinks
+	assert_file "$HOME/.ssh/config"
+	assert_symlink "$HOME/.tmux.conf" "$INSTALL_DIR/lib/tmux/$OS"
+	# Check config symlinks
+	for item in "$INSTALL_DIR/share/config"/*; do
+		[[ -e "$item" ]] || continue
+		local name target
+		name="$(basename "$item")"
+		target="$HOME/.config/$name"
+		assert_symlink "$target" "$item"
+	done
+	# Check bash_profile.local exists
+	assert_file "$HOME/.bash_profile.local"
+	# Check bash_profile.local contents
+	assert_file_contains "$HOME/.bash_profile.local" "DOTFILES_DIR="
 
-	# .bash_profile.local check
-	if [[ -f "$HOME/.bash_profile.local" ]]; then
-		if grep -q "DOTFILES_DIR=" "$HOME/.bash_profile.local"; then
-			print_pass "DOTFILES_DIR is defined in .bash_profile.local"
-		else
-			print_fail "DOTFILES_DIR is missing in .bash_profile.local"
-		fi
-	else
-		print_fail ".bash_profile.local is missing"
-	fi
+	describe "Tools setup & installation"
+
+	describe "Authorship setup"
+
+	############
+	# ADD MORE #
+	############
 
 	# Git config user.name and user.email
 	git_name=$(git config --file "$HOME/.config/git/local" user.name || echo "")
@@ -119,3 +133,5 @@ run_assertions() {
 }
 
 run_assertions
+
+exit $failures
