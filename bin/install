@@ -959,8 +959,13 @@ install_genmoji() {
 	fi
 
 	# Prompt for OpenAI API key
-	local openai_api_key_input=""
-	prompt_for openai_api_key_input "🔑 Enter your OpenAI API key (check Passwords app)"
+	local openai_api_key_input
+	if [[ -n "${OPENAI_API_KEY:-}" ]]; then
+		info "Using OPENAI_API_KEY from environment"
+		openai_api_key_input="$OPENAI_API_KEY"
+	else
+		prompt_for openai_api_key_input "🔑 Enter your OpenAI API key (check Passwords app)"
+	fi
 
 	# Only export if a value was entered
 	if [[ -n "$openai_api_key_input" ]]; then
