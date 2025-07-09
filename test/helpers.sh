@@ -71,6 +71,12 @@ assert_variable() {
 assert_file_contains() {
 	local file="$1"
 	local pattern="$2"
-	assert_file $file
-	it "$pattern is defined in $file" grep -q "$pattern" "$file"
+
+	# First assert the file exists
+	if assert_file "$file"; then
+		# Only if file exists, check if pattern is found
+		it "$pattern is defined in $file" grep -q "$pattern" "$file"
+	else
+		print_fail "File $file not found, cannot check pattern $pattern"
+	fi
 }

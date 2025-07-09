@@ -83,8 +83,8 @@ run_assertions() {
 	git_email=$(git config --file "$HOME/.config/git/local" user.email || echo "")
 	assert_variable $git_name "Git user.name"
 	assert_variable $git_email "Git user.email"
-	assert_file_contains "$HOME/.bash_profile.local" "GITHUB_AUTHOR_NAME="
-	assert_file_contains "$HOME/.bash_profile.local" "GITHUB_AUTHOR_EMAIL="
+	assert_file_contains "$HOME/.bash_profile.local" "GIT_AUTHOR_NAME="
+	assert_file_contains "$HOME/.bash_profile.local" "GIT_AUTHOR_EMAIL="
 
 	# GPG directory permissions
 	GNUPGHOME="${GNUPGHOME:-$HOME/.config/gnupg}"
