@@ -1098,14 +1098,14 @@ setup_fzf_keybindings() {
 setup_github_token() {
 	log "🔎 Checking for GitHub token..."
 
-	if [[ -n "${GITHUB_TOKEN:-}" ]]; then
-		info "GITHUB_TOKEN is already set in environment"
-		return 0
-	fi
-
-	log "🔐 Configuring GitHub token"
 	local token_input=""
-	prompt_for token_input "🔑 Enter your GitHub personal access token"
+	if [[ -n "${GITHUB_TOKEN:-}" ]]; then
+		token_input="$GITHUB_TOKEN"
+		info "GITHUB_TOKEN is already set in environment"
+	else
+		log "🔐 Configuring GitHub token"
+		prompt_for token_input "🔑 Enter your GitHub personal access token"
+	fi
 
 	if [[ -z "$token_input" ]]; then
 		warn "No token entered, skipping GitHub token setup"

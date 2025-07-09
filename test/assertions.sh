@@ -61,9 +61,14 @@ run_assertions() {
 		FONT_DIR="$HOME/.local/share/fonts"
 	fi
 	assert_dir "$FONT_DIR"
-	for font_file in "$FONT_DIR"/*.{ttf,otf}; do
+	font_files=()
+	while IFS= read -r -d $'\0' file; do
+		font_files+=("$file")
+	done < <(find "$FONT_DIR" \( -iname '*.ttf' -o -iname '*.otf' \) -type f -print0)
+	for font_file in "${font_files[@]}"; do
 		assert_file "$font_file"
 	done
+
 	# Check for LS colors
 	assert_file_contains "$HOME/.config/dircolors" "LS_COLORS="
 	# Check for genmoji
