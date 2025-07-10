@@ -773,7 +773,7 @@ install_npm_packages() {
 		"trash-cli:trash"
 		"vtop:vtop"
 	)
-	for pkg in "${packages[@]}"; do
+	for pair in "${packages[@]}"; do
 		IFS=":" read -r pkg cmd <<<"$pair"
 		if npm list -g --depth=0 "$pkg" >/dev/null 2>&1; then
 			info "🔄 Updating $cmd"
