@@ -80,8 +80,9 @@ run_assertions() {
 	fi
 
 	assert_cmd gitmoji-fuzzy-hook-init
-	assert_file_contains "$HOME/.config/git/hooks/prepare-commit-msg" "gitmoji-fuzzy-hook"
-	assert_file_contains "$HOME/.config/git/templates/hooks/prepare-commit-msg" "gitmoji-fuzzy-hook"
+	cat "$HOME/.config/git/hooks/prepare-commit-msg"
+	assert_file_contains "$HOME/.config/git/hooks/prepare-commit-msg" "gitmoji-fuzzy-hook-init"
+	assert_file_contains "$HOME/.config/git/templates/hooks/prepare-commit-msg" "gitmoji-fuzzy-hook-init"
 
 	describe "Authorship setup"
 	# Git token

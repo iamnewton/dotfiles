@@ -1044,10 +1044,6 @@ install_gitmoji_fuzzy_hook() {
 
 	log "🎉 Installing gitmoji-fuzzy-hook"
 	target="$HOME/.local/bin/$install_repo-init"
-	mkdir -p "$(dirname "$target")" || {
-		error "Failed to create directory: $(dirname "$target")"
-		return 73 # Can't create directory (EX_CANTCREAT)
-	}
 
 	log "🔗 Symlinking $install_dir/bin/${install_repo-init}.sh → $target"
 	if ln -sfn "$install_dir/bin/${install_repo}-init.sh" "$target"; then
