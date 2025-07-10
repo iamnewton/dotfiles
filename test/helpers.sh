@@ -12,8 +12,8 @@ failures=0
 # it wrapper
 it() {
 	local description="$1"
-	local cmd="${*:2}"
-	if bash -c "$cmd"; then
+	shift
+	if "$@"; then
 		print_pass "$description"
 	else
 		print_fail "$description"
