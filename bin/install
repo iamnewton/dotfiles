@@ -771,6 +771,12 @@ install_npm_packages() {
 			log "📦 Installing $pkg"
 			run_quietly npm install --global --quiet "$pkg" || warn "Failed to install $pkg"
 		fi
+
+		if command -v "$cmd" >/dev/null 2>&1; then
+			success "'$cmd' installed and available"
+		else
+			warn "'$cmd' not found in PATH after installing $pkg"
+		fi
 	done
 
 	success "All npm packages installed or updated"
@@ -780,6 +786,11 @@ install_npm_packages() {
 # Prompt to install macOS App Store apps via mas and Brewfile.macos
 install_macos_apps() {
 	log "🔎 Checking if on MacOS for app installation..."
+
+	if [[ -n "${CI:-}" ]]; then
+		info "Running in CI environment. Skipping macOS app install"
+		return 0
+	fi
 
 	if [[ "$OS" != "darwin" ]]; then
 		warn "Not on macOS, skipping macOS app install"
