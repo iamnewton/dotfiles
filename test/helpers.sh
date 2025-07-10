@@ -28,7 +28,7 @@ describe() {
 # Assertions
 assert_cmd() {
 	local cmd="$1"
-	it "$cmd is installed" command -v "$cmd" >/dev/null 2>&1
+	it "$cmd is installed" command -v "$cmd"
 }
 
 assert_file() {
