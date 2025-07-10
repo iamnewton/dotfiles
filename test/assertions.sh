@@ -50,7 +50,7 @@ run_assertions() {
 	# Check homebrew package installations
 	# Check whalebrew package installations
 	# Check npm package installations
-	packages=(fkill-cli fx-completion is-up tldr trash vtop)
+	packages=(fkill fx is-up tldr trash vtop)
 	for pkg in "${packages[@]}"; do
 		assert_cmd "$pkg"
 	done

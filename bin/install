@@ -38,6 +38,8 @@ readonly LOG_FILE="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles/install.log"
 readonly LOG_TO_FILE="${DOTFILES_LOG_TO_FILE:-true}"
 readonly LOG_TO_SYSLOG="${DOTFILES_LOG_TO_SYSLOG:-true}"
 
+# print out some fun header
+# @url: https://patorjk.com/software/taag/#p=testall&h=1&v=1&f=Doh&t=dotfiles
 print_banner() {
 	cat <<'EOF'
 
@@ -64,6 +66,7 @@ d::::::ddddd::::::ddo:::::ooooo:::::o      t::::::tttt:::::tf:::::::f           
 EOF
 }
 
+# print out some stats about the machine/installer
 print_stats() {
 	echo "🖥️  Host:"
 	echo "    Hostname:    $(hostname)"
@@ -762,13 +765,21 @@ install_npm_packages() {
 
 	log "📦 Installing global npm packages"
 	local packages
-	packages=(fkill-cli fx-completion is-up tldr trash vtop)
+	packages=(
+		"fkill-cli:fkill"
+		"fx-completion:fx"
+		"is-up-cli:is-up"
+		"tldr:tldr"
+		"trash-cli:trash"
+		"vtop:vtop"
+	)
 	for pkg in "${packages[@]}"; do
+		IFS=":" read -r pkg cmd <<<"$pair"
 		if npm list -g --depth=0 "$pkg" >/dev/null 2>&1; then
-			info "🔄 Updating $pkg"
+			info "🔄 Updating $cmd"
 			run_quietly npm update --global --quiet "$pkg" || warn "Failed to update $pkg"
 		else
-			log "📦 Installing $pkg"
+			log "📦 Installing $cmd"
 			run_quietly npm install --global --quiet "$pkg" || warn "Failed to install $pkg"
 		fi
 
