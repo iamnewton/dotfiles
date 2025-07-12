@@ -34,7 +34,8 @@ readonly RESET="\033[0m"
 readonly LOG_PREFIX="${PURPLE}[${REPO}]${RESET}"
 
 # Logging destinations
-readonly LOG_FILE="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles/install.log"
+readonly LOG_FILE="${XDG_STATE_HOME:-$HOME/.local/state}/$REPO/install.log"
+readonly BREWFILE_LOG_FILE="${XDG_STATE_HOME:-$HOME/.local/state}/$REPO/brewfile_installation.$(date +%Y-%m-%d_%H-%M-%S).log"
 readonly LOG_TO_FILE="${DOTFILES_LOG_TO_FILE:-true}"
 readonly LOG_TO_SYSLOG="${DOTFILES_LOG_TO_SYSLOG:-true}"
 
@@ -68,7 +69,7 @@ EOF
 
 # print out some stats about the machine/installer
 print_stats() {
-	echo "🖥️  Host:"
+	echo "🖥️ Host:"
 	echo "    Hostname:    $(hostname)"
 	if command -v sw_vers &>/dev/null; then
 		echo "    OS Version:  $(sw_vers -productName) $(sw_vers -productVersion)"
@@ -132,39 +133,33 @@ log() {
 	_log_to_file "LOG" "$msg"
 	_log_to_syslog "$msg"
 }
-
 header() {
 	local msg="${1:-}"
 	echo -e "${LOG_PREFIX}: ${BRIGHT_WHITE}${msg}${RESET}"
 }
-
 section() {
 	local msg="${1:-}"
 	echo -e "${LOG_PREFIX}:"
 	echo -e "${LOG_PREFIX}: ${BOLD_WHITE}${msg}${RESET}"
 }
-
 info() {
 	local msg="${1:-}"
 	echo -e "${LOG_PREFIX}: \tℹ️ ${BLUE}${msg}${RESET}"
 	_log_to_file "INFO" "$msg"
 	_log_to_syslog "[INFO] $msg"
 }
-
 warn() {
 	local msg="${1:-}"
 	echo -e "${LOG_PREFIX}: \t⚠️ ${YELLOW}${msg}${RESET}"
 	_log_to_file "WARN" "$msg"
 	_log_to_syslog "[WARN] $msg"
 }
-
 error() {
 	local msg="${1:-}"
 	echo -e "${LOG_PREFIX}: \t❌ ${RED}${msg}${RESET}" >&2
 	_log_to_file "ERROR" "$msg"
 	_log_to_syslog "[ERROR] $msg"
 }
-
 success() {
 	local msg="${1:-}"
 	local is_final="${2:-false}"
@@ -191,7 +186,7 @@ prompt_for() {
 	local cyan=$'\033[36m'
 	local reset=$'\033[0m'
 	local tab=$'\t'
-	local log_prefix=$'\033[1;35m[${repo}]\033[0m'
+	local log_prefix=$'\033[1;35m[dotfiles]\033[0m'
 
 	# safe indirect expansion: defaults to empty if unset
 	local current="${!varname:-}"
@@ -207,6 +202,67 @@ prompt_for() {
 	fi
 
 	read -rp "${log_prefix}:${tab}${cyan}${message}:${reset} " "$varname"
+}
+
+# loading graphic for long running processes
+loading() {
+	local print_output=false
+	local delay=0.1
+	local spinstr='|/-\'
+	local pid
+	local i=0
+
+	# Check for --print-output flag
+	if [[ "$1" == "--print-output" ]]; then
+		print_output=true
+		shift
+	fi
+
+	if [ "$#" -lt 3 ]; then
+		error "Usage: loading [--print-output] <command...> <success_msg> <failure_msg>"
+		return 1
+	fi
+
+	# The last two arguments are success and failure messages
+	local success_msg="${@: -2:1}"
+	local failure_msg="${@: -1}"
+
+	# All the rest are command and args
+	local cmd_args=("${@:1:$(($# - 2))}")
+
+	# Run command redirecting output to temp file
+	"${cmd_args[@]}" >"$BREWFILE_LOG_FILE" 2>&1 &
+	pid=$!
+
+	tput civis
+	printf "%b:\t " "${LOG_PREFIX}"
+
+	while kill -0 "$pid" 2>/dev/null; do
+		printf "\b%c" "${spinstr:i++%${#spinstr}:1}"
+		sleep $delay
+	done
+
+	wait $pid
+	local exit_code=$?
+
+	# Clear spinner char
+	# printf "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
+	# Clean spinner
+	tput cnorm
+	printf "\r%*s\r" "$(tput cols)" "" # full clear
+
+	# Optionally print output
+	if [ "$print_output" = true ]; then
+		cat "$BREWFILE_LOG_FILE"
+	fi
+
+	if [ $exit_code -eq 0 ]; then
+		success "$success_msg"
+	else
+		error "$failure_msg"
+	fi
+
+	return $exit_code
 }
 
 # Ensure log dir exists
@@ -256,13 +312,13 @@ install_homebrew() {
 		fi
 
 		# Shellenv activation
-		log "🔧 Configuring Homebrew environment"
+		log "🔧 Configuring Homebrew environment: $brew_bin"
 		eval "$("$brew_bin" shellenv)" || {
 			error "Failed to configure Homebrew environment"
 			return 70
 		}
 
-		success "Homebrew installed and configured"
+		success "Homebrew setup"
 		return 0
 	fi
 
@@ -272,7 +328,7 @@ install_homebrew() {
 		return 70 # Internal shell eval/config error (EX_SOFTWARE)
 	fi
 
-	info "Homebrew is already installed"
+	info "Homebrew is already setup"
 
 	return 0
 }
@@ -282,7 +338,7 @@ extract_repo() {
 	log "🔎 Checking for $INSTALL_DIR..."
 
 	if [[ -d "$INSTALL_DIR" && -n "$(ls -A "$INSTALL_DIR")" ]]; then
-		info "$INSTALL_DIR already exists and is not empty. Skipping extraction"
+		info "$INSTALL_DIR exists and is not empty. Skipping extraction"
 		success "Using previously extracted dotfiles"
 		return 0
 	fi
@@ -450,7 +506,9 @@ symlink_dotconfigs() {
 	fi
 
 	log "🔗 Symlinking dotconfig files to HOME directory"
-	local count=0
+	local count total
+	count=0
+	total=$(ls -1 "$source_dir"/* | wc -l)
 	for filepath in "$source_dir"/*; do
 		[[ -f "$filepath" ]] || continue
 
@@ -480,7 +538,7 @@ symlink_dotconfigs() {
 	if [[ "$count" -eq 0 ]]; then
 		warn "No dotfiles were symlinked from $source_dir"
 	else
-		info "Symlinked $count dotfile(s) from $source_dir"
+		info "Symlinked $count of $total dotfile(s) from $source_dir"
 	fi
 
 	return 0
@@ -542,9 +600,9 @@ symlink_os_files() {
 	done
 
 	if [[ "$processed" -gt 0 ]]; then
-		info "Processed $processed OS-specific config(s):$OS"
+		info "Processed $processed of ${#targets[@]} OS-specific config(s)"
 	else
-		info "No OS-specific configs were symlinked: $OS"
+		info "No OS-specific configs were symlinked"
 	fi
 
 	success "Symlinked OS-specific configs: $OS"
@@ -593,7 +651,8 @@ symlink_configs() {
 	if [[ "$count" -eq 0 ]]; then
 		warn "No configs were symlinked from $source_dir"
 	else
-		info "Symlinked $count config(s) into $HOME/.config/"
+		total=$(find ./share/config -mindepth 1 -maxdepth 1 ! -name '.*' | wc -l)
+		info "Symlinked $count of $total config(s) into $HOME/.config/"
 	fi
 
 	return 0
@@ -665,11 +724,9 @@ install_homebrew_packages() {
 	log "🍺 Installing Homebrew packages from Brewfile"
 	local bundle_log
 	bundle_log="$(mktemp)"
-	if ! run_quietly brew bundle --file="$brewfile_path"; then
-		warn "Failed to install packages via Brewfile"
-	else
-		success "Installed all Homebrew packages"
-	fi
+	loading brew bundle --file="$brewfile_path" \
+		"Installed all Homebrew packages" \
+		"Failed to install packages via Brewfile. Check $BREWFILE_LOG_FILE"
 
 	# Parse and list failed packages
 	local failed=()
@@ -700,12 +757,12 @@ install_whalebrew_packages() {
 	log "🔎 Checking if Whalebrew is supported..."
 
 	if [[ -n "${CI:-}" ]]; then
-		info "Running in CI environment. Skipping Whalebrew."
+		info "Running in CI environment. Skipping Whalebrew install"
 		return 0
 	fi
 
 	if ! command -v docker >/dev/null && ! command -v podman >/dev/null; then
-		warn "Neither Docker nor Podman is available. Skipping Whalebrew."
+		warn "Neither Docker nor Podman is available. Skipping Whalebrew install"
 		return 0
 	fi
 
@@ -804,7 +861,7 @@ install_macos_apps() {
 	fi
 
 	if [[ "$OS" != "darwin" ]]; then
-		warn "Not on macOS, skipping macOS app install"
+		warn "Not on macOS. Skipping macOS app install"
 		return 0
 	fi
 
@@ -866,7 +923,7 @@ install_fonts() {
 		return 0
 	fi
 
-	log "🖋 Installing font to $target..."
+	log "🖋  Installing font to $target..."
 	mkdir -p "$target" || {
 		error "Failed to create font directory: $target"
 		return 73 # Can't create directory (EX_CANTCREAT)
@@ -881,7 +938,7 @@ install_fonts() {
 		fc-cache -f "$target"
 	fi
 
-	success "Font '$font_name' installed"
+	success "'$font_name' installed"
 	return 0
 }
 
@@ -942,7 +999,7 @@ install_genmoji() {
 	log "🔎 Checking if Genmoji is installed..."
 
 	if [[ "$(uname -m)" != "x86_64" ]]; then
-		warn "Genmoji only supports x86_64 architectures; current architecture: "$(uname -m)". Skipping install."
+		warn "Genmoji only supports x86_64 architectures; current architecture: "$(uname -m)". Skipping Genmoji install"
 		return 0
 	fi
 
@@ -1043,9 +1100,9 @@ install_gitmoji_fuzzy_hook() {
 	fi
 
 	log "🎉 Installing gitmoji-fuzzy-hook"
-	target="$HOME/.local/bin/$install_repo-init"
+	target="$HOME/.local/bin/${install_repo}-init"
 
-	log "🔗 Symlinking $install_dir/bin/${install_repo-init}.sh → $target"
+	log "🔗 Symlinking $install_dir/bin/${install_repo}-init.sh → $target"
 	if ln -sfn "$install_dir/bin/${install_repo}-init.sh" "$target"; then
 		success "Symlinked $install_dir/bin/${install_repo}-init.sh → $target"
 	else
@@ -1063,7 +1120,7 @@ install_gitmoji_fuzzy_hook() {
 		}
 		hook_path="$dir/prepare-commit-msg"
 		log "🔗 Installing $install_repo to $hook_path"
-		if run_quietly $target >"$hook_path"; then
+		if "$target" >>"$hook_path" 2>/dev/null; then
 			chmod +x "$hook_path"
 			success "Installed $install_repo to $hook_path"
 		else
@@ -1121,7 +1178,7 @@ setup_github_token() {
 		token_input="$GITHUB_TOKEN"
 		info "GITHUB_TOKEN is already set in environment"
 	else
-		log "🔐 Configuring GitHub token"
+		log "🔧 Configuring GitHub token: (https://github.com/settings/tokens)"
 		prompt_for token_input "🔑 Enter your GitHub personal access token"
 	fi
 
@@ -1311,7 +1368,7 @@ EOF
 	key_id=$(echo "$key_output" | awk -F: '/^sec/ { print $5 }' | head -n1)
 
 	if [[ -n "$key_id" ]]; then
-		info "🔑 GPG Key ID: $key_id"
+		info "GPG Key ID: $key_id"
 		git config --file "$GIT_CONFIG_FILE" user.signingkey "$key_id"
 		success "GPG signing key configured for Git"
 	else
@@ -1369,12 +1426,78 @@ change_login_shell() {
 	return 0
 }
 
-# These need to be global so cleanup can read them
+# Global tracking
 start_time=""
 end_time=""
-failed_optional=()
+# These steps are registered to track what should run
+pending_steps=(
+	install_homebrew
+	extract_repo
+	clone_repo
+	symlink_binary
+	symlink_dotconfigs
+	symlink_os_files
+	symlink_configs
+	create_bash_profile_local
+	install_homebrew_packages
+	install_npm_packages
+	install_whalebrew_packages
+	install_macos_apps
+	install_fonts
+	install_ls_colors
+	install_genmoji
+	install_gitmoji_fuzzy_hook
+	setup_fzf_keybindings
+	setup_github_token
+	setup_git_author
+	generate_gpg_key
+	change_login_shell
+)
+failed_steps=()
 
-# Cleanup function to trap EXIT and summarize results
+# Step management
+complete_step() {
+	local label="$1"
+	local new_pending=()
+
+	for step in "${pending_steps[@]}"; do
+		if [[ "$step" != "$label" ]]; then
+			new_pending+=("$step")
+		fi
+	done
+
+	pending_steps=("${new_pending[@]}")
+}
+
+fail_step() {
+	local label="$1"
+	failed_steps+=("$label")
+	complete_step "$label"
+}
+
+run_step() {
+	local label="$1"
+	shift
+
+	if "$@"; then
+		complete_step "$label"
+	else
+		fail_step "$label"
+	fi
+}
+
+optional_step() {
+	local label="$1"
+	shift
+
+	if "$@"; then
+		complete_step "$label"
+	else
+		fail_step "$label"
+	fi
+}
+
+# Cleanup trap
 cleanup() {
 	section "🚀 dotfiles installation stats:"
 
@@ -1385,10 +1508,17 @@ cleanup() {
 		log "⏱️ Exited before timing could begin"
 	fi
 
-	if [[ "${#failed_optional[@]}" -gt 0 ]]; then
-		warn "Some optional steps failed and may need to be run manually:"
-		for fn in "${failed_optional[@]}"; do
-			log "\t - $fn"
+	if [[ "${#failed_steps[@]}" -gt 0 ]]; then
+		error "These steps failed:"
+		for step in "${failed_steps[@]}"; do
+			[[ -n "${step}" ]] && log "\t - $step"
+		done
+	fi
+
+	if [[ "${#pending_steps[@]}" -gt 0 ]]; then
+		warn "These steps were skipped or did not run:"
+		for step in "${pending_steps[@]}"; do
+			[[ -n "${step// /}" ]] && log "\t - $step"
 		done
 	fi
 }
@@ -1406,34 +1536,25 @@ main() {
 	# Set up logging first — before any log messages
 	init_log_file || echo "⚠️ Log file could not be initialized"
 
-	# Helper to run optional steps
-	optional_step() {
-		local label="$1"
-		shift
-		if ! "$@"; then
-			failed_optional+=("$label")
-		fi
-	}
-
 	header "🚀 Starting dotfiles installation..."
 
 	section "🧱 Setting up dependencies, cloning library and installing binary"
-	install_homebrew || return $?
-	extract_repo || return $?
-	clone_repo || return $?
-	symlink_binary || return $?
+	run_step "install_homebrew" install_homebrew
+	run_step "extract_repo" extract_repo
+	run_step "clone_repo" clone_repo
+	run_step "symlink_binary" symlink_binary
 	success "${REPO} cloned, setup, and binary installed" "true"
 
 	section "⚙️ Setting up configurations"
-	symlink_dotconfigs || return $?
-	symlink_os_files || return $?
-	symlink_configs || return $?
-	create_bash_profile_local || return $?
+	run_step "symlink_dotconfigs" symlink_dotconfigs
+	run_step "symlink_os_files" symlink_os_files
+	run_step "symlink_configs" symlink_configs
+	run_step "create_bash_profile_local" create_bash_profile_local
 	success "Configurations are setup" "true"
 
 	section "📦 Installing and setting up tools"
-	install_homebrew_packages || return $?
-	install_npm_packages || return $?
+	run_step "install_homebrew_packages" install_homebrew_packages
+	run_step "install_npm_packages" install_npm_packages
 	optional_step "install_whalebrew_packages" install_whalebrew_packages
 	optional_step "install_macos_apps" install_macos_apps
 	optional_step "install_fonts" install_fonts
@@ -1445,10 +1566,10 @@ main() {
 
 	#  Tool setup
 	section "🔧 Configure authorship"
-	setup_github_token || log "🔐 GitHub token setup skipped"
-	setup_git_author || return $?
-	generate_gpg_key || return $?
-	change_login_shell || return $?
+	run_step "setup_github_token" setup_github_token
+	run_step "setup_git_author" setup_git_author
+	run_step "generate_gpg_key" generate_gpg_key
+	run_step "change_login_shell" change_login_shell
 	success "Authorship is configured" "true"
 
 	echo -e "${LOG_PREFIX}:"
