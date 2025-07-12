@@ -204,6 +204,10 @@ prompt_for() {
 	read -rp "${log_prefix}:${tab}${cyan}${message}:${reset} " "$varname"
 }
 
+is_interactive() {
+	[[ -t 1 && -n "$TERM" && "$TERM" != "dumb" ]]
+}
+
 # loading graphic for long running processes
 loading() {
 	local print_output=false
@@ -234,7 +238,9 @@ loading() {
 	"${cmd_args[@]}" >"$BREWFILE_LOG_FILE" 2>&1 &
 	pid=$!
 
-	tput civis
+	if is_interactive; then
+		tput civis # hide cursor
+	fi
 	printf "%b:\t " "${LOG_PREFIX}"
 
 	while kill -0 "$pid" 2>/dev/null; do
@@ -248,7 +254,9 @@ loading() {
 	# Clear spinner char
 	# printf "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
 	# Clean spinner
-	tput cnorm
+	if is_interactive; then
+		tput cnorm # show cursor again
+	fi
 	printf "\r%*s\r" "$(tput cols)" "" # full clear
 
 	# Optionally print output
@@ -1371,6 +1379,12 @@ EOF
 		info "GPG Key ID: $key_id"
 		git config --file "$GIT_CONFIG_FILE" user.signingkey "$key_id"
 		success "GPG signing key configured for Git"
+		if echo "test" | gpg --local-user "$key_id" --clearsign >/dev/null 2>&1; then
+			info "GPG signing key test passed"
+		else
+			error "GPG key exists but signing test failed"
+			return 71
+		fi
 	else
 		warn "GPG key generated but could not extract key ID"
 		[[ "${DEBUG:-false}" == "true" ]] && echo "$key_output"
@@ -1458,7 +1472,7 @@ failed_steps=()
 # Step management
 complete_step() {
 	local label="$1"
-	local new_pending=()
+	local -a new_pending=() # ✅ explicitly declare as array
 
 	for step in "${pending_steps[@]}"; do
 		if [[ "$step" != "$label" ]]; then

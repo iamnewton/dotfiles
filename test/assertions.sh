@@ -48,7 +48,11 @@ run_assertions() {
 
 	describe "Tools setup & installation"
 	# Check homebrew package installations
+	echo "test for homebrew packages"
 	# Check whalebrew package installations
+	echo "test for whalebrew packages"
+	# Check macOS app installations
+	echo "test for macOS apps"
 	# Check npm package installations
 	packages=(fkill fx is-up tldr trash vtop)
 	for pkg in "${packages[@]}"; do
@@ -116,6 +120,8 @@ run_assertions() {
 	else
 		print_skip "GPG directory not found at $real_gnupghome"
 	fi
+	configured_key=$(git config --file "$GIT_CONFIG_FILE" user.signingkey || echo "")
+	assert_variable $configured_key "Git user.signingkey"
 
 	# this is all over the map, sometimes it works, sometimes not
 	# assert_equals "$SHELL" "$(brew --prefix)/bin/bash"
