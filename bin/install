@@ -205,6 +205,10 @@ prompt_for() {
 }
 
 is_interactive() {
+	if [[ -n "${CI-}" || -n "${GITHUB_ACTIONS-}" ]]; then
+		return 1
+	fi
+
 	[[ -t 1 && -n "$TERM" && "$TERM" != "dumb" ]]
 }
 
@@ -516,7 +520,7 @@ symlink_dotconfigs() {
 	log "🔗 Symlinking dotconfig files to HOME directory"
 	local count total
 	count=0
-	total=$(ls -1 "$source_dir"/* | wc -l)
+	total=$(($(ls -1 "$source_dir"/* 2>/dev/null | wc -l)))
 	for filepath in "$source_dir"/*; do
 		[[ -f "$filepath" ]] || continue
 
@@ -659,7 +663,7 @@ symlink_configs() {
 	if [[ "$count" -eq 0 ]]; then
 		warn "No configs were symlinked from $source_dir"
 	else
-		total=$(find ./share/config -mindepth 1 -maxdepth 1 ! -name '.*' | wc -l)
+		total=$(($(find "$source_dir" -mindepth 1 -maxdepth 1 ! -name '.*' | wc -l)))
 		info "Symlinked $count of $total config(s) into $HOME/.config/"
 	fi
 

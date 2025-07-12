@@ -120,7 +120,7 @@ run_assertions() {
 	else
 		print_skip "GPG directory not found at $real_gnupghome"
 	fi
-	configured_key=$(git config --file "$GIT_CONFIG_FILE" user.signingkey || echo "")
+	configured_key=$(git config --file "$HOME/.config/git/local" user.signingkey || echo "")
 	assert_variable $configured_key "Git user.signingkey"
 
 	# this is all over the map, sometimes it works, sometimes not
