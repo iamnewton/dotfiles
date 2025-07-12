@@ -14,6 +14,7 @@ run_assertions() {
 	echo "🧪 Running dotfiles post-install assertions..."
 
 	describe "$REPO setup"
+	echo $PATH
 	# check for homebrew installation
 	assert_cmd brew
 	# Check install directory exists
