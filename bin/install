@@ -1382,9 +1382,20 @@ EOF
 	if [[ -n "$key_id" ]]; then
 		info "GPG Key ID: $key_id"
 		git config --file "$GIT_CONFIG_FILE" user.signingkey "$key_id"
-		success "GPG signing key configured for Git"
+
+		# Export the public key
+		local export_file
+		export_file="$(mktemp "/tmp/${GIT_AUTHOR_EMAIL}_gpg_pub_XXXXXX.asc")"
+		log "🔑 Exporting GPG public key: $export_file"
+		if gpg --armor --export "$GIT_AUTHOR_EMAIL" >"$export_file"; then
+			info "GPG public key saved to: $export_file"
+		else
+			warn "Failed to export GPG public key"
+		fi
+
+		# Test signing
 		if echo "test" | gpg --local-user "$key_id" --clearsign >/dev/null 2>&1; then
-			info "GPG signing key test passed"
+			success "GPG signing key configured for Git"
 		else
 			error "GPG key exists but signing test failed"
 			return 71

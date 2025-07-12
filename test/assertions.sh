@@ -18,7 +18,6 @@ run_assertions() {
 	fi
 
 	describe "$REPO setup"
-	echo $PATH
 	# check for homebrew installation
 	assert_cmd brew
 	# Check install directory exists
