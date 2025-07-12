@@ -12,6 +12,10 @@ readonly DOTFILES_BIN="$HOME/.local/bin/$REPO"
 
 run_assertions() {
 	echo "🧪 Running dotfiles post-install assertions..."
+	# GitHub Actions doesn't source bashrc, so we do it ourselves
+	if [[ -f /home/linuxbrew/.linuxbrew/bin/brew ]]; then
+		eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+	fi
 
 	describe "$REPO setup"
 	echo $PATH
