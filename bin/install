@@ -16,7 +16,7 @@ readonly INSTALL_DIR="$HOME/.local/lib/$REPO"
 
 readonly GIT_AUTHOR_NAME="${GIT_AUTHOR_NAME:-Newton}"
 readonly GIT_AUTHOR_EMAIL="${GIT_AUTHOR_EMAIL:-5769156+iamnewton@users.noreply.github.com}"
-readonly GIT_CONFIG_FILE="$HOME/.config/git/local"
+readonly GIT_CONFIG_FILE="$HOME/.gitconfig.local"
 readonly BASH_PROFILE_LOCAL_FILE="$HOME/.bash_profile.local"
 
 # ANSI color codes

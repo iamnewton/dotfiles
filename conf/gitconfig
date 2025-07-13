@@ -249,7 +249,7 @@
 	templatedir = ~/.config/git/templates
 
 [include]
-	path = ~/.config/git/local
+	path = ~/.gitconfig.local
 
 [includeIf "gitdir:/Users"]
 	path = ~/.config/git/darwin
