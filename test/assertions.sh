@@ -97,8 +97,8 @@ run_assertions() {
 	assert_file_contains "$HOME/.netrc" "github"
 	assert_file_contains "$HOME/.bash_profile.local" "GITHUB_TOKEN="
 	# Git config user.name and user.email
-	git_name=$(git config --file "$HOME/.config/git/local" user.name || echo "")
-	git_email=$(git config --file "$HOME/.config/git/local" user.email || echo "")
+	git_name=$(git config --file "$HOME/.gitconfig.local" user.name || echo "")
+	git_email=$(git config --file "$HOME/.gitconfig.local" user.email || echo "")
 	assert_variable $git_name "Git user.name"
 	assert_variable $git_email "Git user.email"
 	assert_file_contains "$HOME/.bash_profile.local" "GIT_AUTHOR_NAME="
@@ -124,7 +124,7 @@ run_assertions() {
 	else
 		print_skip "GPG directory not found at $real_gnupghome"
 	fi
-	configured_key=$(git config --file "$HOME/.config/git/local" user.signingkey || echo "")
+	configured_key=$(git config --file "$HOME/.gitconfig.local" user.signingkey || echo "")
 	assert_variable $configured_key "Git user.signingkey"
 
 	# this is all over the map, sometimes it works, sometimes not
