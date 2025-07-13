@@ -1,4 +1,12 @@
-# dotfiles(1)
+# 🛠 dotfiles(1)
+
+A highly-configurable, cross-platform `dotfiles` setup built with:
+
+- ✅ Idempotent, modular shell scripts
+- 🐳 Docker test harness
+- 🧪 Bash-based assertions
+- 📦 Easy packaging
+- ⚙️ GitHub Actions CI ready
 
 Typically software you buy comes with some sort of installer, why not your dotfiles? After manually setting up my dotfiles and installation for years, I decided to take a page from [some](https://github.com/necolas) [other](https://github.com/mathiasbynens) [people's](https://github.com/cowboy) [books](http://dotfiles.github.io) and set up a script that will configure my machine to setup my bash profile and install a few core packages.  Feel free to [poke around](https://github.com/iamnewton/dotfiles/commits/main) the repository, [fork it](https://github.com/iamnewton/dotfiles/fork) to make it your own, [suggest things](https://github.com/iamnewton/dotfiles/issues?labels=feature+request) for me to include, [log a bug](https://github.com/iamnewton/dotfiles/issues/new), or maybe checkout the [features list](#features) to see what's included.
 
@@ -36,27 +44,25 @@ A custom bash prompt based on the [Seti UI color palette](https://github.com/jes
 | ?      | Untracked files                  |
 | $      | Stashed files                    |
 
-For best results with iTerm, you should install [the SETI color scheme for iTerm](https://github.com/willmanduffy/seti-iterm). Further details are in the `$(dotfiles --prefix)/conf/bash/prompt` file.
+For best results with iTerm, you should install [the SETI color scheme for iTerm](https://github.com/willmanduffy/seti-iterm). Further details are in the `./conf/bash_prompt` file.
 
 #### Screenshot
 
 ![](https://iamnewton.github.io/cdn/images/dotfiles-screenshot-v2.png)
 
-### Local/private Bash configuration
+### Local/private configuration
 
-Any private and custom Bash commands and configuration should be placed in a `~/.bash_profile.local` file. This file will not be under version control or committed to a public repository. If `~/.bash_profile.local` exists, it will be sourced for inclusion in `bash_profile`.
+Any private and custom Bash commands and configuration should be placed in a `$HOME/.bash_profile.local` file. This file will not be under version control or committed to a public repository. If `$HOME/.bash_profile.local` exists, it will be sourced for inclusion in `bash_profile`. The same goes for any local Git configuration but within the `$HOME/.gitconfig.local`
 
 Here is an example `~/.bash_profile.local`:
 
 ```bash
 # Github Issues library token
-export GH_TOKEN="<insert github token>"
+export GITHUB_TOKEN="<insert github token>"
 
 # Aliases
 alias code="cd ~/Code"
 ```
-
-:exclamation: N.B. Because the `$(dotfiles --prefix)/conf/git/config` file is copied to `$HOME/.gitconfig`, any private git configuration specified in `$HOME/.gitconfig.local` will not be committed to your dotfiles repository.
 
 * * *
 
