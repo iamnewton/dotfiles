@@ -6,22 +6,24 @@ set -euo pipefail
 # Helps avoid accidentally creating insecure or overly permissive files
 umask 022
 
+readonly REPO="dotfiles"
+
 # ANSI color codes
-PURPLE="\033[1;35m"
-RED="\033[1;31m"
-GREEN="\033[1;32m"
-YELLOW="\033[1;33m"
-BLUE="\033[1;34m"
-DIM_WHITE="\033[2;37m"
-RESET="\033[0m"
-LOG_PREFIX="[${PURPLE}${REPO}${RESET}]"
+readonly PURPLE="\033[1;35m"
+readonly RED="\033[1;31m"
+readonly GREEN="\033[1;32m"
+readonly YELLOW="\033[1;33m"
+readonly BLUE="\033[1;34m"
+readonly DIM_WHITE="\033[2;37m"
+readonly RESET="\033[0m"
+readonly LOG_PREFIX="[${PURPLE}${REPO}${RESET}]"
 
 # Logging
-error() { echo -e "${LOG_PREFIX}: ❌ ${RED}$1${RESET}" >&2; }
 log() { echo -e "${LOG_PREFIX}: ${DIM_WHITE}$1${RESET}"; }
 info() { echo -e "${LOG_PREFIX}: ℹ️ ${BLUE}$1${RESET}"; }
-success() { echo -e "${LOG_PREFIX}: ✅ ${GREEN}$1${RESET}"; }
 warn() { echo -e "${LOG_PREFIX}: ⚠️ ${YELLOW}$1${RESET}"; }
+error() { echo -e "${LOG_PREFIX}: ❌ ${RED}$1${RESET}" >&2; }
+success() { echo -e "${LOG_PREFIX}: ✅ ${GREEN}$1${RESET}"; }
 
 main() {
 	if ! command -v nvim &>/dev/null; then
