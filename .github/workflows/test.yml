@@ -8,6 +8,9 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   test:
     strategy:
@@ -25,7 +28,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
-          sudo apt-get install -y curl git bash sudo unzip coreutils gnupg2
+          sudo apt-get install -y curl git bash sudo unzip coreutils
 
       - name: ▶️ Run dotfiles install script
         env:
@@ -37,11 +40,9 @@ jobs:
           GITHUB_TOKEN: "mock-github-token"
           GNUPGHOME: "${{ github.workspace }}/.gnupg"
           OPENAI_API_KEY: "mock-openai-key"
-        run: |
-          chmod +x bin/install
-          ./bin/install || true
+        run: make install
 
       - name: ✅ Run post-install assertions
         env:
           GNUPGHOME: "${{ github.workspace }}/.gnupg"
-        run: bash test/assertions.sh
+        run: make test
