@@ -60,6 +60,7 @@ export LESSKEY="$HOME/.config/lesskey"
 # Add colors format to the LS command output
 export CLICOLOR=1
 # export LSCOLORS="exfxcxdxbxegedabagacad"
+export LS_COLORS="$(vivid generate github-dark)"
 
 # Don't clear the screen after quitting a manual page
 export MANPAGER="less -X"

@@ -1587,7 +1587,7 @@ main() {
 	optional_step "install_whalebrew_packages" install_whalebrew_packages
 	optional_step "install_macos_apps" install_macos_apps
 	optional_step "install_fonts" install_fonts
-	optional_step "install_ls_colors" install_ls_colors
+	# optional_step "install_ls_colors" install_ls_colors
 	optional_step "install_genmoji" install_genmoji
 	optional_step "install_gitmoji_fuzzy_hook" install_gitmoji_fuzzy_hook
 	optional_step "setup_fzf_keybindings" setup_fzf_keybindings
