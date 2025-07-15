@@ -63,10 +63,9 @@ assert_equals() {
 }
 
 assert_variable() {
-	local var_name="$1"
+	local variable="$1"
 	local label="$2"
-	local value="${!var_name:-}" # indirect expansion, safe with default
-	it "$label is set: \$$var_name" test -n "$value"
+	it "$label is set: $variable" test -n "$variable"
 }
 
 assert_file_contains() {
