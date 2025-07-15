@@ -79,7 +79,7 @@ run_assertions() {
 
 	# Check for LS colors
 	#assert_file_contains "$HOME/.config/dircolors" "LS_COLORS="
-	assert_variable $LS_COLORS "LS_COLORS"
+	assert_equals $LS_COLORS "$(vivid generate github-dark)"
 	# Check for genmoji
 	if command -v genmoji >/dev/null 2>&1; then
 		assert_cmd genmoji
