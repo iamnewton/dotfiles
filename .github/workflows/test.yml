@@ -33,6 +33,7 @@ jobs:
       - name: ▶️ Run dotfiles install script
         env:
           DEBUG: "false"
+          DOTFILES_BRANCH: ${{ github.ref_name }}
           DOTFILES_NONINTERACTIVE: "1"
           DOTFILES_MACOS_APPS: "n" # or "y" if you want to test macOS apps install
           GIT_AUTHOR_NAME: "Test User"
