@@ -387,15 +387,16 @@ clone_repo() {
 	fi
 
 	# If repo already initialized, check if it's clean and up-to-date
-	local repo_url
+	local repo_url fetch_branch
 	repo_url="https://github.com/${USERNAME}/${REPO}.git"
+	fetch_branch=${DOTFILES_BRANCH:-main}
 	if [[ -d .git ]]; then
-		local remote_url branch
+		local remote_url current_branch
 		remote_url="$(git remote get-url origin 2>/dev/null || true)"
-		branch="$(git symbolic-ref --short HEAD 2>/dev/null || echo '')"
+		current_branch="$(git symbolic-ref --short HEAD 2>/dev/null || echo '')"
 
-		if git diff --quiet && git diff --cached --quiet && [[ "$remote_url" == "$repo_url" ]] && [[ "$branch" =~ ^(main|master)$ ]]; then
-			info "Dotfiles repo already cloned, clean, and on $branch"
+		if git diff --quiet && git diff --cached --quiet && [[ "$remote_url" == "$repo_url" ]] && [[ "$current_branch" == "$fetch_branch" ]]; then
+			info "Dotfiles repo already cloned, clean, and on $current_branch"
 			popd >/dev/null
 			return 0
 		fi
@@ -432,14 +433,14 @@ clone_repo() {
 		info "Remote origin already exists"
 	fi
 
-	log "📥 Fetching origin/main"
-	if ! run_quietly git fetch origin main; then
+	log "📥 Fetching origin/$fetch_branch"
+	if ! run_quietly git fetch origin $fetch_branch; then
 		error "Failed to fetch from origin"
 		popd >/dev/null
 		return 74 # I/O error: failed to fetch or run install script (EX_IOERR)
 	fi
 
-	log "🧹 Resetting index and working tree to origin/main"
+	log "🧹 Resetting index and working tree to origin/$fetch_branch"
 	local head
 	if ! head=$(git reset --hard FETCH_HEAD 2>&1); then
 		error "Failed to reset to FETCH_HEAD"
@@ -451,10 +452,10 @@ clone_repo() {
 	log "🧽 Cleaning untracked files"
 	git clean -fd || warn "Git clean produced warnings"
 
-	success "Repository has been initialized and reset to origin/main"
+	success "Repository has been initialized and reset to origin/$fetch_branch"
 
 	log "📤 Pulling latest changes (rebase)"
-	if ! run_quietly git pull --rebase origin main; then
+	if ! run_quietly git pull --rebase origin $fetch_branch; then
 		error "Failed to pull latest changes"
 		popd >/dev/null
 		return 70 # Software error: symlink failed (EX_SOFTWARE)
