@@ -1,6 +1,13 @@
+export DOTFILES_THEME="github-dark"
+
 # Directory listing color theme
-# export LSCOLORS="exfxcxdxbxegedabagacad"
-export LS_COLORS="$(vivid generate github-dark)"
+# Set LS_COLORS using vivid
+if command -v vivid >/dev/null 2>&1; then
+	export LS_COLORS="$(vivid generate "$DOTFILES_THEME")"
+else
+	# export LSCOLORS="exfxcxdxbxegedabagacad"
+	echo "⚠️ vivid not installed. Skipping LS_COLORS setup." >&2
+fi
 
 # bat theme configuration
 export BAT_THEME="OneHalfDark"
@@ -17,9 +24,9 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
 
 # FZF colors - (github-dark) inherit background/foreground
 # export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
-  --color=fg:-1,fg+:#d1d7e0,bg:-1,bg+:#343a42
-  --color=hl:#478be6,hl+:#4184e4,info:#f2cc60,marker:#57ab39
-  --color=prompt:#c96198,spinner:#C06EFF,pointer:#ec775c,header:#96d0ff
-  --color=border:#3d444d,label:#aeaeae,query:#ffffff
-  --border="rounded" --border-label="" --preview-window="border-rounded" --prompt="$ "
-  --marker="✓" --pointer="▶" --separator="─" --scrollbar="│"'
+# --color=fg:-1,fg+:#d1d7e0,bg:-1,bg+:#343a42
+# --color=hl:#478be6,hl+:#4184e4,info:#f2cc60,marker:#57ab39
+# --color=prompt:#c96198,spinner:#C06EFF,pointer:#ec775c,header:#96d0ff
+# --color=border:#3d444d,label:#aeaeae,query:#ffffff
+# --border="rounded" --border-label="" --preview-window="border-rounded" --prompt="$ "
+# --marker="✓" --pointer="▶" --separator="─" --scrollbar="│"'
