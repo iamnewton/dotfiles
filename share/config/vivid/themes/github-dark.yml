@@ -37,6 +37,10 @@ core:
     foreground: background_color
     background: pink
 
+  door:
+    foreground: background_color
+    background: pink
+
   block_device:
     foreground: cyan
     background: darkergray
@@ -62,6 +66,8 @@ core:
     background: pink
     foreground: white
     font-style: bold
+
+  file_with_capability: {}
 
   executable_file:
     foreground: green
