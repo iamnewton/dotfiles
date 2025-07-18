@@ -82,6 +82,7 @@ run_assertions() {
 	#assert_file_contains "$HOME/.config/dircolors" "LS_COLORS="
 	# assert_equals $LS_COLORS "$(vivid generate github-dark)"
 	# Check for genmoji
+	assert_file_contains "$HOME/.config/dotfiles/theme" "github-dark"
 	if command -v genmoji >/dev/null 2>&1; then
 		assert_cmd genmoji
 		assert_file_contains "$HOME/.bash_profile.local" "OPENAI_API_KEY="

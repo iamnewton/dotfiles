@@ -15,8 +15,17 @@ RUN apt-get update && \
     build-essential \
     gnupg2 \
     unzip \
-    coreutils && \
+    coreutils \
+    locales && \
     rm -rf /var/lib/apt/lists/*
+
+# Generate the locale
+RUN locale-gen en_US.UTF-8 && \
+    update-locale LANG=en_US.UTF-8
+
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US:en \
+    LC_ALL=en_US.UTF-8
 
 # Create non-root user
 RUN useradd -m -s /bin/bash tester && \

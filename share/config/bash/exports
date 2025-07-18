@@ -47,7 +47,7 @@ export HISTTIMEFORMAT="%h/%d/%y-%H:%M:%S "
 export INPUTRC="$HOME/.config/readline/inputrc"
 
 # Prefer US English and use UTF-8
-export LANG="en_US"
+export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 
 # Linuxbrew library path
@@ -59,8 +59,6 @@ export LESSKEY="$HOME/.config/lesskey"
 
 # Add colors format to the LS command output
 export CLICOLOR=1
-# export LSCOLORS="exfxcxdxbxegedabagacad"
-export LS_COLORS="$(vivid generate github-dark)"
 
 # Don't clear the screen after quitting a manual page
 export MANPAGER="less -X"
@@ -76,9 +74,6 @@ export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
 # ripgrep configuration path
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"
-
-# bat theme configuration
-export BAT_THEME="OneHalfDark"
 
 # wget configuration path
 export WGETRC="$HOME/.config/wgetrc"
