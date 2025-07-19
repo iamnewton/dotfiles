@@ -14,7 +14,7 @@ A highly-configurable, cross-platform [`dotfiles`](https://dotfiles.github.io/) 
 
 Typically software you buy comes with some sort of installer, why not your dotfiles? Here's a one-liner to get you up and running.
 
-```bash
+```shell
 $ /bin/bash -c "$(curl -#fL https://raw.githubusercontent.com/iamnewton/dotfiles/main/bin/install)"
 ```
 
@@ -33,7 +33,7 @@ Ensure that you have the following dependencies installed on your system.  If yo
 - [build-essential](https://packages.ubuntu.com/search?keywords=build-essential) – Package with compiler and build tools for Debian/Ubuntu
 - [unzip](https://linux.die.net/man/1/unzip) – Extract .zip archives
 
-```bash
+```shell
 git clone https://github.com/iamnewton/dotfiles $HOME/.local/lib/dotfiles
 cd $HOME/.local/lib/dotfiles
 make install;
@@ -56,7 +56,7 @@ The script supports the following environment variables:
 
 You can pass them inline:
 
-```bash
+```shell
 DOTFILES_NONINTERACTIVE=1 DEBUG=true make install
 ```
 
@@ -64,7 +64,7 @@ DOTFILES_NONINTERACTIVE=1 DEBUG=true make install
 
 To test the installation in a sandbox:
 
-```bash
+```shell
 make docker
 ```
 
@@ -74,7 +74,7 @@ This builds a container, runs the installer inside it, and prints results. Usefu
 
 All logs are written to:
 
-```bash
+```shell
 $HOME/.local/state/dotfiles/install.log
 ```
 
@@ -84,7 +84,7 @@ Use `make logs` to inspect them.
 
 To test your changes before submitting a PR:
 
-```bash
+```shell
 make docker
 make test
 ```
