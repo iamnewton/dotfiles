@@ -56,8 +56,9 @@ The script supports the following environment variables:
 
 You can pass them inline:
 
-```shell
+```bash
 DOTFILES_NONINTERACTIVE=1 DEBUG=true make install
+```
 
 ## 🐳 Run in Docker
 
@@ -73,7 +74,7 @@ This builds a container, runs the installer inside it, and prints results. Usefu
 
 All logs are written to:
 
-```shell
+```bash
 $HOME/.local/state/dotfiles/install.log
 ```
 
@@ -83,7 +84,7 @@ Use `make logs` to inspect them.
 
 To test your changes before submitting a PR:
 
-```shell
+```bash
 make docker
 make test
 ```
