@@ -152,3 +152,26 @@ Given a version number **MAJOR.MINOR.PATCH**, increment the:
 * **PATCH** version when you make backward-compatible bug fixes.
 
 Additional labels for pre-release and build metadata are available as extensions to the **MAJOR.MINOR.PATCH** format.
+
+### Publish A Release
+
+Create and push a Git tag:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+GitHub Actions will:
+
+* Package the dotfiles
+* Create a release draft
+* Upload the archive to the release
+
+Alternatively, release manually using:
+
+```bash
+make release VERSION=1.0.0
+```
+
+**Requires the GitHub CLI (gh) and a valid token.**
