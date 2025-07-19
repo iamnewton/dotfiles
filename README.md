@@ -41,43 +41,6 @@ make install;
 
 :exclamation: N.B. If you wish to [fork this project](https://github.com/iamnewton/dotfiles/fork) and maintain your own dotfiles, you **MUST** substitute my username for your own in the above command and the variable (`$USERNAME`) found at the top of the `bin/install.sh` script.
 
-
-## 🎛 Make Targets
-
-The included `Makefile` provides simple commands for development, testing, and packaging:
-
-| Target        | Description                                          |
-|---------------|------------------------------------------------------|
-| `make install`| Run the main install script (`bin/install`)          |
-| `make test`   | Run the local assertions in `test/assertions.sh`     |
-| `make docker` | Run the install script inside a Docker container     |
-| `make logs`   | View install log file via `less`                     |
-| `make package`| Create a compressed tarball of the dotfiles          |
-| `make clean`  | Remove generated tarball and log files               |
-| `make dist`  | Create a release tarball in `dist/` |
-| `make test-dist`  | Confirm the archive contains required files |
-| `make release`  | Trigger a GitHub Release with version set via `VERSION=` |
-
-## 🐳 Testing in Docker
-
-To test the installation in a sandbox:
-
-```bash
-make docker
-```
-
-This builds a container, runs the installer inside it, and prints results. Useful for local testing before pushing.
-
-## 📁 Output Logs
-
-All logs are written to:
-
-```shell
-$HOME/.local/state/dotfiles/install.log
-```
-
-Use `make logs` to inspect them.
-
 ## 🔐 Environment Variables
 
 The script supports the following environment variables:
@@ -93,40 +56,35 @@ The script supports the following environment variables:
 
 You can pass them inline:
 
-```shell
+```bash
 DOTFILES_NONINTERACTIVE=1 DEBUG=true make install
 ```
 
-## 📦 GitHub Releases
+## 🐳 Run in Docker
 
-To publish a new release:
-
-###	Create and push a Git tag:
+To test the installation in a sandbox:
 
 ```bash
-git tag v1.0.0
-git push origin v1.0.0
+make docker
 ```
 
-###	GitHub Actions will:
+This builds a container, runs the installer inside it, and prints results. Useful for local testing before pushing.
 
-* Package the dotfiles
-* Create a release draft
-* Upload the archive to the release
+### 📁 Output Logs
 
-Alternatively, release manually using:
+All logs are written to:
 
 ```bash
-make release VERSION=1.0.0
+$HOME/.local/state/dotfiles/install.log
 ```
 
-Requires the GitHub CLI (gh) and a valid token.
+Use `make logs` to inspect them.
 
-## 🤝 Contributing
+## 🧪 Testing
 
 To test your changes before submitting a PR:
 
-```shell
+```bash
 make docker
 make test
 ```
