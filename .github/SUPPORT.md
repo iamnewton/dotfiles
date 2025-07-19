@@ -16,7 +16,7 @@ If you have a question about this project, how to use it, or need clarification 
 
 1. Open a [support request](https://github.com/iamnewton/dotfiles/issues/new?template=support_request.md) or reach out via [email](mailto:holocron77@gmail.com).
 2. Provide as much context as you can about what you're running into.
-3. Provide browser, library and/or platform versions (`nodejs`, `npm`, etc), depending on what seems relevant. If not, please be ready to provide that information if maintainers ask for it.
+3. Provide library version and/or platform versions (Linux, MacOS, etc), depending on what seems relevant. If not, please be ready to provide that information if maintainers ask for it.
 
 If you chose to write an issue, once it's filed:
 
@@ -48,7 +48,7 @@ If you run into an error or bug with the project:
 
 1. Open a [bug report](https://github.com/iamnewton/dotfiles/issues/new?template=bug_report.md)
 2. Fill out the template and provide as much context as you can about what you're running into and be sure to include steps **to reproduce** such that someone else can follow to recreate the bug or error on their own.
-4. Provide project and platform versions (`nodejs`, `npm`, etc), depending on what seems relevant. If not, please be ready to provide that information if maintainers ask for it.
+4. Provide project and platform versions (Linux, MacOS, etc), depending on what seems relevant. If not, please be ready to provide that information if maintainers ask for it.
 
 Once it's filed:
 
