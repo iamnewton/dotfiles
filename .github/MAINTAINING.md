@@ -174,4 +174,4 @@ Alternatively, release manually using:
 make release VERSION=1.0.0
 ```
 
-**Requires the GitHub CLI (gh) and a valid token.**
+:notebook_with_decorative_cover: Requires the GitHub CLI (gh) and a valid token.
