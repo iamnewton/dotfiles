@@ -23,6 +23,8 @@ jobs:
       - name: 🧰 Import GPG key for signed commits
         uses: crazy-max/ghaction-import-gpg@v6
         with:
+          git_user_signingkey: true
+          git_commit_gpgsign: true
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
