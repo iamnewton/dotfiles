@@ -40,13 +40,10 @@ jobs:
           git config --global commit.gpgsign true
           git config --global tag.gpgSign true
 
-      - name: 🐙 Install GitHub CLI
-        uses: actions/setup-gh@v3
-
       - name: 💼 Run release Makefile
         run: make release VERSION=${GITHUB_REF_NAME#refs/tags/}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 📝 Push updated CHANGELOG.md (if changed)
         run: |
