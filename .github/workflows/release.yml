@@ -1,30 +1,57 @@
 name: Release
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:    # manual trigger
   push:
     tags:
-      - 'v*.*.*'
+      - 'v*.*.*'        # triggers on version tags like v1.2.3
 
 permissions:
-  contents: write   # needed for creating releases and uploading assets
+  contents: write       # required for creating releases and pushing commits
 
 jobs:
   release:
+    name: Release and Publish
     runs-on: ubuntu-latest
 
     steps:
-      - name: ⬇️ Checkout
+      - name: 📥 Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # ensures full git history is available
 
-      - name: 🔧 Set up GitHub CLI
+      - name: 🧰 Import GPG key for signed commits
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: 🛠 Install release dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tar gawk
+
+      - name: 🔧 Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global commit.gpgsign true
+          git config --global tag.gpgSign true
+
+      - name: 🐙 Install GitHub CLI
         uses: cli/cli-action@v2
 
-      - name: 🧰 Configure git + gh
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@users.noreply.github.com"
-          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+      - name: 💼 Run release Makefile
+        run: make release VERSION=${GITHUB_REF_NAME#refs/tags/}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 📦 Build and release tarball
-        run: make release VERSION=${GITHUB_REF_NAME}
+      - name: 📝 Push updated CHANGELOG.md (if changed)
+        run: |
+          git add CHANGELOG.md
+          if ! git diff --cached --quiet; then
+            git commit -m "docs: update changelog for ${GITHUB_REF_NAME}" -S
+            git push origin HEAD
+          else
+            echo "No changelog changes to commit."
+          fi
