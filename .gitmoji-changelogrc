@@ -1,0 +1,7 @@
+{
+  "project": {
+    "name": "@iamnewton/dotfiles",
+    "description": "UNIX-based system configuration for software development",
+    "version": "5.0.0"
+  }
+}
