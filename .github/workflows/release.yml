@@ -45,12 +45,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 📝 Push updated CHANGELOG.md (if changed)
-        run: |
-          git add CHANGELOG.md
-          if ! git diff --cached --quiet; then
-            git commit -m "docs: update changelog for ${GITHUB_REF_NAME}" -S
-            git push origin HEAD
-          else
-            echo "No changelog changes to commit."
-          fi
+      - name: "Generate Changelog"
+        uses: sercanuste/gitmoji-changelog-action@v1
