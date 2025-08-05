@@ -28,11 +28,6 @@ jobs:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
-      - name: 🛠 Install release dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y tar gawk
-
       - name: 🔧 Configure Git
         run: |
           git config --global user.name "github-actions[bot]"
@@ -45,5 +40,11 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: "Generate Changelog"
+      - name: Generate Changelog
         uses: sercanuste/gitmoji-changelog-action@v1
+
+      - name: 🚀 Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: CHANGELOG.md
+          files: dist/dotfiles.tar.gz
