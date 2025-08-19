@@ -914,6 +914,31 @@ install_macos_apps() {
 	return 0
 }
 
+# Install warp themes
+install_warp_themes() {
+	log "🔎 Checking for Warp app..."
+	
+	local install_dir repo_url
+	install_dir="$HOME/.warp"
+	repo_url="https://github.com/warpdotdev/themes.git"
+
+	if [[ -f "${install_dir}/themes" ]]; then
+		info "Warp themes are already installed."
+		return 0
+	fi
+
+	mkdir -p "$install_dir" || {
+		error "Failed to create font directory: $install_dir"
+		return 73 # Can't create directory (EX_CANTCREAT)
+	}
+
+	run_quietly git clone "$repo_url" "${install_dir}/themes" || {
+		error "Failed to clone $repo_url"
+		return 74 # I/O error from curl or tar (EX_IOERR)
+	}
+	success "Downloaded Warp themes into ${install_dir}/themese"
+}
+
 # Install custom TTF font included in the repo
 install_fonts() {
 	log "🔎 Checking for font files..."
