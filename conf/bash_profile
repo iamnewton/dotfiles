@@ -46,6 +46,11 @@ load_dotfiles() {
 load_dotfiles
 unset load_dotfiles
 
+# Ensure n-managed Node always wins
+if [ -d "$HOME/.local/n/bin" ]; then
+	PATH="$HOME/.local/n/bin:$PATH"
+fi
+
 # list out tmux sessions on startup, don't show error if none
 # https://twitter.com/climagic/status/567658485517930497
 tmux list-sessions 2>/dev/null
