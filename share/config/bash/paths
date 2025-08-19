@@ -2,24 +2,27 @@
 
 # bash_paths
 
-# Directories to be prepended to PATH
+# Directories to be prepended to PATH (highest priority → lowest)
 declare -a dirs_to_prepend=(
-	"/opt/homebrew/bin"
-	"/opt/homebrew/sbin"
-	"/opt/whalebrew/bin"
-	"/usr/local/bin" # Ensure that this bin always takes precedence over `/usr/bin`
+	"$HOME/.local/n/bin" # Node managed by `n`
+	"$HOME/bin"          # Personal scripts
+	"$HOME/.local/bin"   # Personal local bin installs (pip, etc.)
+	"/usr/local/bin"     # Common local installs (sometimes non-Brew)
 	"/usr/local/sbin"
+	"/opt/homebrew/bin" # Homebrew userland
+	"/opt/homebrew/sbin"
+	"/opt/whalebrew/bin" # Other custom tools
 )
 
-# Directories to be appended to PATH
+# Directories to be appended to PATH (lowest priority, fallback only)
 declare -a dirs_to_append=(
-	"/usr/bin"
-	"$HOME/bin"
-	"$HOME/.local/bin"
-	"$(brew --prefix coreutils)/libexec/gnubin" # Add brew-installed GNU core utilities bin
-	"$(brew --prefix npm)/bin"                  # Add npm-installed package bin
+	"/usr/bin" # System binaries
+	"/bin"
+	"/usr/sbin"
+	"/sbin"
+	"$(brew --prefix coreutils)/libexec/gnubin" # GNU utils from Brew
+	"$(brew --prefix npm)/bin"                  # npm global installs (Brew-managed)
 	"$FORGIT_INSTALL_DIR/bin"
-	"/usr/local/bin/node"
 )
 
 # Prepend directories to PATH
