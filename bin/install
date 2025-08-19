@@ -1474,7 +1474,6 @@ pending_steps=(
 	install_whalebrew_packages
 	install_macos_apps
 	install_fonts
-	install_ls_colors
 	install_genmoji
 	install_gitmoji_fuzzy_hook
 	setup_fzf_keybindings
