@@ -144,13 +144,13 @@ section() {
 }
 info() {
 	local msg="${1:-}"
-	echo -e "${LOG_PREFIX}: \tℹ️ ${BLUE}${msg}${RESET}"
+	echo -e "${LOG_PREFIX}: \tℹ️  ${BLUE}${msg}${RESET}"
 	_log_to_file "INFO" "$msg"
 	_log_to_syslog "[INFO] $msg"
 }
 warn() {
 	local msg="${1:-}"
-	echo -e "${LOG_PREFIX}: \t⚠️ ${YELLOW}${msg}${RESET}"
+	echo -e "${LOG_PREFIX}: \t⚠️  ${YELLOW}${msg}${RESET}"
 	_log_to_file "WARN" "$msg"
 	_log_to_syslog "[WARN] $msg"
 }
