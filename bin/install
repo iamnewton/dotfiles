@@ -144,13 +144,13 @@ section() {
 }
 info() {
 	local msg="${1:-}"
-	echo -e "${LOG_PREFIX}: \tℹ️ ${BLUE}${msg}${RESET}"
+	echo -e "${LOG_PREFIX}: \tℹ️  ${BLUE}${msg}${RESET}"
 	_log_to_file "INFO" "$msg"
 	_log_to_syslog "[INFO] $msg"
 }
 warn() {
 	local msg="${1:-}"
-	echo -e "${LOG_PREFIX}: \t⚠️ ${YELLOW}${msg}${RESET}"
+	echo -e "${LOG_PREFIX}: \t⚠️  ${YELLOW}${msg}${RESET}"
 	_log_to_file "WARN" "$msg"
 	_log_to_syslog "[WARN] $msg"
 }
@@ -914,6 +914,31 @@ install_macos_apps() {
 	return 0
 }
 
+# Install warp themes
+install_warp_themes() {
+	log "🔎 Checking for Warp app..."
+	
+	local install_dir repo_url
+	install_dir="$HOME/.warp"
+	repo_url="https://github.com/warpdotdev/themes.git"
+
+	if [[ -f "${install_dir}/themes" ]]; then
+		info "Warp themes are already installed."
+		return 0
+	fi
+
+	mkdir -p "$install_dir" || {
+		error "Failed to create font directory: $install_dir"
+		return 73 # Can't create directory (EX_CANTCREAT)
+	}
+
+	run_quietly git clone "$repo_url" "${install_dir}/themes" || {
+		error "Failed to clone $repo_url"
+		return 74 # I/O error from curl or tar (EX_IOERR)
+	}
+	success "Downloaded Warp themes into ${install_dir}/themese"
+}
+
 # Install custom TTF font included in the repo
 install_fonts() {
 	log "🔎 Checking for font files..."
@@ -1474,7 +1499,7 @@ pending_steps=(
 	install_whalebrew_packages
 	install_macos_apps
 	install_fonts
-	install_ls_colors
+	install_warp_themes
 	install_genmoji
 	install_gitmoji_fuzzy_hook
 	setup_fzf_keybindings
@@ -1589,6 +1614,7 @@ main() {
 	optional_step "install_macos_apps" install_macos_apps
 	optional_step "install_fonts" install_fonts
 	# optional_step "install_ls_colors" install_ls_colors
+	optional_step "install_warp_themes" install_warp_themes
 	optional_step "install_genmoji" install_genmoji
 	optional_step "install_gitmoji_fuzzy_hook" install_gitmoji_fuzzy_hook
 	optional_step "setup_fzf_keybindings" setup_fzf_keybindings

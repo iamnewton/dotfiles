@@ -33,12 +33,12 @@ cask "microsoft-edge@dev"
 cask "safari-technology-preview"
 cask "screen-studio"
 cask "shottr"
+cask "tourbox-console"
 
 # mac app store apps
 mas "Goodnotes 3", id: 1444383602
 mas "Marked 2", id: 890031187
 mas "Textastic", id: 572491815
-mas "LumaFusion", id: 1062022008
 mas "Things 3", id: 904280696
 mas "Xcode", id: 497799835
 mas "Velja", id: 1607635845
