@@ -1354,7 +1354,7 @@ setup_gpg_key() {
 	tmp_export_file="$(mktemp "/tmp/gpg-key-${gpg_key}.XXXXXX.asc")"
 	if gpg --armor --export "$gpg_key" >"$tmp_export_file"; then
 		info "📄 GPG public key exported to: $tmp_export_file"
-		log "🔗 Add this GPG key to GitHub: https://github.com/settings/keys"
+		log "🔗 pbcopy the contents and add this GPG key to GitHub: https://github.com/settings/keys"
 	else
 		error "Failed to export GPG key."
 		return 74 # Export failed (EX_IOERR)

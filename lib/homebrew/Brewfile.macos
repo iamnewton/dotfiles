@@ -1,18 +1,30 @@
 "mas"
 
 # utilities
+cask "airfoil"
+cask "audio-hijack"
 cask "chatgpt"
 cask "docker"
-cask "elgato-stream-deck"
-cask "elgato-wave-link"
+cask "farrago"
 cask "figma"
+cask "fission"
 cask "gpg-suite"
-# cask "iterm2" - favoring warp
+cask "loopback"
+cask "musicbrainz-picard"
 cask "notion"
 cask "postman"
 cask "raycast"
+cask "screen-studio"
+cask "shottr"
 cask "slack"
+cask "soundsource"
 cask "warp"
+
+# peripherals
+cask "elgato-stream-deck"
+cask "elgato-wave-link"
+cask "insta360-link-controller"
+cask "tourbox-console"
 
 # browsers
 cask "brave-browser"
@@ -31,9 +43,6 @@ cask "microsoft-edge"
 cask "microsoft-edge@beta"
 cask "microsoft-edge@dev"
 cask "safari-technology-preview"
-cask "screen-studio"
-cask "shottr"
-cask "tourbox-console"
 
 # mac app store apps
 mas "Goodnotes 3", id: 1444383602
