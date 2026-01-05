@@ -64,7 +64,7 @@ export CLICOLOR=1
 export MANPAGER="less -X"
 
 # NVM directory (choosing n over nvm)
-# export NVM_DIR=$HOME/.nvm
+export NVM_DIR=$HOME/.nvm
 
 # N (node version manager) directory; where to store versions
 export N_PREFIX="$HOME/.local/n"
