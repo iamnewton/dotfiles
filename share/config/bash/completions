@@ -31,3 +31,12 @@ fi
 if [[ -e "$HOME/.ssh/known_hosts" ]]; then
 	complete -o default -W "$(cat "$HOME/.ssh/known_hosts" | sed 's/[, ].*//' | sort | uniq | grep -v '[0-9]')" ssh scp sftp
 fi
+
+if [[ -r "$NVM_DIR/nvm.sh" ]] && [[ -s "$NVM_DIR/nvm.sh" ]]; then
+	source "$NVM_DIR/nvm.sh" # This loads nvm
+fi
+
+# Enable bash <tab> completion for nvm
+if [[ -r "$NVM_DIR/bash_completion" ]] && [[ -s "$NVM_DIR/bash_completion" ]]; then
+	source "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+fi
